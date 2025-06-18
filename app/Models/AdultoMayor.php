@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class AdultoMayor extends Model
 {
     use HasFactory;
+    protected $table = 'adultos_mayores'; // nombre correcto de la tabla 
+
 
     public function enfermedades() {
         return $this->hasOne(Enfermedad::class);

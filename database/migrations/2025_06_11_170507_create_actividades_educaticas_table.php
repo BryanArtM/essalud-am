@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //CREACION DE LA TABLA  CON LAS ACTIVIDADES EDUCATIVAS DE LOS ADULTOS MAYORES
         Schema::create('actividades_educaticas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('adulto_mayor_id')->constrained('adultos_mayores')->onDelete('cascade');

@@ -14,15 +14,15 @@ return new class extends Migration
         // CREACIÓN DE LA TABLA CON LOS DATOS DE LOS ADULTOS MAYORES
         Schema::create('adultos_mayores', function (Blueprint $table) {
             $table->id();
+            $table->string('ipress');
+            $table->string('numero_ficha');
             $table->string('nombre');
             $table->string('dni')->unique();
             $table->string('telefono')->nullable();
             $table->date('fecha_ingreso');
             $table->date('fecha_nacimiento'); // Fecha de nacimiento del adulto mayor (CALCULAR EDAD)
             $table->text('alergias')->nullable();
-            $table->boolean('adulto_mayor_fragil')->default(false);
-            $table->string('ipress');
-            $table->string('numero_ficha');
+            $table->string('adulto_mayor_fragil')->nullable(); //REVISAR SI SE DEBE CAMBIAR A BOOLEAN O NUMBER
             $table->timestamps();
         });
 
