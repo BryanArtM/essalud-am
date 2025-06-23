@@ -16,7 +16,8 @@ return new class extends Migration
             $table->id();
             $table->string('ipress');
             $table->string('numero_ficha');
-            $table->string('nombre');
+            $table->string('apellidos');
+            $table->string('nombres');
             $table->string('dni')->unique();
             $table->string('telefono')->nullable();
             $table->date('fecha_ingreso');

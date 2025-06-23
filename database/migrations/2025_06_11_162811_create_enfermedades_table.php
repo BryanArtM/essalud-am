@@ -26,11 +26,11 @@ return new class extends Migration
             $table->boolean('itg')->default(false);
             $table->boolean('sindrome_metabolico')->default(false);
             $table->text('otros')->nullable();
-            $table->string('visare_numero')->nullable();
+            $table->integer('visare_numero')->nullable();
             $table->date('visare_fecha')->nullable();
-            $table->string('estadio_1a_3a_numero')->nullable();
+            $table->integer('estadio_1a_3a_numero')->nullable();
             $table->date('estadio_1a_3a_fecha')->nullable();
-            $table->string('estadio_3b_5_numero')->nullable();
+            $table->integer('estadio_3b_5_numero')->nullable();
             $table->date('estadio_3b_5_fecha')->nullable();
             $table->timestamps();
         });

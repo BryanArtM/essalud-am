@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class AdultoMayor extends Model
 {
     use HasFactory;
-    protected $table = 'adultos_mayores'; // nombre correcto de la tabla 
+    protected $table = 'adultos_mayores'; // FORZAR NOMBRE DE LA TABLA
 
 
-    public function enfermedades() {
+    public function enfermedad() {
         return $this->hasOne(Enfermedad::class);
     }
 
-    public function riesgos() {
+    public function riesgo() {
         return $this->hasOne(Riesgo::class);
     }
 
@@ -31,15 +31,11 @@ class AdultoMayor extends Model
         return $this->hasMany(Tratamiento::class);
     }
 
-    public function evaluacionGeriatrica() {
-        return $this->hasOne(EvaluacionGeriatrica::class);
-    }
-
     public function valoraciones() {
         return $this->hasMany(Valoracion::class);
     }
 
-        public function actividadEducativa() {
+        public function actividadesEducativas() {
         return $this->hasMany(ActividadEducativa::class);
     }
 

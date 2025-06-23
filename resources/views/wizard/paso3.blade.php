@@ -1,0 +1,36 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="max-w-2xl mx-auto p-6 bg-white rounded shadow">
+    <h2 class="text-xl font-semibold mb-6">RIESGOS IDENTIFICADOS</h2>
+
+    <form action="{{ route('wizard.paso3') }}" method="POST">
+        @csrf
+
+        @foreach ([
+            'sobrepeso' => 'Sobrepeso',
+            'sedentarismo' => 'Sedentarismo',
+            'tabaco' => 'Tabaco',
+            'alcohol' => 'Alcohol',
+            'estres' => 'Estrés',
+            'bajo_peso' => 'Bajo Peso',
+            'perimetro_abdominal_aumentado' => 'Perímetro Abdominal Aumentado: Mujer >= 88 cm, Hombre >= 102 cm',
+            'hdl_bajo' => 'HDL Bajo: Mujer < 50 mg/dL, Hombre < 40 mg/dL'
+        ] as $name => $label)
+            <div class="mb-3">
+                <label class="inline-flex items-center">
+                    <input type="checkbox" name="{{ $name }}" value="1"
+                        {{ old($name, $data[$name] ?? false) ? 'checked' : '' }}
+                        class="form-checkbox text-blue-600">
+                    <span class="ml-2">{{ $label }}</span>
+                </label>
+            </div>
+        @endforeach
+
+        <div class="flex justify-between">
+            <a href="{{ route('wizard.paso2') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Atrás</a>
+            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Siguiente</button>
+        </div>
+    </form>
+</div>
+@endsection
