@@ -19,6 +19,37 @@
             ];
         @endphp
 
+
+
+        @php
+            if (isset($paso5['tratamientos']) && is_array($paso5['tratamientos'])) {
+                $tratamientosList = [];
+                foreach ($paso5['tratamientos'] as $i => $tratamiento) {
+                    foreach ($tratamiento as $campo => $valor) {
+                        $tratamientosList["Tratamiento " . ($i + 1) . " - " . ucwords(str_replace('_', ' ', $campo))] = $valor;
+                    }
+                }
+                $paso5 = array_merge($paso5, $tratamientosList);
+                unset($paso5['tratamientos']);
+            }
+        @endphp
+
+        @php
+            if (isset($paso5['citas']) && is_array($paso5['citas'])) {
+                $citasList = [];
+                foreach ($paso5['citas'] as $i => $cita) {
+                    foreach ($cita as $campo => $valor) {
+                        $citasList["Cita " . ($i + 1) . " - " . ucwords(str_replace('_', ' ', $campo))] = $valor;
+                    }
+                }
+                $paso5 = array_merge($paso5, $citasList);
+                unset($paso5['citas']);
+            }
+        @endphp
+
+
+
+
         @foreach ($secciones as $clave => $titulo)
             @php
                 $ruta = $clave === 'actividad' || $clave === 'evaluacion' ? 'paso4' : $clave;

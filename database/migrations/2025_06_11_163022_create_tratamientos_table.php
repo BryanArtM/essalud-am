@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('adulto_mayor_id')->constrained('adultos_mayores')->onDelete('cascade');
             $table->string('medicacion')->nullable();
-            $table->string('dosis')->nullable();
+            $table->integer('dosis')->nullable();
             $table->timestamps();
         });
         

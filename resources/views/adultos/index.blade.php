@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
   <h1>Adultos Mayores</h1>
-  <a href="{{ route('adultos.create') }}" class="btn btn-primary mb-3">Registrar Nuevo</a>
+  <a href="{{ route('wizard.paso1') }}" class="btn btn-primary mb-3">Registrar Nuevo</a>
   <table class="table">
     <thead>
       <tr>
@@ -17,7 +17,7 @@
       @foreach ($adultos as $adulto)
         <tr>
           <td>{{ $adulto->dni }}</td>
-          <td>{{ $adulto->nombre }}</td>
+          <td>{{ $adulto->nombres }}</td>
           <td>{{ $adulto->apellidos }}</td>
           <td>
             <a href="{{ route('adultos.show', $adulto->id) }}" class="btn btn-info btn-sm">Ver</a>

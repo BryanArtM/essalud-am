@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AdultoMayor;
+use Illuminate\Support\Facades\DB;
 
 
 class AdultoMayorWizardController extends Controller
@@ -128,26 +129,36 @@ class AdultoMayorWizardController extends Controller
 
     public function paso5()
     {
-        $data = session('citas_tratamientos', []);
-        return view('wizard.paso5', compact('data'));
+        $citas = session('citas_tratamientos.citas', []);
+        $tratamientos = session('citas_tratamientos.tratamientos', []);
+        return view('wizard.paso5', compact('citas', 'tratamientos'));
+
     }
 
     public function guardarPaso5(Request $request)
     {
         $validated = $request->validate([
-            // Cita
-            'cita_fecha' => 'nullable|date',
-            'medico' => 'nullable|string|max:100',
-            'enfermera' => 'nullable|string|max:100',
-            // Tratamiento
-            'medicacion' => 'nullable|string|max:255',
-            'dosis' => 'nullable|string|max:100',
+            // Validación de múltiples citas
+            'citas' => 'array',
+            'citas.*.fecha' => 'nullable|date',
+            'citas.*.medico' => 'nullable|string|max:100',
+            'citas.*.enfermera' => 'nullable|string|max:100',
+
+            // Validación de múltiples tratamientos
+            'tratamientos' => 'array',
+            'tratamientos.*.medicacion' => 'nullable|string|max:100',
+            'tratamientos.*.dosis' => 'nullable|numeric|min:0',
         ]);
 
-        session(['citas_tratamientos' => $validated]);
-
+        session([
+            'citas_tratamientos' => [
+                'citas' => $validated['citas'] ?? [],
+                'tratamientos' => $validated['tratamientos'] ?? [],
+            ]
+        ]);
         return redirect()->route('wizard.paso6');
     }
+
 
     public function paso6()
     {
@@ -193,26 +204,30 @@ class AdultoMayorWizardController extends Controller
 
     public function finalizar()
     {
+
+        if (!session()->has('adulto_mayor')) {
+            return redirect()->route('wizard.paso1')->with('error', 'Sesión expirada. Inicia el registro nuevamente.');
+        }
+
+        DB::transaction(function () {
+
         $adulto = AdultoMayor::create(session('adulto_mayor'));
         $adulto->enfermedad()->create(session('enfermedades'));
         $adulto->riesgo()->create(session('riesgos'));
         $adulto->evaluaciones()->create(session('evaluacion'));
         $adulto->actividadesEducativas()->create(session('actividad'));
-
         $data = session('citas_tratamientos');
-        $citaData = [
-            'fecha' => $data['cita_fecha'],
-            'medico' => $data['medico'],
-            'enfermera' => $data['enfermera'],
-        ];
-        $tratamientoData = [
-            'medicacion' => $data['medicacion'],
-            'dosis' => $data['dosis'],
-        ];
-        $adulto->citas()->create($citaData);
-        $adulto->tratamientos()->create($tratamientoData);
+
+        foreach ($data['citas'] as $cita) {
+            $adulto->citas()->create($cita);
+        }
+
+        foreach ($data['tratamientos'] as $tratamiento) {
+            $adulto->tratamientos()->create($tratamiento);
+        }
 
         $adulto->valoraciones()->create(session('valoracion'));
+        });
 
         session()->forget([
             'adulto_mayor',

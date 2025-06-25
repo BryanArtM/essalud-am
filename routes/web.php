@@ -21,7 +21,7 @@ Route::middleware([
 Route::resource('adultos', AdultoMayorController::class);
 
 
-Route::prefix('registro')->group(function () {
+Route::prefix('registro-adulto')->group(function () {
     Route::get('/paso-1', [AdultoMayorWizardController::class, 'paso1'])->name('wizard.paso1');
     Route::post('/paso-1', [AdultoMayorWizardController::class, 'guardarPaso1'])->name('wizard.paso1.post');
 

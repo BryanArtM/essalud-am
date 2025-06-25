@@ -9,7 +9,18 @@ class AdultoMayor extends Model
 {
     use HasFactory;
     protected $table = 'adultos_mayores'; // FORZAR NOMBRE DE LA TABLA
-
+    protected $fillable = [
+        'numero_ficha',
+        'ipress',
+        'nombres',
+        'apellidos',
+        'dni',
+        'telefono',
+        'fecha_nacimiento',
+        'fecha_ingreso',
+        'alergias',
+        'adulto_mayor_fragil',
+    ];
 
     public function enfermedad() {
         return $this->hasOne(Enfermedad::class);
@@ -35,7 +46,7 @@ class AdultoMayor extends Model
         return $this->hasMany(Valoracion::class);
     }
 
-        public function actividadesEducativas() {
+    public function actividadesEducativas() {
         return $this->hasMany(ActividadEducativa::class);
     }
 

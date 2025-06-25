@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         //CREACION DE LA TABLA  CON LAS ACTIVIDADES EDUCATIVAS DE LOS ADULTOS MAYORES
-        Schema::create('actividades_educaticas', function (Blueprint $table) {
+        Schema::create('actividades_educativas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('adulto_mayor_id')->constrained('adultos_mayores')->onDelete('cascade');
             $table->date('fecha')->nullable();
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('actividades_educaticas');
+        Schema::dropIfExists('actividades_educativas');
     }
 };

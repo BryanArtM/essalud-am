@@ -23,7 +23,8 @@ return new class extends Migration
             $table->date('fecha_ingreso');
             $table->date('fecha_nacimiento'); // Fecha de nacimiento del adulto mayor (CALCULAR EDAD)
             $table->text('alergias')->nullable();
-            $table->string('adulto_mayor_fragil')->nullable(); //REVISAR SI SE DEBE CAMBIAR A BOOLEAN O NUMBER
+            $table->string('adulto_mayor_fragil')->nullable(); 
+            $table->index(['apellidos', 'nombres']);
             $table->timestamps();
         });
 
