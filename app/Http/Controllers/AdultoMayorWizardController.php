@@ -181,13 +181,13 @@ class AdultoMayorWizardController extends Controller
     public function confirmar()
     {
         return view('wizard.confirmar', [
-            'paso1' => session('adulto_mayor'),
-            'paso2' => session('enfermedades'),
-            'paso3' => session('riesgos'),
-            'evaluacion' => session('evaluacion'),
-            'actividad' => session('actividad'),
-            'paso5' => session('citas_tratamientos'),
-            'paso6' => session('valoracion'),
+            'paso1' => session('adulto_mayor', []),
+            'paso2' => session('enfermedades', []),
+            'paso3' => session('riesgos', []),
+            'evaluacion' => session('evaluacion', []),
+            'actividad' => session('actividad', []),
+            'paso5' => session('citas_tratamientos', []),
+            'paso6' => session('valoracion', []),
         ]);
     }
 
