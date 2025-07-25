@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Riesgo extends Model
 {
     use HasFactory;
+    
     protected $fillable = [
         'adulto_mayor_id',
         'sobrepeso',

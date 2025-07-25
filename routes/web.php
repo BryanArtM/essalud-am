@@ -19,6 +19,8 @@ Route::middleware([
 });
 
 Route::resource('adultos', AdultoMayorController::class);
+Route::get('/adultos/{id}', [AdultoMayorController::class, 'show'])->name('adultos.show');
+Route::get('adultos/{adulto}/edit', [AdultoMayorController::class, 'edit'])->name('adultos.edit');
 
 
 Route::prefix('registro-adulto')->group(function () {

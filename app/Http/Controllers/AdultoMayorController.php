@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Enfermedad;
 
 use Illuminate\Http\Request;
 use App\Models\AdultoMayor;
@@ -10,18 +11,32 @@ class AdultoMayorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-            $adultos = AdultoMayor::all();
-            return view('adultos.index', compact('adultos'));
+        $adultos = AdultoMayor::all();
+    
+        $query = AdultoMayor::query();
+
+        if ($request->filled('dni')) {
+            $query->where('dni', 'like', '%' . $request->dni . '%');
+        }
+        if ($request->filled('apellidos')) {
+            $query->where('apellidos', 'like', '%' . $request->apellidos . '%');
+        }
+        $adultos = $query->paginate(1)->withQueryString(); 
+        return view('adultos.index', compact('adultos'));
     }
+
+
+    
+        
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('adultos.create');
+        return view('wizard.paso1');
 
     }
 
@@ -30,56 +45,57 @@ class AdultoMayorController extends Controller
      */
 
     public function store(Request $request)
-    
-{
-
-    $validated = $request->validate([
-        'ipress' => 'required|string|max:100',
-        'numero_ficha' => 'required|string|max:50',
-        'dni' => 'required|digits:8|unique:adultos,dni',
-        'nombres' => 'required|string|max:100',
-        'apellidos' => 'required|string|max:100',
-        'fecha_ingreso' => 'nullable|date|before:today',
-        'alergias' => 'nullable|string|max:200',
-        'adulto_mayor_fragil' => 'nullable|string|max:200',
-        'fecha_nacimiento' => 'required|date|before:today',
-        'telefono' => 'nullable|digits:9',
-    ]);
-
-    $nombreCompleto = $validated['nombres'] . ' ' . $validated['apellidos'];
-
-    AdultoMayor::create([
-        'ipress' => $validated['ipress'],
-        'numero_ficha' => $validated['numero_ficha'],
-        'nombre' => $nombreCompleto,
-        'dni' => $validated['dni'],
-        'telefono' => $validated['telefono'] ?? null,
-        'fecha_ingreso' => $validated['fecha_ingreso'] ?? null,
-        'fecha_nacimiento' => $validated['fecha_nacimiento'] ?? null,
-        'alergias' => $validated['alergias'] ?? null,
-        'adulto_mayor_fragil' => $validated['adulto_mayor_fragil'] ?? null,
-    ]);
-
-
-    return redirect()->route('adultos.index')->with('success', 'Adulto mayor registrado correctamente.');
-}
+    {
+    }
 
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $adulto = AdultoMayor::with([
+            'enfermedad', 'riesgo', 'evaluaciones', 'actividadeseducativas', 'tratamientos', 'citas', 'valoraciones'
+        ])->findOrFail($id);
+
+        return view('adultos.show', compact('adulto'));
     }
+
+
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
-    }
+    public function edit(AdultoMayor $adulto)
+{
+    session(['adulto_id' => $adulto->id]);
+
+    session(['adulto_mayor' => $adulto->only([
+        'ipress','numero_ficha','dni', 'apellidos', 'nombres', 'fecha_nacimiento', 'telefono', 'fecha_ingreso', 'alergias', 'adulto_mayor_fragil'
+    ])]);
+
+    $enfermedad = $adulto->enfermedad->first();
+    session(['enfermedad' => $enfermedad ? $enfermedad->toArray() : []]);
+
+    $riesgo = $adulto->riesgo->first();
+    session(['riesgo' => $riesgo ? $riesgo->toArray() : []]);
+
+    session(['evaluacion' => $adulto->evaluaciones->toArray()]);
+    session(['actividad' => $adulto->actividadesEducativas->toArray()]);
+
+    session(['citas_tratamientos' => [
+        'tratamientos' => $adulto->tratamientos->toArray(),
+        'citas' => $adulto->citas->toArray(),
+    ]]);
+
+    $valoracion = $adulto->valoraciones->first();
+    session(['valoracion' => $valoracion ? $valoracion->toArray() : []]);
+
+    return redirect()->route('wizard.paso1')->with('success', 'Datos cargados para edición.');
+}
+
+
+
 
     /**
      * Update the specified resource in storage.
@@ -92,8 +108,12 @@ class AdultoMayorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $adulto = AdultoMayor::findOrFail($id);
+        $adulto->delete();
+        return redirect()->route('adultos.index')->with('success', 'Adulto mayor eliminado correctamente.');
+
     }
+
 }

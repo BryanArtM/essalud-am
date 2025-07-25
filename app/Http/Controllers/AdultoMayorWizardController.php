@@ -34,7 +34,7 @@ class AdultoMayorWizardController extends Controller
     }
 
     public function paso2() {
-        $data = session('enfermedades', []);
+        $data = session('enfermedad', []);
         return view('wizard.paso2', compact('data'));
     }
 
@@ -57,12 +57,12 @@ class AdultoMayorWizardController extends Controller
             $validated[$field] = $request->has($field);
         }
 
-            session(['enfermedades' => $validated]);
+            session(['enfermedad' => $validated]);
             return redirect()->route('wizard.paso3');
     }
 
     public function paso3() {
-        $data = session('riesgos', []);
+        $data = session('riesgo', []);
         return view('wizard.paso3',compact('data'));
     }
 
@@ -76,11 +76,10 @@ class AdultoMayorWizardController extends Controller
         foreach ($booleanFields as $field) {
             $validated[$field] = $request->has($field);
         }
-        session(['riesgos' => $validated]);
+        session(['riesgo' => $validated]);
         return redirect()->route('wizard.paso4');
 
     }
-
     public function paso4()
     {
         $evaluacion = session('evaluacion', []);
@@ -91,41 +90,50 @@ class AdultoMayorWizardController extends Controller
     public function guardarPaso4(Request $request)
     {
         $validated = $request->validate([
-            'fecha' => 'required|date',
-            'peso' => 'nullable|numeric',
-            'presion_arterial' => 'nullable|string|max:20',
-            'glucosa' => 'nullable|numeric',
-            'hb_glicosilada' => 'nullable|numeric',
-            'imc' => 'nullable|numeric',
-            'perimetro_abdominal' => 'nullable|numeric',
-            'evaluacion_pie_dm' => 'nullable|string|max:100',
-            'test_morisky_green' => 'nullable|in:cumple,no cumple',
-            'microalbuminuria' => 'nullable|numeric',
-            'creatinina' => 'nullable|numeric',
-            'tasa_albuminuria_creatinuria' => 'nullable|numeric',
-            'tasa_filtracion_glomerular' => 'nullable|numeric',
-            'control_renal_fecha' => 'nullable|date',
-            'actividad_fecha' => 'nullable|date',
-            'numero_sesion' => 'nullable|string|max:50',
+            'talla' => 'required|numeric',
+            'peso_aceptable' => 'required|numeric',
+
+            'evaluaciones' => 'required|array',
+
+            'evaluaciones.*.peso' => 'nullable|numeric',
+            'evaluaciones.*.presion_arterial' => 'nullable|string|max:20',
+            'evaluaciones.*.glucosa' => 'nullable|numeric',
+            'evaluaciones.*.hb_glicosilada' => 'nullable|numeric',
+            'evaluaciones.*.imc' => 'nullable|numeric',
+            'evaluaciones.*.perimetro_abdominal' => 'nullable|numeric',
+            'evaluaciones.*.evaluacion_pie_dm' => 'nullable|string|max:100',
+            'evaluaciones.*.test_morisky_green' => 'nullable|in:cumple,no cumple',
+            'evaluaciones.*.microalbuminuria' => 'nullable|numeric',
+            'evaluaciones.*.creatinina' => 'nullable|numeric',
+            'evaluaciones.*.tasa_albuminuria_creatinuria' => 'nullable|numeric',
+            'evaluaciones.*.tasa_filtracion_glomerular' => 'nullable|numeric',
+            'evaluaciones.*.control_renal_fecha' => 'nullable|date',
+            'evaluaciones.*.vacuna_influenza' => 'nullable|boolean',
+            'evaluaciones.*.vacuna_neumococo' => 'nullable|boolean',
+
+            'actividades' => 'nullable|array',
+            'actividades.*.fecha' => 'nullable|date',
+            'actividades.*.numero_sesion' => 'nullable|string|max:50',
         ]);
 
-        $validated['vacuna_influenza'] = $request->has('vacuna_influenza');
-        $validated['vacuna_neumococo'] = $request->has('vacuna_neumococo');
+        // Procesar campos booleanos (checkboxes) en evaluaciones
+        $evaluaciones = $request->input('evaluaciones', []);
+        foreach ($evaluaciones as &$eval) {
+            $eval['vacuna_influenza'] = !empty($eval['vacuna_influenza']);
+            $eval['vacuna_neumococo'] = !empty($eval['vacuna_neumococo']);
+            $eval['peso_aceptable'] = $request->input('peso_aceptable');
+            $eval['talla'] = $request->input('talla');
+        }
 
-        // sesion evaluacion
-        $evaluacion = collect($validated)->except(['actividad_fecha', 'numero_sesion'])->toArray();
-        //sesion actividad
-        $actividad = [
-            'fecha' => $request->input('actividad_fecha'),
-            'numero_sesion' => $request->input('numero_sesion'),
-        ];
+        $actividades = $request->input('actividades', []);
 
-        session(['evaluacion' => $evaluacion]);
-        session(['actividad' => $actividad]);
+        session(['evaluacion' => $evaluaciones]);
+        session(['actividad' => $request->input('actividades', [])]);
 
 
         return redirect()->route('wizard.paso5');
     }
+
 
     public function paso5()
     {
@@ -193,8 +201,8 @@ class AdultoMayorWizardController extends Controller
     {
         return view('wizard.confirmar', [
             'paso1' => session('adulto_mayor', []),
-            'paso2' => session('enfermedades', []),
-            'paso3' => session('riesgos', []),
+            'paso2' => session('enfermedad', []),
+            'paso3' => session('riesgo', []),
             'evaluacion' => session('evaluacion', []),
             'actividad' => session('actividad', []),
             'paso5' => session('citas_tratamientos', []),
@@ -202,45 +210,77 @@ class AdultoMayorWizardController extends Controller
         ]);
     }
 
+
     public function finalizar()
     {
-
         if (!session()->has('adulto_mayor')) {
             return redirect()->route('wizard.paso1')->with('error', 'Sesión expirada. Inicia el registro nuevamente.');
         }
 
         DB::transaction(function () {
+            $data = session('adulto_mayor');
+            $enfermedad = session('enfermedad', []);
+            $riesgo = session('riesgo', []);
+            $evaluaciones = session('evaluacion', []);
+            $actividades = session('actividad', []);
+            $citasTratamientos = session('citas_tratamientos', ['citas' => [], 'tratamientos' => []]);
+            $valoracion = session('valoracion');
 
-        $adulto = AdultoMayor::create(session('adulto_mayor'));
-        $adulto->enfermedad()->create(session('enfermedades'));
-        $adulto->riesgo()->create(session('riesgos'));
-        $adulto->evaluaciones()->create(session('evaluacion'));
-        $adulto->actividadesEducativas()->create(session('actividad'));
-        $data = session('citas_tratamientos');
+            // Verifica si es edición o nuevo registro
+            if (session()->has('adulto_id')) {
+                $adulto = AdultoMayor::findOrFail(session('adulto_id'));
 
-        foreach ($data['citas'] as $cita) {
-            $adulto->citas()->create($cita);
-        }
+                $adulto->update($data);
 
-        foreach ($data['tratamientos'] as $tratamiento) {
-            $adulto->tratamientos()->create($tratamiento);
-        }
+                // Eliminar lo anterior
+                $adulto->enfermedad()->delete();
+                $adulto->riesgo()->delete();
+                $adulto->evaluaciones()->delete();
+                $adulto->actividadesEducativas()->delete();
+                $adulto->tratamientos()->delete();
+                $adulto->citas()->delete();
+                $adulto->valoraciones()->delete();
+            } else {
+                $adulto = AdultoMayor::create($data);
+            }
 
-        $adulto->valoraciones()->create(session('valoracion'));
+            // Re-crear relaciones
+            $adulto->enfermedad()->create($enfermedad);
+            $adulto->riesgo()->create($riesgo);
+
+            foreach ($evaluaciones as $eval) {
+                $adulto->evaluaciones()->create($eval);
+            }
+
+            foreach ($actividades as $actividad) {
+                $adulto->actividadesEducativas()->create($actividad);
+            }
+
+            foreach ($citasTratamientos['citas'] as $cita) {
+                $adulto->citas()->create($cita);
+            }
+
+            foreach ($citasTratamientos['tratamientos'] as $tratamiento) {
+                $adulto->tratamientos()->create($tratamiento);
+            }
+
+            $adulto->valoraciones()->create($valoracion);
         });
 
         session()->forget([
             'adulto_mayor',
-            'enfermedades',
-            'riesgos',
+            'enfermedad',
+            'riesgo',
             'evaluacion',
             'actividad',
             'citas_tratamientos',
             'valoracion',
+            'adulto_id', 
         ]);
 
         return redirect()->route('adultos.index')->with('success', 'Registro completado.');
     }
+
 
 }
 

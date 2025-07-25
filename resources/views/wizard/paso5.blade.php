@@ -3,6 +3,12 @@
 @section('content')
 <div class="max-w-3xl mx-auto p-6 bg-white rounded shadow">
 
+    @if (session()->has('adulto_id'))
+        <div class="mb-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded shadow">
+            <strong>Modo edición:</strong> Estás modificando los datos de un adulto mayor registrado.
+        </div>
+    @endif
+    
     <form action="{{ route('wizard.paso5') }}" method="POST">
         @csrf
 

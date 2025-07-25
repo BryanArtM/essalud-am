@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('dni')->unique();
             $table->string('telefono')->nullable();
             $table->date('fecha_ingreso');
-            $table->date('fecha_nacimiento'); // Fecha de nacimiento del adulto mayor (CALCULAR EDAD)
+            $table->date('fecha_nacimiento');
             $table->text('alergias')->nullable();
             $table->string('adulto_mayor_fragil')->nullable(); 
             $table->index(['apellidos', 'nombres']);
