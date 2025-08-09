@@ -1,6 +1,10 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Resumen de Registro') }}
+        </h2>
+    </x-slot>
 
-@section('content')
 <div class="max-w-4xl mx-auto p-6 bg-white rounded shadow">
     <h1 class="text-center text-2xl font-bold text-essalud-blue mb-8">Resumen de Registro</h1>
 
@@ -127,4 +131,4 @@
         <button type="submit" class="bg-essalud-blue text-white px-6 py-2 rounded hover:bg-blue-700">Finalizar Registro</button>
     </form>
 </div>
-@endsection
+</x-app-layout>

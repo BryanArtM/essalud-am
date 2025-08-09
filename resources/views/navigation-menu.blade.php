@@ -213,6 +213,15 @@
                         @endforeach
                     @endif
                 @endif
+
+                @auth
+                    @if (auth()->user()->email === env('ADMIN_EMAIL'))
+                        <x-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('users.*')">
+                            {{ __('Gestionar Usuarios') }}
+                        </x-nav-link>
+                    @endif
+                @endauth
+
             </div>
         </div>
     </div>
