@@ -25,11 +25,13 @@ Route::middleware([
     Route::resource('adultos', AdultoMayorController::class);
     
     
+Route::middleware(['auth', 'verified', 'isAdmin'=> \App\Http\Middleware\IsAdmin::class])->group(function () {
     Route::resource('admin/users', UserController::class)->except(['show']);
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
-    Route::post('/users', [UserController::class, 'store'])->name('users.store');
-    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+});
+
+
+
+
 
     // Wizard de registro de adultos mayores
     Route::prefix('registro-adulto')->name('wizard.')->group(function () {
