@@ -5,8 +5,9 @@ use App\Http\Controllers\AdultoMayorController;
 use App\Http\Controllers\AdultoMayorWizardController;
 use App\Http\Controllers\UserController;
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::middleware(['auth', 'verified'])->get('/', function () {
+    return redirect()->route('dashboard');
 });
 
 // Grupo protegido por Jetstream (login + email verificado)
@@ -25,7 +26,7 @@ Route::middleware([
     Route::resource('adultos', AdultoMayorController::class);
     
     
-Route::middleware(['auth', 'verified', 'isAdmin'=> \App\Http\Middleware\IsAdmin::class])->group(function () {
+Route::middleware('isAdmin')->group(function () {
     Route::resource('admin/users', UserController::class)->except(['show']);
 });
 
