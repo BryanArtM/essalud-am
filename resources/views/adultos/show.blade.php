@@ -1,33 +1,46 @@
 @php
     $omitidos = ['id', 'adulto_mayor_id', 'created_at', 'updated_at'];
 
+    // Opcional: mapa de etiquetas "bonitas"
+    function prettyLabel($label) {
+        $map = [
+            'dni' => 'DNI',
+            'ipress' => 'IPRESS',
+            'numero_ficha' => 'Número de Ficha',
+            'fecha_nacimiento' => 'Fecha de Nacimiento',
+            'adulto_mayor_fragil' => '¿Adulto Mayor Frágil?',
+        ];
+        return $map[$label] ?? ucwords(str_replace('_', ' ', $label));
+    }
+
     function renderCard($label, $value) {
-        $valorMostrado = $value;
-        if ($value === 1 || $value === 0) {
-            $valorMostrado = $value === 1 ? 'Sí' : 'No';
-        }
+        // Si pasan la clave del campo, la “embellecemos”.
+        $labelText = prettyLabel($label);
+
+        // Normaliza booleanos 1/0, '1'/'0' y true/false
+        $isBoolLike = is_bool($value) || $value === 1 || $value === 0 || $value === '1' || $value === '0';
+        $valorMostrado = $isBoolLike ? ((int)$value === 1 ? 'Sí' : 'No') : $value;
+
+        $contenido = ($value !== null && $value !== '')
+            ? e($valorMostrado)
+            : '<span class="text-gray-400 italic">No registrado</span>';
 
         return '
             <div class="p-2 border rounded-lg bg-white shadow-sm">
-                <x-label value="'.ucwords(str_replace('_', ' ', $label)).'" class="uppercase text-xs text-gray-500" />
-                <p class="text-sm font-medium text-gray-800">' .
-                    ($value !== null && $value !== '' 
-                        ? e($valorMostrado) 
-                        : '<span class="text-gray-400 italic">No registrado</span>'
-                    ) .
-                '</p>
+                <div class="uppercase text-[11px] text-gray-500">'.e($labelText).'</div>
+                <p class="text-sm font-medium text-gray-800">'.$contenido.'</p>
             </div>
         ';
     }
 
     $paneles = [
-        '🦠 Enfermedades' => $adulto->enfermedad ? [$adulto->enfermedad] : [],
-        '⚠️ Riesgos Identificados' => $adulto->riesgo ? [$adulto->riesgo] : [],
-        '🩺 Evaluaciones Médicas' => $adulto->evaluaciones ?? [],
+        '🦠 Enfermedades'           => $adulto->enfermedad ? [$adulto->enfermedad] : [],
+        '⚠️ Riesgos Identificados'  => $adulto->riesgo ? [$adulto->riesgo] : [],
+        '🩺 Evaluaciones Médicas'   => $adulto->evaluaciones ?? [],
         '📚 Actividades Educativas' => $adulto->actividadeseducativas ?? [],
-        '📆 Citas' => $adulto->citas ?? [],
-        '💊 Tratamientos' => $adulto->tratamientos ?? [],
-        '👵 Adulto Mayor 75 Años a Más' => $adulto->valoraciones ?? [], 
+        '📆 Citas'                  => $adulto->citas ?? [],
+        '💊 Tratamientos'           => $adulto->tratamientos ?? [],
+        '👵 Adulto Mayor 75 Años a Más' => $adulto->valoraciones ?? [],
     ];
 @endphp
 
@@ -49,28 +62,26 @@
 
         {{-- Datos principales --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {!! renderCard('Número de ficha', $adulto->numero_ficha) !!}
-            {!! renderCard('IPRESS', $adulto->ipress) !!}
+            {!! renderCard('numero_ficha', $adulto->numero_ficha) !!}
+            {!! renderCard('ipress', $adulto->ipress) !!}
         </div>
 
         {{-- Datos Personales --}}
         <x-section-border />
         <h3 class="text-lg font-semibold text-blue-700 mb-4">🧍 Datos Personales</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-50 p-4 rounded-lg border shadow-sm capitalize">
-            {!! renderCard('DNI', $adulto->dni) !!}
+            {!! renderCard('dni', $adulto->dni) !!}
             {!! renderCard('Apellidos', $adulto->apellidos) !!}
             {!! renderCard('Nombres', $adulto->nombres) !!}
-            {!! renderCard('Fecha de nacimiento', $adulto->fecha_nacimiento) !!}
+            {!! renderCard('fecha_nacimiento', $adulto->fecha_nacimiento) !!}
             @php
-                $edad = $adulto->fecha_nacimiento
-                    ? \Carbon\Carbon::parse($adulto->fecha_nacimiento)->age
-                    : null;
+                $edad = $adulto->fecha_nacimiento ? \Carbon\Carbon::parse($adulto->fecha_nacimiento)->age : null;
             @endphp
             {!! renderCard('Edad', $edad) !!}
             {!! renderCard('Fecha de Ingreso', $adulto->fecha_ingreso) !!}
             {!! renderCard('Alergias', $adulto->alergias) !!}
             {!! renderCard('Teléfono', $adulto->telefono) !!}
-            {!! renderCard('¿Adulto mayor frágil?', $adulto->adulto_mayor_fragil) !!}
+            {!! renderCard('adulto_mayor_fragil', $adulto->adulto_mayor_fragil) !!}
         </div>
 
         {{-- Paneles dinámicos --}}
@@ -83,9 +94,10 @@
                     <svg :class="{ 'rotate-180': open }" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2" d="M19 9l-7 7-7-7" />
+                              stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
+
                 <div x-show="open" class="p-4 transition-all duration-300">
                     @forelse ($items as $item)
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-50 p-3 rounded-lg border capitalize">
