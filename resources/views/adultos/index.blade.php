@@ -12,7 +12,7 @@
                 {{-- Botón de registro --}}
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-2xl font-semibold text-[#0073B6]">Adultos Mayores</h1>
-                    <a href="{{ route('wizard.paso1') }}"
+                    <a href="{{ route('adultos.create') }}"
                         class="bg-blue-400 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded shadow">
                         + Registrar Nuevo
                     </a>
@@ -22,7 +22,7 @@
                 <form method="GET" action="{{ route('adultos.index') }}" class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-sm font-semibold mb-1 text-gray-700" for="dni">Filtrar por DNI</label>
-                        <input type="text" name="dni" id="dni" value="{{ request('dni') }}"
+                        <input type="text" name="dni" id="d ni" value="{{ request('dni') }}"
                             class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500">
                     </div>
                     <div>

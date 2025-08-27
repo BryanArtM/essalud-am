@@ -17,6 +17,8 @@
 
                 <form action="{{ route('wizard.paso3') }}" method="POST">
                     @csrf
+                    <h2 class="flex justify-center text-xl font-semibold mb-4">RIESGOS IDENTIFICADOS</h2>
+
 
                     @foreach ([
                         'sobrepeso' => 'Sobrepeso',

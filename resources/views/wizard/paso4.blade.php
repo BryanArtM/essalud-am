@@ -19,11 +19,14 @@
                     @csrf
 
                     {{-- Evaluaciones --}}
-                    <h2 class="text-xl font-semibold mb-4">Evaluaciones</h2>
+                    <h2 class="flex justify-center text-xl font-semibold mb-4">EVALUACIONES</h2>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="flex justify-center gap-4 mb-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Talla (cm)</label>
+                            <div class="flex justify-center">
+                                <label class="block text-sm font-medium text-gray-700">Talla (cm)</label>
+                            </div>
+                            
                             <input type="number" step="0.1" name="talla" required
                                 value="{{ old('talla', $evaluacion[0]['talla'] ?? '') }}"
                                 class="mt-1 block w-full border rounded px-2 py-1 @error('talla') border-red-500 @enderror">
@@ -32,7 +35,9 @@
                             @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Peso Aceptable (kg)</label>
+                            <div class="flex justify-center">
+                                <label class="block text-sm font-medium text-gray-700">Peso Aceptable (kg)</label>
+                            </div>
                             <input type="number" step="0.1" name="peso_aceptable" required
                                 value="{{ old('peso_aceptable', $evaluacion[0]['peso_aceptable'] ?? '') }}"
                                 class="mt-1 block w-full border rounded px-2 py-1 @error('peso_aceptable') border-red-500 @enderror">
@@ -111,7 +116,7 @@
                         class="my-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">+ Añadir Evaluación</button>
 
                     {{-- Actividades --}}
-                    <h2 class="text-xl font-semibold my-6">Asistencias a Actividades Educativas</h2>
+                    <h2 class="flex justify-center text-xl font-semibold mb-4">ASISTENCIAS A ACTIVIDADES EDUCATIVAS</h2>
                     @php
                         $actividades = old('actividades', $actividad ?? []);
                         $actividades = is_array($actividades) && isset($actividades[0]) ? $actividades : [$actividades];

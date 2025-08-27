@@ -26,6 +26,8 @@
 
                 <form method="POST" action="{{ route('wizard.paso2') }}">
                     @csrf
+                    <h2 class="flex justify-center text-xl font-semibold mb-4">ENFERMEDADES QUE PADECE</h2>
+
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach ([
@@ -33,14 +35,14 @@
                             'diabetes_mellitus', 'erc', 'osteoartrosis',
                             'asma', 'epoc', 'itg', 'sindrome_metabolico'
                         ] as $enfermedad)
-                            <div class="flex items-center">
-                                <input type="checkbox" id="{{ $enfermedad }}" name="{{ $enfermedad }}"
-                                    {{ old($enfermedad, $data[$enfermedad] ?? false) ? 'checked' : '' }}
-                                    class="mr-2">
-                                <label for="{{ $enfermedad }}" class="text-gray-700 uppercase">
-                                    {{ str_replace('_', ' ', $enfermedad) }}
-                                </label>
-                            </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="{{ $enfermedad }}" name="{{ $enfermedad }}"
+                                {{ old($enfermedad, $data[$enfermedad] ?? false) ? 'checked' : '' }}
+                                class="mr-2">
+                            <label for="{{ $enfermedad }}" class="text-gray-700 uppercase">
+                                {{ str_replace('_', ' ', $enfermedad) }}
+                            </label>
+                        </div>
                         @endforeach
                     </div>
 

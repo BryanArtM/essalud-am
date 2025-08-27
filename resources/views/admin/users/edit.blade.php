@@ -39,7 +39,7 @@
                     </select>
                 </div>
 
-                <div class="mt-6">
+                <div class="flex justify-center mt-6">
                     <x-button>Actualizar Usuario</x-button>
                 </div>
             </form>

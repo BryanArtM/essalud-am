@@ -11,20 +11,25 @@
                 {{ session('success') }}
             </div>
         @endif
-
-        <a href="{{ route('users.create') }}" 
-           class="inline-block px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition">
-            + Nuevo Usuario
-        </a>
+        <div class="flex justify-end">
+            <a href="{{ route('users.create') }}"
+                class="inline-block px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition">
+                + Nuevo Usuario
+            </a>
+        </div>
 
         <div class="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Nombre</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol
+                        </th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -34,26 +39,26 @@
                             <td class="px-6 py-4 text-gray-700">{{ $user->email }}</td>
                             <td class="px-6 py-4">
                                 @if($user->is_admin)
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
+                                    <span
+                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
                                         Administrador
                                     </span>
                                 @else
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                    <span
+                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
                                         Usuario
                                     </span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-center space-x-3">
-                                <a href="{{ route('users.edit', $user) }}" 
-                                   class="text-blue-600 hover:text-blue-800 font-medium">Editar</a>
-                                
-                                <form action="{{ route('users.destroy', $user) }}" 
-                                      method="POST" class="inline-block"
-                                      onsubmit="return confirm('¿Eliminar este usuario?');">
+                                <a href="{{ route('users.edit', $user) }}"
+                                    class="text-blue-600 hover:text-blue-800 font-medium">Editar</a>
+
+                                <form action="{{ route('users.destroy', $user) }}" method="POST" class="inline-block"
+                                    onsubmit="return confirm('¿Eliminar este usuario?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" 
-                                            class="text-red-600 hover:text-red-800 font-medium">
+                                    <button type="submit" class="text-red-600 hover:text-red-800 font-medium">
                                         Eliminar
                                     </button>
                                 </form>

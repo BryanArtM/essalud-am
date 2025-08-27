@@ -19,75 +19,80 @@
                     @csrf
 
                     {{-- Citas Médicas --}}
-                    <h3 class="text-lg font-semibold mb-4">Citas Médicas</h3>
-
+                    <h2 class="flex justify-center text-xl font-semibold mb-4">CITAS MÉDICAS</h2>
+                    <div class="flex justify-around font-semibold text-gray-800">
+                        <label>Fecha</label>
+                        <label>Médico</label>
+                        <label>Enfermera</label>
+                    </div>
                     <div id="citas-wrapper">
                         @if(old('citas', $citas))
                             @foreach(old('citas', $citas) as $i => $cita)
                                 <div class="grid grid-cols-3 gap-4 mb-4">
-                                    <input type="date" name="citas[{{ $i }}][fecha]"
-                                           value="{{ $cita['fecha'] ?? '' }}"
-                                           class="w-full border rounded px-3 py-2" required>
+                                    <input type="date" name="citas[{{ $i }}][fecha]" value="{{ $cita['fecha'] ?? '' }}"
+                                        class="w-full border rounded px-3 py-2" required>
 
-                                    <input type="text" name="citas[{{ $i }}][medico]"
-                                           value="{{ $cita['medico'] ?? '' }}"
-                                           class="w-full border rounded px-3 py-2" required>
+                                    <input type="text" name="citas[{{ $i }}][medico]" value="{{ $cita['medico'] ?? '' }}"
+                                        class="w-full border rounded px-3 py-2" required>
 
-                                    <input type="text" name="citas[{{ $i }}][enfermera]"
-                                           value="{{ $cita['enfermera'] ?? '' }}"
-                                           class="w-full border rounded px-3 py-2" required>
+                                    <input type="text" name="citas[{{ $i }}][enfermera]" value="{{ $cita['enfermera'] ?? '' }}"
+                                        class="w-full border rounded px-3 py-2" required>
                                 </div>
                             @endforeach
                         @else
                             <div class="grid grid-cols-3 gap-4 mb-4">
                                 <input type="date" name="citas[0][fecha]" class="w-full border rounded px-3 py-2" required>
                                 <input type="text" name="citas[0][medico]" class="w-full border rounded px-3 py-2" required>
-                                <input type="text" name="citas[0][enfermera]" class="w-full border rounded px-3 py-2" required>
+                                <input type="text" name="citas[0][enfermera]" class="w-full border rounded px-3 py-2"
+                                    required>
                             </div>
                         @endif
                     </div>
 
                     <button type="button" onclick="agregarCita()"
-                            class="mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        class="mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                         + Añadir Cita
                     </button>
 
                     {{-- Tratamiento Farmacológico --}}
-                    <h3 class="text-lg font-semibold mb-4 mt-6">Tratamiento Farmacológico</h3>
-
+                    <h2 class="flex justify-center text-xl font-semibold mb-4">TRATAMIENTO FARMACOLÓGICO</h2>
+                    <div class="flex justify-around font-semibold text-gray-800">
+                        <label>Medicación</label>
+                        <label>Dosis</label>
+                    </div>
                     <div id="tratamientos-wrapper">
                         @if(old('tratamientos', $tratamientos))
                             @foreach(old('tratamientos', $tratamientos) as $i => $tratamiento)
                                 <div class="grid grid-cols-2 gap-4 mb-4">
                                     <input type="text" name="tratamientos[{{ $i }}][medicacion]"
-                                           value="{{ $tratamiento['medicacion'] ?? '' }}"
-                                           class="w-full border rounded px-3 py-2" required>
+                                        value="{{ $tratamiento['medicacion'] ?? '' }}" class="w-full border rounded px-3 py-2"
+                                        required>
 
                                     <input type="number" name="tratamientos[{{ $i }}][dosis]"
-                                           value="{{ $tratamiento['dosis'] ?? '' }}"
-                                           class="w-full border rounded px-3 py-2" required>
+                                        value="{{ $tratamiento['dosis'] ?? '' }}" class="w-full border rounded px-3 py-2"
+                                        required>
                                 </div>
                             @endforeach
                         @else
                             <div class="grid grid-cols-2 gap-4 mb-4">
-                                <input type="text" name="tratamientos[0][medicacion]" class="w-full border rounded px-3 py-2">
+                                <input type="text" name="tratamientos[0][medicacion]"
+                                    class="w-full border rounded px-3 py-2">
                                 <input type="number" name="tratamientos[0][dosis]" class="w-full border rounded px-3 py-2">
                             </div>
                         @endif
                     </div>
 
                     <button type="button" onclick="agregarTratamiento()"
-                            class="mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        class="mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                         + Añadir Tratamiento
                     </button>
 
                     <div class="flex justify-between mt-6">
                         <a href="{{ route('wizard.paso4') }}"
-                           class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                            class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
                             Atrás
                         </a>
-                        <button type="submit"
-                                class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
                             Siguiente
                         </button>
                     </div>

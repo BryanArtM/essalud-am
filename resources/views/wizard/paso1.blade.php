@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="max-w-2xl mx-auto mt-8 bg-white shadow-md rounded-lg p-6">
-        
+
         @if ($errors->any())
             <div class="mb-4 text-red-600">
                 <ul class="list-disc pl-6">
@@ -25,11 +25,12 @@
 
         <form method="POST" action="{{ route('wizard.paso1.post') }}">
             @csrf
+            <h2 class="flex justify-center text-xl font-semibold mb-4">DATOS PERSONALES</h2>
+
 
             <div class="mb-4">
                 <label for="ipress" class="block text-gray-700 font-semibold mb-2">IPRESS</label>
-                <input type="text" name="ipress" id="ipress" required
-                    value="{{ old('ipress', $data['ipress'] ?? '') }}"
+                <input type="text" name="ipress" id="ipress" required value="{{ old('ipress', $data['ipress'] ?? '') }}"
                     class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
@@ -77,8 +78,7 @@
 
             <div class="mb-4">
                 <label for="fecha_nacimiento" class="block text-gray-700 font-semibold mb-2">Fecha de Nacimiento</label>
-                <input type="date" name="fecha_nacimiento" required
-                    max="{{ date('Y-m-d') }}"
+                <input type="date" name="fecha_nacimiento" required max="{{ date('Y-m-d') }}"
                     value="{{ old('fecha_nacimiento', $data['fecha_nacimiento'] ?? '') }}"
                     class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
@@ -91,7 +91,8 @@
             </div>
 
             <div class="mb-6">
-                <label for="adulto_mayor_fragil" class="block text-gray-700 font-semibold mb-2">Adulto Mayor Frágil</label>
+                <label for="adulto_mayor_fragil" class="block text-gray-700 font-semibold mb-2">Adulto Mayor
+                    Frágil</label>
                 <input type="text" name="adulto_mayor_fragil" required maxlength="100"
                     value="{{ old('adulto_mayor_fragil', $data['adulto_mayor_fragil'] ?? '') }}"
                     class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">

@@ -14,7 +14,7 @@ class AdultoMayorController extends Controller
     public function index(Request $request)
     {
         $adultos = AdultoMayor::all();
-    
+
         $query = AdultoMayor::query();
 
         if ($request->filled('dni')) {
@@ -23,19 +23,29 @@ class AdultoMayorController extends Controller
         if ($request->filled('apellidos')) {
             $query->where('apellidos', 'like', '%' . $request->apellidos . '%');
         }
-        $adultos = $query->paginate(1)->withQueryString(); 
+        $adultos = $query->paginate(1)->withQueryString();
         return view('adultos.index', compact('adultos'));
     }
 
 
-    
-        
+
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
+        session()->forget([
+            'adulto_id',
+            'adulto_mayor',
+            'enfermedad',
+            'riesgo',
+            'evaluacion',
+            'actividad',
+            'citas_tratamientos',
+            'valoracion'
+        ]);
         return view('wizard.paso1');
 
     }
@@ -55,7 +65,13 @@ class AdultoMayorController extends Controller
     public function show($id)
     {
         $adulto = AdultoMayor::with([
-            'enfermedad', 'riesgo', 'evaluaciones', 'actividadeseducativas', 'tratamientos', 'citas', 'valoraciones'
+            'enfermedad',
+            'riesgo',
+            'evaluaciones',
+            'actividadeseducativas',
+            'tratamientos',
+            'citas',
+            'valoraciones'
         ])->findOrFail($id);
 
         return view('adultos.show', compact('adulto'));
@@ -67,32 +83,45 @@ class AdultoMayorController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(AdultoMayor $adulto)
-{
-    session(['adulto_id' => $adulto->id]);
+    {
+        session(['adulto_id' => $adulto->id]);
 
-    session(['adulto_mayor' => $adulto->only([
-        'ipress','numero_ficha','dni', 'apellidos', 'nombres', 'fecha_nacimiento', 'telefono', 'fecha_ingreso', 'alergias', 'adulto_mayor_fragil'
-    ])]);
+        session([
+            'adulto_mayor' => $adulto->only([
+                'ipress',
+                'numero_ficha',
+                'dni',
+                'apellidos',
+                'nombres',
+                'fecha_nacimiento',
+                'telefono',
+                'fecha_ingreso',
+                'alergias',
+                'adulto_mayor_fragil'
+            ])
+        ]);
 
-    $enfermedad = $adulto->enfermedad->first();
-    session(['enfermedad' => $enfermedad ? $enfermedad->toArray() : []]);
+        $enfermedad = $adulto->enfermedad->first();
+        session(['enfermedad' => $enfermedad ? $enfermedad->toArray() : []]);
 
-    $riesgo = $adulto->riesgo->first();
-    session(['riesgo' => $riesgo ? $riesgo->toArray() : []]);
+        $riesgo = $adulto->riesgo->first();
+        session(['riesgo' => $riesgo ? $riesgo->toArray() : []]);
 
-    session(['evaluacion' => $adulto->evaluaciones->toArray()]);
-    session(['actividad' => $adulto->actividadesEducativas->toArray()]);
+        session(['evaluacion' => $adulto->evaluaciones->toArray()]);
+        session(['actividad' => $adulto->actividadesEducativas->toArray()]);
 
-    session(['citas_tratamientos' => [
-        'tratamientos' => $adulto->tratamientos->toArray(),
-        'citas' => $adulto->citas->toArray(),
-    ]]);
+        session([
+            'citas_tratamientos' => [
+                'tratamientos' => $adulto->tratamientos->toArray(),
+                'citas' => $adulto->citas->toArray(),
+            ]
+        ]);
 
-    $valoracion = $adulto->valoraciones->first();
-    session(['valoracion' => $valoracion ? $valoracion->toArray() : []]);
+        $valoracion = $adulto->valoraciones->first();
+        session(['valoracion' => $valoracion ? $valoracion->toArray() : []]);
 
-    return redirect()->route('wizard.paso1')->with('success', 'Datos cargados para edición.');
-}
+        return redirect()->route('wizard.paso1')->with('success', 'Datos cargados para edición.');
+    }
 
 
 

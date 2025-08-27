@@ -19,7 +19,7 @@
                             {{ __('Dashboard') }}
                         </x-nav-link>
                         @auth
-                        @if (auth()->user()->email === env('ADMIN_EMAIL'))
+                        @if (auth()->user()->email === 'admin@essalud.pe')
                             <x-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('users.*')">
                                 {{ __('Gestionar Usuarios') }}
                             </x-nav-link>
