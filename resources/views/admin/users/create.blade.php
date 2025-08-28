@@ -27,21 +27,39 @@
 
                 <div class="mt-4">
                     <x-label for="password_confirmation" value="Confirmar Contraseña" />
-                    <x-input id="password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" required />
+                    <x-input id="password_confirmation" name="password_confirmation" type="password"
+                        class="mt-1 block w-full" required />
                 </div>
 
                 <div class="mt-4">
                     <x-label for="role" value="Rol" />
-                    <select id="role" name="role" class="mt-1 block w-full rounded border-gray-300">
+                    <select id="role" name="role" class="mt-1 block w-full rounded border-gray-300" required>
                         <option value="user">Usuario</option>
                         <option value="admin">Administrador</option>
                     </select>
                 </div>
 
                 <div class="flex justify-center mt-6">
-                    <x-button>Crear Usuario</x-button>
+                    <x-button id="submitBtn">Crear Usuario</x-button>
                 </div>
             </form>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const roleSelect = document.getElementById('role');
+            const submitBtn = document.getElementById('submitBtn');
+
+            function updateButtonText() {
+                if (roleSelect.value === 'admin') {
+                    submitBtn.textContent = 'Crear Administrador';
+                } else {
+                    submitBtn.textContent = 'Crear Usuario';
+                }
+            }
+
+            roleSelect.addEventListener('change', updateButtonText);
+            updateButtonText();
+        });
+    </script>
 </x-app-layout>

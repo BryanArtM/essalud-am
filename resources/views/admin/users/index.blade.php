@@ -7,9 +7,15 @@
 
     <div class="py-6 max-w-7xl mx-auto sm:px-6 lg:px-8">
         @if(session('success'))
-            <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
+            <div id="success-alert" class="mb-4 p-3 bg-gray-300 text-gray-800 rounded font-semibold">
                 {{ session('success') }}
             </div>
+            <script>
+                setTimeout(function () {
+                    const alert = document.getElementById('success-alert');
+                    if (alert) alert.style.display = 'none';
+                }, 3000);
+            </script>
         @endif
         <div class="flex justify-end">
             <a href="{{ route('users.create') }}"
@@ -26,9 +32,10 @@
                             Nombre</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol
-                        </th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Rol</th>
+                        <th
+                            class="flex justify-center px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Acciones</th>
                     </tr>
                 </thead>
@@ -53,15 +60,16 @@
                             <td class="px-6 py-4 text-center space-x-3">
                                 <a href="{{ route('users.edit', $user) }}"
                                     class="text-blue-600 hover:text-blue-800 font-medium">Editar</a>
-
-                                <form action="{{ route('users.destroy', $user) }}" method="POST" class="inline-block"
-                                    onsubmit="return confirm('¿Eliminar este usuario?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-800 font-medium">
-                                        Eliminar
-                                    </button>
-                                </form>
+                                @if (auth()->user()->id !== $user->id)
+                                    <form action="{{ route('users.destroy', $user) }}" method="POST" class="inline-block"
+                                        onsubmit="return confirm('¿Eliminar este usuario?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-800 font-medium">
+                                            Eliminar
+                                        </button>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
                     @empty

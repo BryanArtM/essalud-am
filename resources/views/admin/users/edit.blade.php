@@ -13,12 +13,14 @@
 
                 <div>
                     <x-label for="name" value="Nombre" />
-                    <x-input id="name" name="name" type="text" value="{{ $user->name }}" class="mt-1 block w-full" required />
+                    <x-input id="name" name="name" type="text" value="{{ $user->name }}" class="mt-1 block w-full"
+                        required />
                 </div>
 
                 <div class="mt-4">
                     <x-label for="email" value="Email" />
-                    <x-input id="email" name="email" type="email" value="{{ $user->email }}" class="mt-1 block w-full" required />
+                    <x-input id="email" name="email" type="email" value="{{ $user->email }}" class="mt-1 block w-full"
+                        required />
                 </div>
 
                 <div class="mt-4">
@@ -28,7 +30,8 @@
 
                 <div class="mt-4">
                     <x-label for="password_confirmation" value="Confirmar Contraseña" />
-                    <x-input id="password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" />
+                    <x-input id="password_confirmation" name="password_confirmation" type="password"
+                        class="mt-1 block w-full" />
                 </div>
 
                 <div class="mt-4">
@@ -40,9 +43,26 @@
                 </div>
 
                 <div class="flex justify-center mt-6">
-                    <x-button>Actualizar Usuario</x-button>
+                    <x-button id="submitBtn">Actualizar Usuario</x-button>
                 </div>
             </form>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const roleSelect = document.getElementById('role');
+            const submitBtn = document.getElementById('submitBtn');
+
+            function updateButtonText() {
+                if (roleSelect.value === 'admin') {
+                    submitBtn.textContent = 'Actualizar Administrador';
+                } else {
+                    submitBtn.textContent = 'Crear Usuario';
+                }
+            }
+            roleSelect.addEventListener('change', updateButtonText);
+            updateButtonText();
+        });
+
+    </script>
 </x-app-layout>

@@ -36,13 +36,17 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6'
+            'password' => 'required|min:6',
+            'role' => 'required|in:user,admin',
         ]);
+
+        $is_admin = $request->role === 'admin' ? 1 : 0;
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'is_admin' => $is_admin,
         ]);
 
         return redirect()->route('users.index')->with('success', 'Usuario creado correctamente');
@@ -58,13 +62,16 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => "required|email|unique:users,email,{$user->id}",
-            'password' => 'nullable|min:6'
+            'password' => 'nullable|min:6',
+            'role' => "required|in:user,admin",
         ]);
 
+        $is_admin = $request->role === 'admin' ? 1 : 0;
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password ? Hash::make($request->password) : $user->password,
+            'isadmin' => $is_admin,
         ]);
 
         return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente');
