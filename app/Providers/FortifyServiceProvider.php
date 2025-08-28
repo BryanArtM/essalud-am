@@ -31,15 +31,6 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
-    // Crear admin si no existe
-        if (User::count() === 0) {
-            User::create([
-                'name' => 'Administrador',
-                'email' => 'admin@essalud.pe',
-                'password' => Hash::make('admin123'), // cámbialo por algo seguro
-            ]);
-        }
-
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);

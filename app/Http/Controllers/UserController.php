@@ -13,7 +13,7 @@ class UserController extends Controller
     {
         // Solo el admin puede entrar
         $this->middleware(function ($request, $next) {
-            if (auth()->check() && auth()->user()->email === env('ADMIN_EMAIL')) {
+            if (auth()->check() && auth()->user()->is_admin == 1) {
                 return $next($request);
             }
             abort(403, 'Acceso denegado');

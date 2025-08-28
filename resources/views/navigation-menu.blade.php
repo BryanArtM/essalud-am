@@ -17,7 +17,7 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     @auth
-                        @if (auth()->user()->email === 'admin@essalud.pe')
+                        @if (auth()->user()->is_admin == 1)
                             <x-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('users.*')">
                                 {{ __('Gestionar Usuarios') }}
                             </x-nav-link>
@@ -162,7 +162,7 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
             @auth
-                @if (auth()->user()->email === 'admin@essalud.pe')
+                @if (auth()->user()->is_admin == 1)
                     <x-responsive-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('users.*')">
                         {{ __('Gestionar Usuarios') }}
                     </x-responsive-nav-link>
