@@ -57,7 +57,7 @@
                 if (roleSelect.value === 'admin') {
                     submitBtn.textContent = 'Actualizar Administrador';
                 } else {
-                    submitBtn.textContent = 'Crear Usuario';
+                    submitBtn.textContent = 'Actualizar Usuario';
                 }
             }
             roleSelect.addEventListener('change', updateButtonText);
