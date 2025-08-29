@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="flex justify-center mt-6">
-                    <x-button id="submitBtn">Crear Usuario</x-button>
+                    <x-button id="submitBtn">Registrar Usuario</x-button>
                 </div>
             </form>
         </div>
@@ -52,9 +52,9 @@
 
             function updateButtonText() {
                 if (roleSelect.value === 'admin') {
-                    submitBtn.textContent = 'Crear Administrador';
+                    submitBtn.textContent = 'Registrar Administrador';
                 } else {
-                    submitBtn.textContent = 'Crear Usuario';
+                    submitBtn.textContent = 'Registrar Usuario';
                 }
             }
 

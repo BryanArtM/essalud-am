@@ -4,7 +4,7 @@
         <!-- Menú lateral -->
         <aside class="w-64 bg-white shadow-lg">
             <div class="p-4 border-b">
-                <h1 class="text-xl font-bold text-gray-800">Menú</h1>
+                <h1 class="flex justify-start ms-4 text-xl font-bold text-gray-800">Menú</h1>
             </div>
             <nav class="p-4 space-y-2">
                 <a href="{{ route('dashboard') }}" class="block px-4 py-2 rounded hover:bg-gray-200">🏠 Inicio</a>
