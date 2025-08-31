@@ -3,9 +3,10 @@
 declare(strict_types=1);
 
 return [
-    'reset'     => 'Su contraseña ha sido restablecida.',
-    'sent'      => 'Le hemos enviado por correo electrónico el enlace para restablecer su contraseña.',
+    'reset' => 'Su contraseña ha sido restablecida.',
+    'sent' => '¡Hemos enviado el enlace para restablecer tu contraseña! 
+                Revisa también tu carpeta de SPAM o correo no deseado.',
     'throttled' => 'Por favor espere antes de intentar de nuevo.',
-    'token'     => 'El token de restablecimiento de contraseña es inválido.',
-    'user'      => 'No encontramos ningún usuario con ese correo electrónico.',
+    'token' => 'El token de restablecimiento de contraseña es inválido.',
+    'user' => 'No encontramos ningún usuario con ese correo electrónico.',
 ];
