@@ -71,7 +71,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password ? Hash::make($request->password) : $user->password,
-            'isadmin' => $is_admin,
+            'is_admin' => $is_admin,
         ]);
 
         return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente');
