@@ -13,19 +13,25 @@
 
                 <div>
                     <x-label for="name" value="Nombre" />
-                    <x-input id="name" name="name" type="text" value="{{ $user->name }}" class="mt-1 block w-full"
-                        required />
+                    <x-input id="name" name="name" type="text" class="mt-1 block w-full" value="{{ $user->name }}"
+                        required minlength="3" maxlength="50" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$"
+                        title="Solo letras y espacios, mínimo 3 y máximo 50 caracteres" />
                 </div>
+
 
                 <div class="mt-4">
                     <x-label for="email" value="Email" />
-                    <x-input id="email" name="email" type="email" value="{{ $user->email }}" class="mt-1 block w-full"
-                        required />
+                    <x-input id="email" class="block mt-1 w-full" type="email" name="email" value="{{ old('email', $user->email) }}"
+                        required autofocus  pattern="^[\w\.-]+@gmail\.com$"
+                        title="Solo se permiten correos @gmail.com" />
                 </div>
 
                 <div class="mt-4">
                     <x-label for="password" value="Contraseña (dejar vacío para no cambiar)" />
-                    <x-input id="password" name="password" type="password" class="mt-1 block w-full" />
+                    <x-input id="password" class="block mt-1 w-full" type="password" name="password" required
+                        autocomplete="new-password" minlength="8"
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$"
+                        title="Mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial" />
                 </div>
 
                 <div class="mt-4">
@@ -33,6 +39,8 @@
                     <x-input id="password_confirmation" name="password_confirmation" type="password"
                         class="mt-1 block w-full" />
                 </div>
+
+
 
                 <div class="mt-4">
                     <x-label for="role" value="Rol" />

@@ -12,23 +12,30 @@
 
                 <div>
                     <x-label for="name" value="Nombre" />
-                    <x-input id="name" name="name" type="text" class="mt-1 block w-full" required />
+                    <x-input id="name" name="name" type="text" class="mt-1 block w-full" required minlength="3"
+                        maxlength="50" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$"
+                        title="Solo letras y espacios, mínimo 3 y máximo 50 caracteres" />
                 </div>
 
                 <div class="mt-4">
                     <x-label for="email" value="Email" />
-                    <x-input id="email" name="email" type="email" class="mt-1 block w-full" required />
+                    <x-input id="email" class="block mt-1 w-full" type="email" name="email"
+                        value="{{ old('email') }}" required autofocus autocomplete="username"
+                        pattern="^[\w\.-]+@gmail\.com$" title="Solo se permiten correos @gmail.com" />
                 </div>
 
                 <div class="mt-4">
                     <x-label for="password" value="Contraseña" />
-                    <x-input id="password" name="password" type="password" class="mt-1 block w-full" required />
+                    <x-input id="password" class="block mt-1 w-full" type="password" name="password" required
+                        autocomplete="new-password" minlength="8"
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$"
+                        title="Mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial" />
                 </div>
 
                 <div class="mt-4">
                     <x-label for="password_confirmation" value="Confirmar Contraseña" />
-                    <x-input id="password_confirmation" name="password_confirmation" type="password"
-                        class="mt-1 block w-full" required />
+                    <x-input id="password_confirmation" class="block mt-1 w-full" type="password"
+                        name="password_confirmation" required />
                 </div>
 
                 <div class="mt-4">

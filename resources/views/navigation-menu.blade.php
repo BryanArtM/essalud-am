@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <img src="{{ asset('images/icon.jpg') }}" alt="Logo" class="block h-9 w-auto rounded" />
+                        <x-authentication-card-logo class="max-h-12 max-w-12 mx-auto ring-1 ring-blue-300 shadow-md" />
                     </a>
                 </div>
 

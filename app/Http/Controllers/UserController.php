@@ -34,10 +34,28 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-            'role' => 'required|in:user,admin',
+            'name' => [
+                'required',
+                'string',
+                'min:3',
+                'max:50',
+                'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'
+            ],
+            'email' => [
+                'required',
+                'email',
+                'unique:users,email',
+                'regex:/^[\w\.-]+@gmail\.com$/'
+            ],
+            'password' => [
+                'required',
+                'min:8',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'
+            ],
+            'role' => [
+                'required',
+                'in:user,admin',
+            ],
         ]);
 
         $is_admin = $request->role === 'admin' ? 1 : 0;
@@ -60,10 +78,28 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => "required|email|unique:users,email,{$user->id}",
-            'password' => 'nullable|min:6',
-            'role' => "required|in:user,admin",
+            'name' => [
+                'required',
+                'string',
+                'min:3',
+                'max:50',
+                'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'
+            ],
+            'email' => [
+                'required',
+                'email',
+                "unique:users,email,{$user->id}",
+                'regex:/^[\w\.-]+@gmail\.com$/'
+            ],
+            'password' => [
+                'nullable',
+                'min:8',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'
+            ],
+            'role' => [
+                'required',
+                'in:user,admin',
+            ],
         ]);
 
         $is_admin = $request->role === 'admin' ? 1 : 0;
