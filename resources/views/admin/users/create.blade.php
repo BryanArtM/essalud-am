@@ -13,15 +13,14 @@
                 <div>
                     <x-label for="name" value="Nombre" />
                     <x-input id="name" name="name" type="text" class="mt-1 block w-full" required minlength="3"
-                        maxlength="50" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$"
+                        autofocus maxlength="50" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$"
                         title="Solo letras y espacios, mínimo 3 y máximo 50 caracteres" />
                 </div>
 
                 <div class="mt-4">
                     <x-label for="email" value="Email" />
-                    <x-input id="email" class="block mt-1 w-full" type="email" name="email"
-                        value="{{ old('email') }}" required autofocus autocomplete="username"
-                        pattern="^[\w\.-]+@gmail\.com$" title="Solo se permiten correos @gmail.com" />
+                    <x-input id="email" class="block mt-1 w-full" type="email" name="email" value="{{ old('email') }}"
+                        required placeholder="ejemplo@gmail.com" autocomplete="username" title="Solo se permiten correos @gmail.com" />
                 </div>
 
                 <div class="mt-4">
@@ -56,6 +55,8 @@
         document.addEventListener('DOMContentLoaded', function () {
             const roleSelect = document.getElementById('role');
             const submitBtn = document.getElementById('submitBtn');
+            const emailInput = document.getElementById('email');
+
 
             function updateButtonText() {
                 if (roleSelect.value === 'admin') {
@@ -64,6 +65,20 @@
                     submitBtn.textContent = 'Registrar Usuario';
                 }
             }
+            // Validación en tiempo real del email
+            emailInput.addEventListener('input', function () {
+                const email = this.value.trim();
+
+                if (email.length > 0) {
+                    if (!email.endsWith('@gmail.com')) {
+                        this.setCustomValidity('Solo se permiten correos @gmail.com');
+                    } else {
+                        this.setCustomValidity('');
+                    }
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
 
             roleSelect.addEventListener('change', updateButtonText);
             updateButtonText();

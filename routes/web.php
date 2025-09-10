@@ -5,34 +5,30 @@ use App\Http\Controllers\AdultoMayorController;
 use App\Http\Controllers\AdultoMayorWizardController;
 use App\Http\Controllers\UserController;
 
-
+// Redirigir raíz al dashboard
 Route::middleware(['auth', 'verified'])->get('/', function () {
     return redirect()->route('dashboard');
 });
 
-// Grupo protegido por Jetstream (login + email verificado)
+// Grupo protegido por Jetstream
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
     
-    // Dashboard
+    // Dashboard 
     Route::get('/dashboard', function () {        
         return view('dashboard');
-        })->middleware(['auth', 'verified'])->name('dashboard');
+    })->name('dashboard');
     
     // CRUD Adultos Mayores
     Route::resource('adultos', AdultoMayorController::class);
     
-    
-Route::middleware('isAdmin')->group(function () {
-    Route::resource('admin/users', UserController::class)->except(['show']);
-});
-
-
-
-
+    // Administración de usuarios (solo admins)
+    Route::middleware('isAdmin')->group(function () {
+        Route::resource('admin/users', UserController::class)->except(['show']);
+    });
 
     // Wizard de registro de adultos mayores
     Route::prefix('registro-adulto')->name('wizard.')->group(function () {

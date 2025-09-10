@@ -21,14 +21,13 @@
 
                 <div class="mt-4">
                     <x-label for="email" value="Email" />
-                    <x-input id="email" class="block mt-1 w-full" type="email" name="email" value="{{ old('email', $user->email) }}"
-                        required autofocus  pattern="^[\w\.-]+@gmail\.com$"
-                        title="Solo se permiten correos @gmail.com" />
+                    <x-input id="email" class="block mt-1 w-full" type="email" name="email" placeholder="ejemplo@gmail.com"
+                        value="{{ old('email', $user->email) }}" required title="Solo se permiten correos @gmail.com" />
                 </div>
 
                 <div class="mt-4">
                     <x-label for="password" value="Contraseña (dejar vacío para no cambiar)" />
-                    <x-input id="password" class="block mt-1 w-full" type="password" name="password" required
+                    <x-input id="password" class="block mt-1 w-full" type="password" name="password"
                         autocomplete="new-password" minlength="8"
                         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$"
                         title="Mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial" />
@@ -60,6 +59,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const roleSelect = document.getElementById('role');
             const submitBtn = document.getElementById('submitBtn');
+            const emailInput = document.getElementById('email');
 
             function updateButtonText() {
                 if (roleSelect.value === 'admin') {
@@ -68,6 +68,21 @@
                     submitBtn.textContent = 'Actualizar Usuario';
                 }
             }
+            // Validación en tiempo real del email
+            emailInput.addEventListener('input', function () {
+                const email = this.value.trim();
+
+                if (email.length > 0) {
+                    if (!email.endsWith('@gmail.com')) {
+                        this.setCustomValidity('Solo se permiten correos @gmail.com');
+                    } else {
+                        this.setCustomValidity('');
+                    }
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+
             roleSelect.addEventListener('change', updateButtonText);
             updateButtonText();
         });
