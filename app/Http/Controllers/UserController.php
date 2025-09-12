@@ -20,10 +20,23 @@ class UserController extends Controller
         });
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        // Validación básica para filtros
+        $request->validate([
+            'name' => 'nullable|string|max:100',
+        ]);
+
+        $query = User::query();
+
+        if ($request->filled('name')) {
+            $query->where('name', 'LIKE', '%' . $request->name . '%');
+        }
+
+        $users = $query->paginate(10)->appends($request->all());
         return view('admin.users.index', compact('users'));
+
+
     }
 
     public function create()

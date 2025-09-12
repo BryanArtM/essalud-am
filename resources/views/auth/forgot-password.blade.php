@@ -1,7 +1,8 @@
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo  class="w-40 h-40 mx-auto ring-2 ring-blue-500 shadow-lg" />
+            <a href="{{ route('login') }}">
+                <x-authentication-card-logo class="w-40 h-40 mx-auto ring-2 ring-blue-500 shadow-lg" />
         </x-slot>
 
         <div class="mb-4 text-sm text-gray-600">

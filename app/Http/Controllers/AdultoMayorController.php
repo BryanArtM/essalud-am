@@ -15,15 +15,22 @@ class AdultoMayorController extends Controller
     {
         $adultos = AdultoMayor::all();
 
+        $request->validate([
+            'dni' => 'nullable|string|regex:/^[0-9]{1,8}$/',
+            'apellidos' => 'nullable|string|max:100',
+        ], [
+            'dni.regex' => 'El DNI debe contener solo números (máximo 8 dígitos).',
+        ]);
+
         $query = AdultoMayor::query();
 
         if ($request->filled('dni')) {
-            $query->where('dni', 'like', '%' . $request->dni . '%');
+            $query->where('dni', 'like',$request->dni . '%');
         }
         if ($request->filled('apellidos')) {
             $query->where('apellidos', 'like', '%' . $request->apellidos . '%');
         }
-        $adultos = $query->paginate(1)->withQueryString();
+        $adultos = $query->paginate(10)->withQueryString();
         return view('adultos.index', compact('adultos'));
     }
 

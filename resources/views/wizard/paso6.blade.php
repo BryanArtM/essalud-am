@@ -20,7 +20,7 @@
                     @csrf
 
                     {{-- Evaluación Geriátrica --}}
-                    <h2 class="flex justify-center text-xl font-semibold mb-4">ADULTO MAYOR 75 AÑOS A MÁS</h2>
+                    <h2 class="text-center text-xl font-semibold mb-4">ADULTO MAYOR 75 AÑOS A MÁS</h2>
 
                     <div class="mb-4">
                         <label class="font-semibold">¿Autovalente?</label>
@@ -63,7 +63,7 @@
                     </div>
 
                     {{-- Fechas por servicio --}}
-                    <h2 class="flex justify-center text-xl font-semibold mb-4">VALORACIÓN GERIÁTRICA INTEGRAL</h2>
+                    <h2 class="text-center text-xl font-semibold mb-4">VALORACIÓN GERIÁTRICA INTEGRAL</h2>
 
                     @foreach ([
                         'enfermeria', 'medicina', 'nutricion',

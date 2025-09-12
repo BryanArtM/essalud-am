@@ -10,6 +10,16 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call(AdminUserSeeder::class);
+        $this->call([
+            AdminUserSeeder::class,
+            AdultosMayoresSeeder::class,
+            EnfermedadesSeeder::class,
+            RiesgosSeeder::class,
+            EvaluacionesSeeder::class,
+            CitasSeeder::class,
+            TratamientosSeeder::class,
+            ValoracionesSeeder::class,
+            ActividadesEducativasSeeder::class,
+        ]);
     }
 }

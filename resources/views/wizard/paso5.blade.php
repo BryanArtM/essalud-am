@@ -19,7 +19,7 @@
                     @csrf
 
                     {{-- Citas Médicas --}}
-                    <h2 class="flex justify-center text-xl font-semibold mb-4">CITAS MÉDICAS</h2>
+                    <h2 class="text-center text-xl font-semibold mb-4">CITAS MÉDICAS</h2>
                     <div class="flex justify-around font-semibold text-gray-800">
                         <label>Fecha</label>
                         <label>Médico</label>
@@ -55,7 +55,7 @@
                     </button>
 
                     {{-- Tratamiento Farmacológico --}}
-                    <h2 class="flex justify-center text-xl font-semibold mb-4">TRATAMIENTO FARMACOLÓGICO</h2>
+                    <h2 class="text-center text-xl font-semibold mb-4">TRATAMIENTO FARMACOLÓGICO</h2>
                     <div class="flex justify-around font-semibold text-gray-800">
                         <label>Medicación</label>
                         <label>Dosis</label>

@@ -19,7 +19,7 @@
                     @csrf
 
                     {{-- Evaluaciones --}}
-                    <h2 class="flex justify-center text-xl font-semibold mb-4">EVALUACIONES</h2>
+                    <h2 class="text-center text-xl font-semibold mb-4">EVALUACIONES</h2>
 
                     <div class="flex justify-center gap-4 mb-6">
                         <div>
@@ -116,7 +116,7 @@
                         class="my-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">+ Añadir Evaluación</button>
 
                     {{-- Actividades --}}
-                    <h2 class="flex justify-center text-xl font-semibold mb-4">ASISTENCIAS A ACTIVIDADES EDUCATIVAS</h2>
+                    <h2 class="text-center text-xl font-semibold mb-4">ASISTENCIAS A ACTIVIDADES EDUCATIVAS</h2>
                     @php
                         $actividades = old('actividades', $actividad ?? []);
                         $actividades = is_array($actividades) && isset($actividades[0]) ? $actividades : [$actividades];

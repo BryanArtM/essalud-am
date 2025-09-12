@@ -19,14 +19,18 @@
                 </div>
 
                 {{-- Filtros --}}
-                <form method="GET" action="{{ route('adultos.index') }}" class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <form method="GET" action="{{ route('adultos.index') }}"
+                    class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-sm font-semibold mb-1 text-gray-700" for="dni">Filtrar por DNI</label>
-                        <input type="text" name="dni" id="d ni" value="{{ request('dni') }}"
-                            class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <input type="text" name="dni" id="dni" pattern="[0-9]{1,8}" maxlength="8"
+                            title="Ingrese hasta 8 números" value="{{ request('dni') }}"
+                            class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 8)">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold mb-1 text-gray-700" for="apellidos">Filtrar por Apellidos</label>
+                        <label class="block text-sm font-semibold mb-1 text-gray-700" for="apellidos">Filtrar por
+                            Apellidos</label>
                         <input type="text" name="apellidos" id="apellidos" value="{{ request('apellidos') }}"
                             class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500">
                     </div>
@@ -73,8 +77,8 @@
                                                 class="bg-yellow-400 hover:bg-yellow-600 text-white px-3 py-1 rounded text-xs shadow">
                                                 Editar
                                             </a>
-                                            <form action="{{ route('adultos.destroy', $adulto->id) }}"
-                                                method="POST" class="inline-block"
+                                            <form action="{{ route('adultos.destroy', $adulto->id) }}" method="POST"
+                                                class="inline-block"
                                                 onsubmit="return confirm('¿Está seguro de eliminar este registro?');">
                                                 @csrf
                                                 @method('DELETE')
