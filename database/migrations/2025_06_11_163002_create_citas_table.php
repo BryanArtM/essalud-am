@@ -6,10 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+        public function up(): void
     {
         // CREACIÓN DE LA TABLA CON LOS DATOS DE LAS CITAS DE LOS ADULTOS MAYORES
         Schema::create('citas', function (Blueprint $table) {
@@ -23,10 +20,7 @@ return new class extends Migration
         
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+        public function down(): void
     {
         Schema::dropIfExists('citas');
     }

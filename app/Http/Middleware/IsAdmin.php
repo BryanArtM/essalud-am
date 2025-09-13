@@ -11,6 +11,7 @@ class IsAdmin
 {
     public function handle(Request $request, Closure $next): Response
     {
+        // Verificar si el usuario autenticado es administrador
         if (!Auth::check() || Auth::user()->is_admin !== 1) {
             abort(403, 'No tienes permisos para acceder a esta sección.');
         }

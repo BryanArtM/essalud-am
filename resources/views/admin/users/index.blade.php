@@ -19,8 +19,6 @@
         @endif
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
 
-
-            {{-- Botón de registro --}}
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-semibold text-[#0073B6]">Usuarios</h1>
                 <a href="{{ route('users.create') }}"
@@ -29,7 +27,6 @@
                 </a>
             </div>
 
-            {{-- Filtros --}}
             <form method="GET" action="{{ route('users.index') }}" class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <label class="block text-sm font-semibold mb-1 text-gray-700" for="name">Filtrar por Nombre</label>

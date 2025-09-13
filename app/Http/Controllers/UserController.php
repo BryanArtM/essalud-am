@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        // Solo el admin puede entrar
+        // Solo el administrador puede entrar
         $this->middleware(function ($request, $next) {
             if (auth()->check() && auth()->user()->is_admin == 1) {
                 return $next($request);
@@ -26,13 +26,12 @@ class UserController extends Controller
         $request->validate([
             'name' => 'nullable|string|max:100',
         ]);
-
+        //Filtrado
         $query = User::query();
-
         if ($request->filled('name')) {
             $query->where('name', 'LIKE', '%' . $request->name . '%');
         }
-
+        //Paginación   
         $users = $query->paginate(10)->appends($request->all());
         return view('admin.users.index', compact('users'));
 
@@ -46,6 +45,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        //Validación de datos
         $request->validate([
             'name' => [
                 'required',
@@ -71,8 +71,10 @@ class UserController extends Controller
             ],
         ]);
 
+        //Convertir el rol a valor booleano para is_admin
         $is_admin = $request->role === 'admin' ? 1 : 0;
 
+        //Crear el usuario en la base de datos
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -115,7 +117,10 @@ class UserController extends Controller
             ],
         ]);
 
+        //Convertir el rol a valor booleano para is_admin
         $is_admin = $request->role === 'admin' ? 1 : 0;
+
+        //Actualizar el usuario en la base de datos
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
@@ -128,10 +133,10 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        //El usuario no puede eliminar su propia cuenta desde el listado
         if ($user->id === auth()->id()) {
             return back()->with('error', 'No puedes eliminar tu propio usuario');
         }
-
         $user->delete();
 
         return redirect()->route('users.index')->with('success', 'Usuario eliminado correctamente');

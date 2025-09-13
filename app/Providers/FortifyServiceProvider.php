@@ -17,18 +17,12 @@ use Illuminate\Support\Facades\Hash;
 
 class FortifyServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
+        public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
+        public function boot(): void
     {
 
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
@@ -36,16 +30,17 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
             Fortify::registerView(function () {
-                abort(404); // o puedes redirigir a login: return redirect()->route('login');
+                abort(404);
             });
 
-
+        // Limitar intentos de inicio de sesión
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
             return Limit::perMinute(5)->by($throttleKey);
         });
-
+        
+        // Limitar intentos de verificación en dos pasos
         RateLimiter::for('two-factor', function (Request $request) {
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });

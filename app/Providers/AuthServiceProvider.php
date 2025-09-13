@@ -7,22 +7,13 @@ use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
-    /**
-     * The model to policy mappings for the application.
-     *
-     * @var array<class-string, class-string>
-     */
-    protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        protected $policies = [
     ];
 
-    /**
-     * Register any authentication / authorization services.
-     */
-    public function boot(): void
+        public function boot(): void
     {
         $this->registerPolicies();
-
+        //Los administradores pueden gestionar usuarios
         Gate::define('manage-users', function ($user) {
             return $user->is_admin == 1;
 

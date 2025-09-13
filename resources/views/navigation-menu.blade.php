@@ -4,11 +4,15 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
+                <div class="shrink-0 flex items-center space-x-4">
                     <a href="{{ route('dashboard') }}">
                         <x-authentication-card-logo class="max-h-12 max-w-12 mx-auto ring-1 ring-blue-300 shadow-md" />
                     </a>
+                    <div class="flex-shrink-0">
+                        <h1 class="text-lg font-bold text-blue-500">EsSalud - Adultos Mayores</h1>
+                    </div>
                 </div>
+
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">

@@ -15,6 +15,7 @@
             </div>
         @endsession
 
+        {{-- Mensaje de éxito --}}
         <x-validation-errors class="mb-4" />
 
         <form method="POST" action="{{ route('password.email') }}">

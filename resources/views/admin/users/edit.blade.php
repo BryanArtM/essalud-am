@@ -60,7 +60,7 @@
             const roleSelect = document.getElementById('role');
             const submitBtn = document.getElementById('submitBtn');
             const emailInput = document.getElementById('email');
-
+            // Actualizar el texto del botón según el rol seleccionado
             function updateButtonText() {
                 if (roleSelect.value === 'admin') {
                     submitBtn.textContent = 'Actualizar Administrador';
@@ -82,7 +82,7 @@
                     this.setCustomValidity('');
                 }
             });
-
+            // Actualizar el texto del botón según el rol seleccionado
             roleSelect.addEventListener('change', updateButtonText);
             updateButtonText();
         });

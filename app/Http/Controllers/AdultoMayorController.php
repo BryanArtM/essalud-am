@@ -8,13 +8,10 @@ use App\Models\AdultoMayor;
 
 class AdultoMayorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+        public function index(Request $request)
     {
         $adultos = AdultoMayor::all();
-
+        //Validación de los campos de búsqueda
         $request->validate([
             'dni' => 'nullable|string|regex:/^[0-9]{1,8}$/',
             'apellidos' => 'nullable|string|max:100',
@@ -22,14 +19,15 @@ class AdultoMayorController extends Controller
             'dni.regex' => 'El DNI debe contener solo números (máximo 8 dígitos).',
         ]);
 
+        //Filtrado
         $query = AdultoMayor::query();
-
         if ($request->filled('dni')) {
             $query->where('dni', 'like',$request->dni . '%');
         }
         if ($request->filled('apellidos')) {
             $query->where('apellidos', 'like', '%' . $request->apellidos . '%');
         }
+        //Paginación
         $adultos = $query->paginate(10)->withQueryString();
         return view('adultos.index', compact('adultos'));
     }
@@ -38,10 +36,7 @@ class AdultoMayorController extends Controller
 
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+        public function create()
     {
         session()->forget([
             'adulto_id',
@@ -57,19 +52,13 @@ class AdultoMayorController extends Controller
 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-
+    
     public function store(Request $request)
     {
     }
 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
+        public function show($id)
     {
         $adulto = AdultoMayor::with([
             'enfermedad',
@@ -86,10 +75,7 @@ class AdultoMayorController extends Controller
 
 
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(AdultoMayor $adulto)
+        public function edit(AdultoMayor $adulto)
     {
         session(['adulto_id' => $adulto->id]);
 
@@ -133,18 +119,12 @@ class AdultoMayorController extends Controller
 
 
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+        public function update(Request $request, string $id)
     {
-        //
+        
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
+        public function destroy($id)
     {
         $adulto = AdultoMayor::findOrFail($id);
         $adulto->delete();

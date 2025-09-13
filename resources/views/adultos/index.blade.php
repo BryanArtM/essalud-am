@@ -9,7 +9,6 @@
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
 
-                {{-- Botón de registro --}}
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-2xl font-semibold text-[#0073B6]">Adultos Mayores</h1>
                     <a href="{{ route('adultos.create') }}"
@@ -18,7 +17,6 @@
                     </a>
                 </div>
 
-                {{-- Filtros --}}
                 <form method="GET" action="{{ route('adultos.index') }}"
                     class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
@@ -50,7 +48,6 @@
                     </div>
                 </form>
 
-                {{-- Tabla --}}
                 <div class="overflow-x-auto border rounded-lg shadow-sm">
                     <table class="min-w-full table-auto text-sm">
                         <thead class="bg-blue-400 text-white uppercase text-xs">
@@ -100,7 +97,6 @@
                         </tbody>
                     </table>
 
-                    {{-- Paginación --}}
                     <x-paginacion :pagina="$adultos" />
                 </div>
 

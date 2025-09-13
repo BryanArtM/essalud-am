@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\DB;
 
 class AdultoMayorWizardController extends Controller
 {
-    public function paso1() {
+    public function paso1()
+    {
         $data = session('adulto_mayor', []);
-        return view('wizard.paso1',compact('data'));
+        return view('wizard.paso1', compact('data'));
     }
 
-    public function guardarPaso1(Request $request) {
+    public function guardarPaso1(Request $request)
+    {
         $validated = $request->validate([
             'numero_ficha' => 'required|string',
             'ipress' => 'required|string',
@@ -26,19 +28,20 @@ class AdultoMayorWizardController extends Controller
             'fecha_ingreso' => 'required|date',
             'alergias' => 'nullable|string',
             'adulto_mayor_fragil' => 'nullable|string|max:200',
-            ]);
-            
-            session(['adulto_mayor' => $validated]);
-            //dd(session('adulto_mayor'));  --> para ver la sesión actual
-            return redirect()->route('wizard.paso2');
+        ]);
+
+        session(['adulto_mayor' => $validated]);
+        return redirect()->route('wizard.paso2');
     }
 
-    public function paso2() {
+    public function paso2()
+    {
         $data = session('enfermedad', []);
         return view('wizard.paso2', compact('data'));
     }
 
-    public function guardarPaso2(Request $request) {
+    public function guardarPaso2(Request $request)
+    {
         $validated = $request->validate([
             'otros' => 'nullable|string|max:500',
             'visare_numero' => 'nullable|integer',
@@ -49,29 +52,44 @@ class AdultoMayorWizardController extends Controller
             'estadio_3b_5_fecha' => 'nullable|date',
         ]);
 
+        //Recorrido de los campos booleanos
         foreach ([
-            'obesidad', 'dislipidemia', 'hipertension_arterial',
-            'diabetes_mellitus', 'erc', 'osteoartrosis',
-            'asma', 'epoc', 'itg', 'sindrome_metabolico'
+            'obesidad',
+            'dislipidemia',
+            'hipertension_arterial',
+            'diabetes_mellitus',
+            'erc',
+            'osteoartrosis',
+            'asma',
+            'epoc',
+            'itg',
+            'sindrome_metabolico'
         ] as $field) {
             $validated[$field] = $request->has($field);
         }
 
-            session(['enfermedad' => $validated]);
-            return redirect()->route('wizard.paso3');
+        session(['enfermedad' => $validated]);
+        return redirect()->route('wizard.paso3');
     }
 
-    public function paso3() {
+    public function paso3()
+    {
         $data = session('riesgo', []);
-        return view('wizard.paso3',compact('data'));
+        return view('wizard.paso3', compact('data'));
     }
 
-    public function guardarPaso3(Request $request) {
+    public function guardarPaso3(Request $request)
+    {
 
-            $booleanFields = [
-            'sobrepeso', 'alcohol', 'sedentarismo',
-            'estres', 'tabaco', 'bajo_peso',
-            'perimetro_abdominal_aumentado', 'hdl_bajo'
+        $booleanFields = [
+            'sobrepeso',
+            'alcohol',
+            'sedentarismo',
+            'estres',
+            'tabaco',
+            'bajo_peso',
+            'perimetro_abdominal_aumentado',
+            'hdl_bajo'
         ];
         foreach ($booleanFields as $field) {
             $validated[$field] = $request->has($field);
@@ -92,9 +110,8 @@ class AdultoMayorWizardController extends Controller
         $validated = $request->validate([
             'talla' => 'required|numeric',
             'peso_aceptable' => 'required|numeric',
-
+            //Validación de registros de evaluaciones
             'evaluaciones' => 'required|array',
-
             'evaluaciones.*.peso' => 'nullable|numeric',
             'evaluaciones.*.presion_arterial' => 'nullable|string|max:20',
             'evaluaciones.*.glucosa' => 'nullable|numeric',
@@ -110,7 +127,7 @@ class AdultoMayorWizardController extends Controller
             'evaluaciones.*.control_renal_fecha' => 'nullable|date',
             'evaluaciones.*.vacuna_influenza' => 'nullable|boolean',
             'evaluaciones.*.vacuna_neumococo' => 'nullable|boolean',
-
+            //Validación de registros de actividades
             'actividades' => 'nullable|array',
             'actividades.*.fecha' => 'nullable|date',
             'actividades.*.numero_sesion' => 'nullable|string|max:50',
@@ -146,13 +163,13 @@ class AdultoMayorWizardController extends Controller
     public function guardarPaso5(Request $request)
     {
         $validated = $request->validate([
-            // Validación de múltiples citas
+            //Validación de registros de citas
             'citas' => 'array',
             'citas.*.fecha' => 'nullable|date',
             'citas.*.medico' => 'nullable|string|max:100',
             'citas.*.enfermera' => 'nullable|string|max:100',
 
-            // Validación de múltiples tratamientos
+            //Validación de registros de tratamientos
             'tratamientos' => 'array',
             'tratamientos.*.medicacion' => 'nullable|string|max:100',
             'tratamientos.*.dosis' => 'nullable|numeric|min:0',
@@ -216,7 +233,7 @@ class AdultoMayorWizardController extends Controller
         if (!session()->has('adulto_mayor')) {
             return redirect()->route('wizard.paso1')->with('error', 'Sesión expirada. Inicia el registro nuevamente.');
         }
-
+        //Transacción para evitar enviar datos incompletos
         DB::transaction(function () {
             $data = session('adulto_mayor');
             $enfermedad = session('enfermedad', []);
@@ -229,7 +246,6 @@ class AdultoMayorWizardController extends Controller
             // Verifica si es edición o nuevo registro
             if (session()->has('adulto_id')) {
                 $adulto = AdultoMayor::findOrFail(session('adulto_id'));
-
                 $adulto->update($data);
 
                 // Eliminar lo anterior
@@ -247,26 +263,22 @@ class AdultoMayorWizardController extends Controller
             // Re-crear relaciones
             $adulto->enfermedad()->create($enfermedad);
             $adulto->riesgo()->create($riesgo);
-
             foreach ($evaluaciones as $eval) {
                 $adulto->evaluaciones()->create($eval);
             }
-
             foreach ($actividades as $actividad) {
                 $adulto->actividadesEducativas()->create($actividad);
             }
-
             foreach ($citasTratamientos['citas'] as $cita) {
                 $adulto->citas()->create($cita);
             }
-
             foreach ($citasTratamientos['tratamientos'] as $tratamiento) {
                 $adulto->tratamientos()->create($tratamiento);
             }
-
             $adulto->valoraciones()->create($valoracion);
         });
-
+        
+        // Limpiar la sesión
         session()->forget([
             'adulto_mayor',
             'enfermedad',
@@ -275,12 +287,10 @@ class AdultoMayorWizardController extends Controller
             'actividad',
             'citas_tratamientos',
             'valoracion',
-            'adulto_id', 
+            'adulto_id',
         ]);
 
         return redirect()->route('adultos.index')->with('success', 'Registro completado.');
     }
-
-
 }
 

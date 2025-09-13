@@ -57,7 +57,7 @@
             const submitBtn = document.getElementById('submitBtn');
             const emailInput = document.getElementById('email');
 
-
+            // Actualizar el texto del botón según el rol seleccionado
             function updateButtonText() {
                 if (roleSelect.value === 'admin') {
                     submitBtn.textContent = 'Registrar Administrador';
@@ -79,7 +79,7 @@
                     this.setCustomValidity('');
                 }
             });
-
+            // Actualizar el texto del botón según el rol seleccionado
             roleSelect.addEventListener('change', updateButtonText);
             updateButtonText();
         });
