@@ -24,10 +24,15 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('wizard.paso2') }}">
+                <form method="POST" action="{{ isset($adulto_id) && $adulto_id ? route('wizard.paso2.post', ['adulto_id' => $adulto_id]) : route('wizard.paso2.post') }}">
                     @csrf
+                    
+                    {{-- Campo hidden para preservar el ID de la enfermedad --}}
+                    @if(isset($data['id']))
+                        <input type="hidden" name="id" value="{{ $data['id'] }}">
+                    @endif
+                    
                     <h2 class="flex justify-center text-xl font-semibold mb-4">ENFERMEDADES QUE PADECE</h2>
-
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach ([
@@ -70,18 +75,18 @@
                         </div>
                     </div>
 
-                    <h3 class="text-lg font-semibold mt-6 mb-2">Estadio 1a - 3a</h3>
+                    <h3 class="text-lg font-semibold mt-6 mb-2">Estadio 1 - 3a</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label>Número:</label>
-                            <input type="number" name="estadio_1a_3a_numero"
-                                value="{{ old('estadio_1a_3a_numero', $data['estadio_1a_3a_numero'] ?? '') }}"
+                            <input type="number" name="estadio_1_3a_numero"
+                                value="{{ old('estadio_1_3a_numero', $data['estadio_1_3a_numero'] ?? '') }}"
                                 class="w-full border rounded px-3 py-2">
                         </div>
                         <div>
                             <label>Fecha:</label>
-                            <input type="date" name="estadio_1a_3a_fecha"
-                                value="{{ old('estadio_1a_3a_fecha', $data['estadio_1a_3a_fecha'] ?? '') }}"
+                            <input type="date" name="estadio_1_3a_fecha"
+                                value="{{ old('estadio_1_3a_fecha', $data['estadio_1_3a_fecha'] ?? '') }}"
                                 class="w-full border rounded px-3 py-2">
                         </div>
                     </div>
@@ -103,7 +108,7 @@
                     </div>
 
                     <div class="mt-6 flex justify-between">
-                        <a href="{{ route('wizard.paso1') }}"
+                        <a href="{{ isset($adulto_id) && $adulto_id ? route('wizard.paso1', ['adulto_id' => $adulto_id]) : route('wizard.paso1') }}"
                             class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">
                             Atrás
                         </a>

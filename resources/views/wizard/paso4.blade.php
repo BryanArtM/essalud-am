@@ -15,7 +15,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('wizard.paso4') }}">
+                <form method="POST" action="{{ isset($adulto_id) && $adulto_id ? route('wizard.paso4.post', ['adulto_id' => $adulto_id]) : route('wizard.paso4.post') }}">
                     @csrf
 
                     {{-- Evaluaciones --}}
@@ -27,7 +27,7 @@
                                 <label class="block text-sm font-medium text-gray-700">Talla (cm)</label>
                             </div>
                             
-                            <input type="number" step="0.1" name="talla" required
+                            <input type="number" step="0.01" min="0" name="talla" required
                                 value="{{ old('talla', $evaluacion[0]['talla'] ?? '') }}"
                                 class="mt-1 block w-full border rounded px-2 py-1 @error('talla') border-red-500 @enderror">
                             @error('talla')
@@ -38,7 +38,7 @@
                             <div class="flex justify-center">
                                 <label class="block text-sm font-medium text-gray-700">Peso Aceptable (kg)</label>
                             </div>
-                            <input type="number" step="0.1" name="peso_aceptable" required
+                            <input type="number" step="0.01" min="0" name="peso_aceptable" required
                                 value="{{ old('peso_aceptable', $evaluacion[0]['peso_aceptable'] ?? '') }}"
                                 class="mt-1 block w-full border rounded px-2 py-1 @error('peso_aceptable') border-red-500 @enderror">
                             @error('peso_aceptable')
@@ -59,6 +59,10 @@
                                     <th class="w-48"></th>
                                     @foreach ($evaluaciones as $i => $eval)
                                         <th class="px-4 py-2">Evaluación {{ $i + 1 }}</th>
+                                        {{-- Campo hidden para preservar el ID de la evaluación --}}
+                                        @if(isset($eval['id']))
+                                            <input type="hidden" name="evaluaciones[{{ $i }}][id]" value="{{ $eval['id'] }}">
+                                        @endif
                                     @endforeach
                                 </tr>
                             </thead>
@@ -98,10 +102,15 @@
                                                         <option value="no cumple" {{ ($eval[$key] ?? '') === 'no cumple' ? 'selected' : '' }}>No cumple</option>
                                                     </select>
                                                 @else
+                                                    @php
+                                                        $inputType = in_array($key, ['fecha', 'control_renal_fecha']) ? 'date' : (in_array($key, ['presion_arterial', 'evaluacion_pie_dm']) ? 'text' : 'number');
+                                                        $isNumericField = in_array($key, ['peso', 'glucosa', 'hb_glicosilada', 'imc', 'perimetro_abdominal', 'microalbuminuria', 'creatinina', 'tasa_albuminuria_creatinuria', 'tasa_filtracion_glomerular']);
+                                                    @endphp
                                                     <input
-                                                        type="{{ in_array($key, ['fecha', 'control_renal_fecha']) ? 'date' : (in_array($key, ['presion_arterial', 'evaluacion_pie_dm']) ? 'text' : 'number') }}"
+                                                        type="{{ $inputType }}"
                                                         name="evaluaciones[{{ $i }}][{{ $key }}]"
                                                         value="{{ $eval[$key] ?? '' }}"
+                                                        @if($isNumericField) step="0.01" min="0" @endif
                                                         class="w-full border rounded px-2 py-1">
                                                 @endif
                                             </td>
@@ -129,6 +138,10 @@
                                     <th class="w-48"></th>
                                     @foreach ($actividades as $i => $act)
                                         <th class="px-4 py-2">Actividad {{ $i + 1 }}</th>
+                                        {{-- Campo hidden para preservar el ID de la actividad --}}
+                                        @if(isset($act['id']))
+                                            <input type="hidden" name="actividades[{{ $i }}][id]" value="{{ $act['id'] }}">
+                                        @endif
                                     @endforeach
                                 </tr>
                             </thead>
@@ -155,7 +168,7 @@
 
                     {{-- Navegación --}}
                     <div class="flex justify-between mt-6">
-                        <a href="{{ route('wizard.paso3') }}"
+                        <a href="{{ isset($adulto_id) && $adulto_id ? route('wizard.paso3', ['adulto_id' => $adulto_id]) : route('wizard.paso3') }}"
                             class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Atrás</a>
                         <button type="submit"
                             class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Siguiente</button>
@@ -219,7 +232,9 @@
             } else {
                 const type = name.includes('fecha') ? 'date' :
                             ['presion_arterial', 'evaluacion_pie_dm'].includes(name) ? 'text' : 'number';
-                td.innerHTML = `<input type="${type}" name="evaluaciones[${evaluacionIndex}][${name}]" class="w-full border rounded px-2 py-1">`;
+                const stepAttr = ['peso', 'glucosa', 'hb_glicosilada', 'imc', 'perimetro_abdominal', 'microalbuminuria', 'creatinina', 'tasa_albuminuria_creatinuria', 'tasa_filtracion_glomerular'].includes(name) ? ' step="0.01" min="0"' : '';
+
+                td.innerHTML = `<input type="${type}" name="evaluaciones[${evaluacionIndex}][${name}]" class="w-full border rounded px-2 py-1"${stepAttr}>`;
             }
 
             row.appendChild(td);

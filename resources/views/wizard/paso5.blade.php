@@ -15,9 +15,10 @@
                     </div>
                 @endif
 
-                <form action="{{ route('wizard.paso5') }}" method="POST">
+                <form
+                    action="{{ isset($adulto_id) && $adulto_id ? route('wizard.paso5.post', ['adulto_id' => $adulto_id]) : route('wizard.paso5.post') }}"
+                    method="POST">
                     @csrf
-
                     {{-- Citas Médicas --}}
                     <h2 class="text-center text-xl font-semibold mb-4">CITAS MÉDICAS</h2>
                     <div class="flex justify-around font-semibold text-gray-800">
@@ -29,22 +30,26 @@
                         @if(old('citas', $citas))
                             @foreach(old('citas', $citas) as $i => $cita)
                                 <div class="grid grid-cols-3 gap-4 mb-4">
+                                    {{-- Campo hidden para preservar el ID del registro --}}
+                                    @if(isset($cita['id']))
+                                        <input type="hidden" name="citas[{{ $i }}][id]" value="{{ $cita['id'] }}">
+                                    @endif
+
                                     <input type="date" name="citas[{{ $i }}][fecha]" value="{{ $cita['fecha'] ?? '' }}"
-                                        class="w-full border rounded px-3 py-2" required>
+                                        class="w-full border rounded px-3 py-2">
 
                                     <input type="text" name="citas[{{ $i }}][medico]" value="{{ $cita['medico'] ?? '' }}"
-                                        class="w-full border rounded px-3 py-2" required>
+                                        class="w-full border rounded px-3 py-2">
 
                                     <input type="text" name="citas[{{ $i }}][enfermera]" value="{{ $cita['enfermera'] ?? '' }}"
-                                        class="w-full border rounded px-3 py-2" required>
+                                        class="w-full border rounded px-3 py-2">
                                 </div>
                             @endforeach
                         @else
                             <div class="grid grid-cols-3 gap-4 mb-4">
-                                <input type="date" name="citas[0][fecha]" class="w-full border rounded px-3 py-2" required>
-                                <input type="text" name="citas[0][medico]" class="w-full border rounded px-3 py-2" required>
-                                <input type="text" name="citas[0][enfermera]" class="w-full border rounded px-3 py-2"
-                                    required>
+                                <input type="date" name="citas[0][fecha]" class="w-full border rounded px-3 py-2">
+                                <input type="text" name="citas[0][medico]" class="w-full border rounded px-3 py-2">
+                                <input type="text" name="citas[0][enfermera]" class="w-full border rounded px-3 py-2">
                             </div>
                         @endif
                     </div>
@@ -64,20 +69,24 @@
                         @if(old('tratamientos', $tratamientos))
                             @foreach(old('tratamientos', $tratamientos) as $i => $tratamiento)
                                 <div class="grid grid-cols-2 gap-4 mb-4">
-                                    <input type="text" name="tratamientos[{{ $i }}][medicacion]"
-                                        value="{{ $tratamiento['medicacion'] ?? '' }}" class="w-full border rounded px-3 py-2"
-                                        required>
+                                    {{-- Campo hidden para preservar el ID del registro --}}
+                                    @if(isset($tratamiento['id']))
+                                        <input type="hidden" name="tratamientos[{{ $i }}][id]" value="{{ $tratamiento['id'] }}">
+                                    @endif
 
-                                    <input type="number" name="tratamientos[{{ $i }}][dosis]"
-                                        value="{{ $tratamiento['dosis'] ?? '' }}" class="w-full border rounded px-3 py-2"
-                                        required>
+                                    <input type="text" name="tratamientos[{{ $i }}][medicacion]"
+                                        value="{{ $tratamiento['medicacion'] ?? '' }}" class="w-full border rounded px-3 py-2">
+
+                                    <input type="number" step="any" name="tratamientos[{{ $i }}][dosis]"
+                                        value="{{ $tratamiento['dosis'] ?? '' }}" class="w-full border rounded px-3 py-2">
                                 </div>
                             @endforeach
                         @else
                             <div class="grid grid-cols-2 gap-4 mb-4">
                                 <input type="text" name="tratamientos[0][medicacion]"
                                     class="w-full border rounded px-3 py-2">
-                                <input type="number" name="tratamientos[0][dosis]" class="w-full border rounded px-3 py-2">
+                                <input type="number" step="any" name="tratamientos[0][dosis]"
+                                    class="w-full border rounded px-3 py-2">
                             </div>
                         @endif
                     </div>
@@ -88,7 +97,7 @@
                     </button>
 
                     <div class="flex justify-between mt-6">
-                        <a href="{{ route('wizard.paso4') }}"
+                        <a href="{{ isset($adulto_id) && $adulto_id ? route('wizard.paso4', ['adulto_id' => $adulto_id]) : route('wizard.paso4') }}"
                             class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
                             Atrás
                         </a>
@@ -110,8 +119,8 @@
             const div = document.createElement('div');
             div.className = "grid grid-cols-2 gap-4 mb-4";
             div.innerHTML = `
-                <input type="text" name="tratamientos[${index}][medicacion]" class="w-full border rounded px-3 py-2" required>
-                <input type="number" name="tratamientos[${index}][dosis]" class="w-full border rounded px-3 py-2" required>
+                <input type="text" name="tratamientos[${index}][medicacion]" class="w-full border rounded px-3 py-2" >
+                <input type="number" step="any" name="tratamientos[${index}][dosis]" class="w-full border rounded px-3 py-2" >
             `;
             wrapper.appendChild(div);
             index++;
@@ -123,9 +132,9 @@
             const div = document.createElement('div');
             div.className = "grid grid-cols-3 gap-4 mb-4";
             div.innerHTML = `
-                <input type="date" name="citas[${citaIndex}][fecha]" class="w-full border rounded px-3 py-2" required>
-                <input type="text" name="citas[${citaIndex}][medico]" class="w-full border rounded px-3 py-2" required>
-                <input type="text" name="citas[${citaIndex}][enfermera]" class="w-full border rounded px-3 py-2" required>
+                <input type="date" name="citas[${citaIndex}][fecha]" class="w-full border rounded px-3 py-2" >
+                <input type="text" name="citas[${citaIndex}][medico]" class="w-full border rounded px-3 py-2" >
+                <input type="text" name="citas[${citaIndex}][enfermera]" class="w-full border rounded px-3 py-2" >
             `;
             wrapper.appendChild(div);
             citaIndex++;

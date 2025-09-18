@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Enfermedad;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use Illuminate\Http\Request;
 use App\Models\AdultoMayor;
@@ -31,11 +32,6 @@ class AdultoMayorController extends Controller
         $adultos = $query->paginate(10)->withQueryString();
         return view('adultos.index', compact('adultos'));
     }
-
-
-
-
-
         public function create()
     {
         session()->forget([
@@ -56,8 +52,6 @@ class AdultoMayorController extends Controller
     public function store(Request $request)
     {
     }
-
-
         public function show($id)
     {
         $adulto = AdultoMayor::with([
@@ -73,10 +67,20 @@ class AdultoMayorController extends Controller
         return view('adultos.show', compact('adulto'));
     }
 
-
-
         public function edit(AdultoMayor $adulto)
     {
+        // Limpiar la sesión de datos previos antes de cargar los nuevos
+        session()->forget([
+            'adulto_mayor',
+            'enfermedad',
+            'riesgo',
+            'evaluacion',
+            'actividad',
+            'citas_tratamientos',
+            'valoracion',
+            'adulto_id',
+        ]);
+
         session(['adulto_id' => $adulto->id]);
 
         session([
@@ -113,12 +117,8 @@ class AdultoMayorController extends Controller
         $valoracion = $adulto->valoraciones->first();
         session(['valoracion' => $valoracion ? $valoracion->toArray() : []]);
 
-        return redirect()->route('wizard.paso1')->with('success', 'Datos cargados para edición.');
+        return redirect()->route('wizard.paso1', ['adulto_id' => $adulto->id])->with('success', 'Datos cargados para edición.');
     }
-
-
-
-
         public function update(Request $request, string $id)
     {
         
@@ -130,6 +130,57 @@ class AdultoMayorController extends Controller
         $adulto->delete();
         return redirect()->route('adultos.index')->with('success', 'Adulto mayor eliminado correctamente.');
 
+    }
+
+    public function generatePDF($id)
+    {
+        // Obtener el adulto mayor con todas sus relaciones
+        $adulto = AdultoMayor::with([
+            'enfermedad',
+            'riesgo',
+            'evaluaciones' => function($query) {
+                $query->orderBy('created_at', 'desc')->limit(15);
+            },
+            'actividadesEducativas' => function($query) {
+                $query->orderBy('created_at', 'desc')->limit(15);
+            },
+            'tratamientos' => function($query) {
+                $query->orderBy('created_at', 'desc')->limit(10);
+            },
+            'citas' => function($query) {
+                $query->orderBy('created_at', 'desc')->limit(10);
+            },
+            'valoraciones' => function($query) {
+                $query->orderBy('created_at', 'asc');
+            }
+        ])->findOrFail($id);
+
+
+        // Reordenar las colecciones para mostrar de izquierda a derecha (más antiguo al más reciente)
+        $adulto->evaluaciones = $adulto->evaluaciones->sortBy('created_at')->values();
+        $adulto->actividadesEducativas = $adulto->actividadesEducativas->sortBy('created_at')->values();
+        $adulto->tratamientos = $adulto->tratamientos->sortBy('created_at')->values();
+        $adulto->citas = $adulto->citas->sortBy('created_at')->values();
+
+        $fechaNacimiento = \Carbon\Carbon::parse($adulto->fecha_nacimiento);
+        $edad = $fechaNacimiento->age;
+
+        // Datos para la vista
+        $data = [
+            'adulto' => $adulto,
+            'edad' => $edad,
+            'fecha_generacion' => now()->timezone('America/Lima')->format('d/m/Y H:i:s')
+        ];
+
+        // Generar PDF
+        $pdf = Pdf::loadView('adultos.pdf', $data);
+        $pdf->setPaper('A4', 'portrait');
+        
+        // Nombre del archivo
+        $filename = 'Ficha_' . str_replace(' ', '_', $adulto->nombres . '_' . $adulto->apellidos) . '_' . now()->format('Y-m-d') . '.pdf';
+        
+        // Siempre mostrar en el navegador para imprimir
+        return $pdf->stream($filename);
     }
 
 }

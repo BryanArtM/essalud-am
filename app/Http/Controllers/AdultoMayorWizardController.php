@@ -9,13 +9,36 @@ use Illuminate\Support\Facades\DB;
 
 class AdultoMayorWizardController extends Controller
 {
-    public function paso1()
+    public function paso1($adulto_id = null)
     {
-        $data = session('adulto_mayor', []);
-        return view('wizard.paso1', compact('data'));
+        // Si tenemos adulto_id (modo edición), cargar datos directamente de la base de datos
+        if ($adulto_id) {
+            $adulto = AdultoMayor::findOrFail($adulto_id);
+            $data = $adulto->only([
+                'ipress',
+                'numero_ficha',
+                'dni',
+                'apellidos',
+                'nombres',
+                'fecha_nacimiento',
+                'telefono',
+                'fecha_ingreso',
+                'alergias',
+                'adulto_mayor_fragil'
+            ]);
+
+            // Actualizar la sesión con los datos correctos
+            session(['adulto_mayor' => $data]);
+            session(['adulto_id' => $adulto_id]);
+        } else {
+            // Modo nuevo registro, usar datos de sesión
+            $data = session('adulto_mayor', []);
+        }
+
+        return view('wizard.paso1', compact('data', 'adulto_id'));
     }
 
-    public function guardarPaso1(Request $request)
+    public function guardarPaso1(Request $request, $adulto_id = null)
     {
         $validated = $request->validate([
             'numero_ficha' => 'required|string',
@@ -31,23 +54,65 @@ class AdultoMayorWizardController extends Controller
         ]);
 
         session(['adulto_mayor' => $validated]);
+
+        if ($adulto_id) {
+            return redirect()->route('wizard.paso2', ['adulto_id' => $adulto_id]);
+        }
         return redirect()->route('wizard.paso2');
     }
 
-    public function paso2()
+    public function paso2($adulto_id = null)
     {
-        $data = session('enfermedad', []);
-        return view('wizard.paso2', compact('data'));
+        // Si tenemos adulto_id (modo edición)
+        if ($adulto_id) {
+            // Verificar si los datos en sesión corresponden al usuario actual
+            $sessionData = session('enfermedad', []);
+            $sessionAdultoId = session('adulto_id');
+
+            // Cargar desde BD si:
+            // 1. No hay datos en sesión, O
+            // 2. El adulto_id de sesión no coincide con el actual, O  
+            // 3. Los datos en sesión pertenecen a otro usuario
+            $shouldLoadFromDB = empty($sessionData) ||
+                $sessionAdultoId != $adulto_id ||
+                (isset($sessionData['adulto_mayor_id']) && $sessionData['adulto_mayor_id'] != $adulto_id);
+
+            if ($shouldLoadFromDB) {
+                $adulto = AdultoMayor::findOrFail($adulto_id);
+
+                // Consulta explícita para asegurar que obtenemos los datos correctos
+                $enfermedad = \App\Models\Enfermedad::where('adulto_mayor_id', $adulto_id)->first();
+                $data = $enfermedad ? $enfermedad->toArray() : [];
+
+                // Debugging temporal
+                \Log::info("PASO 2 - Cargando desde BD para usuario ID: " . $adulto_id);
+                \Log::info("PASO 2 - Datos de enfermedad cargados: " . json_encode($data));
+
+                // Actualizar la sesión con los datos correctos
+                session(['enfermedad' => $data]);
+                session(['adulto_id' => $adulto_id]);
+            } else {
+                // Usar datos de sesión existentes (ya modificados por el usuario)
+                $data = $sessionData;
+                \Log::info("PASO 2 - Usando datos de sesión existentes: " . json_encode($data));
+            }
+        } else {
+            // Modo nuevo registro, usar datos de sesión
+            $data = session('enfermedad', []);
+            \Log::info("PASO 2 - Modo nuevo registro, datos de sesión: " . json_encode($data));
+        }
+
+        return view('wizard.paso2', compact('data', 'adulto_id'));
     }
 
-    public function guardarPaso2(Request $request)
+    public function guardarPaso2(Request $request, $adulto_id = null)
     {
         $validated = $request->validate([
             'otros' => 'nullable|string|max:500',
             'visare_numero' => 'nullable|integer',
             'visare_fecha' => 'nullable|date',
-            'estadio_1a_3a_numero' => 'nullable|integer',
-            'estadio_1a_3a_fecha' => 'nullable|date',
+            'estadio_1_3a_numero' => 'nullable|integer',
+            'estadio_1_3a_fecha' => 'nullable|date',
             'estadio_3b_5_numero' => 'nullable|integer',
             'estadio_3b_5_fecha' => 'nullable|date',
         ]);
@@ -69,16 +134,58 @@ class AdultoMayorWizardController extends Controller
         }
 
         session(['enfermedad' => $validated]);
+
+        if ($adulto_id) {
+            return redirect()->route('wizard.paso3', ['adulto_id' => $adulto_id]);
+        }
         return redirect()->route('wizard.paso3');
     }
 
-    public function paso3()
+    public function paso3($adulto_id = null)
     {
-        $data = session('riesgo', []);
-        return view('wizard.paso3', compact('data'));
+        // Si tenemos adulto_id (modo edición)
+        if ($adulto_id) {
+            // Verificar si los datos en sesión corresponden al usuario actual
+            $sessionData = session('riesgo', []);
+            $sessionAdultoId = session('adulto_id');
+
+            // Cargar desde BD si:
+            // 1. No hay datos en sesión, O
+            // 2. El adulto_id de sesión no coincide con el actual, O  
+            // 3. Los datos en sesión pertenecen a otro usuario
+            $shouldLoadFromDB = empty($sessionData) ||
+                $sessionAdultoId != $adulto_id ||
+                (isset($sessionData['adulto_mayor_id']) && $sessionData['adulto_mayor_id'] != $adulto_id);
+
+            if ($shouldLoadFromDB) {
+                $adulto = AdultoMayor::findOrFail($adulto_id);
+
+                // Consulta explícita para asegurar que obtenemos los datos correctos
+                $riesgo = \App\Models\Riesgo::where('adulto_mayor_id', $adulto_id)->first();
+                $data = $riesgo ? $riesgo->toArray() : [];
+
+                // Debugging temporal
+                \Log::info("PASO 3 - Cargando desde BD para usuario ID: " . $adulto_id);
+                \Log::info("PASO 3 - Datos de riesgo cargados: " . json_encode($data));
+
+                // Actualizar la sesión con los datos correctos
+                session(['riesgo' => $data]);
+                session(['adulto_id' => $adulto_id]);
+            } else {
+                // Usar datos de sesión existentes (ya modificados por el usuario)
+                $data = $sessionData;
+                \Log::info("PASO 3 - Usando datos de sesión existentes: " . json_encode($data));
+            }
+        } else {
+            // Modo nuevo registro, usar datos de sesión
+            $data = session('riesgo', []);
+            \Log::info("PASO 3 - Modo nuevo registro, datos de sesión: " . json_encode($data));
+        }
+
+        return view('wizard.paso3', compact('data', 'adulto_id'));
     }
 
-    public function guardarPaso3(Request $request)
+    public function guardarPaso3(Request $request, $adulto_id = null)
     {
 
         $booleanFields = [
@@ -95,17 +202,21 @@ class AdultoMayorWizardController extends Controller
             $validated[$field] = $request->has($field);
         }
         session(['riesgo' => $validated]);
+
+        if ($adulto_id) {
+            return redirect()->route('wizard.paso4', ['adulto_id' => $adulto_id]);
+        }
         return redirect()->route('wizard.paso4');
 
     }
-    public function paso4()
+    public function paso4($adulto_id = null)
     {
         $evaluacion = session('evaluacion', []);
         $actividad = session('actividad', []);
-        return view('wizard.paso4', compact('evaluacion', 'actividad'));
+        return view('wizard.paso4', compact('evaluacion', 'actividad', 'adulto_id'));
     }
 
-    public function guardarPaso4(Request $request)
+    public function guardarPaso4(Request $request, $adulto_id = null)
     {
         $validated = $request->validate([
             'talla' => 'required|numeric',
@@ -147,30 +258,34 @@ class AdultoMayorWizardController extends Controller
         session(['evaluacion' => $evaluaciones]);
         session(['actividad' => $request->input('actividades', [])]);
 
-
+        if ($adulto_id) {
+            return redirect()->route('wizard.paso5', ['adulto_id' => $adulto_id]);
+        }
         return redirect()->route('wizard.paso5');
     }
 
 
-    public function paso5()
+    public function paso5($adulto_id = null)
     {
         $citas = session('citas_tratamientos.citas', []);
         $tratamientos = session('citas_tratamientos.tratamientos', []);
-        return view('wizard.paso5', compact('citas', 'tratamientos'));
+        return view('wizard.paso5', compact('citas', 'tratamientos', 'adulto_id'));
 
     }
 
-    public function guardarPaso5(Request $request)
+    public function guardarPaso5(Request $request, $adulto_id = null)
     {
         $validated = $request->validate([
             //Validación de registros de citas
             'citas' => 'array',
+            'citas.*.id' => 'nullable|integer|exists:citas,id',
             'citas.*.fecha' => 'nullable|date',
             'citas.*.medico' => 'nullable|string|max:100',
             'citas.*.enfermera' => 'nullable|string|max:100',
 
             //Validación de registros de tratamientos
             'tratamientos' => 'array',
+            'tratamientos.*.id' => 'nullable|integer|exists:tratamientos,id',
             'tratamientos.*.medicacion' => 'nullable|string|max:100',
             'tratamientos.*.dosis' => 'nullable|numeric|min:0',
         ]);
@@ -181,17 +296,21 @@ class AdultoMayorWizardController extends Controller
                 'tratamientos' => $validated['tratamientos'] ?? [],
             ]
         ]);
+
+        if ($adulto_id) {
+            return redirect()->route('wizard.paso6', ['adulto_id' => $adulto_id]);
+        }
         return redirect()->route('wizard.paso6');
     }
 
 
-    public function paso6()
+    public function paso6($adulto_id = null)
     {
         $data = session('valoracion', []);
-        return view('wizard.paso6', compact('data'));
+        return view('wizard.paso6', compact('data', 'adulto_id'));
     }
 
-    public function guardarPaso6(Request $request)
+    public function guardarPaso6(Request $request, $adulto_id = null)
     {
         $validated = $request->validate([
             'autovalente' => 'required|in:0,1',
@@ -210,13 +329,16 @@ class AdultoMayorWizardController extends Controller
 
         session(['valoracion' => $validated]);
 
+        if ($adulto_id) {
+            return redirect()->route('wizard.confirmar', ['adulto_id' => $adulto_id]);
+        }
         return redirect()->route('wizard.confirmar');
     }
 
 
-    public function confirmar()
+    public function confirmar($adulto_id = null)
     {
-        return view('wizard.confirmar', [
+        $data = [
             'paso1' => session('adulto_mayor', []),
             'paso2' => session('enfermedad', []),
             'paso3' => session('riesgo', []),
@@ -224,11 +346,245 @@ class AdultoMayorWizardController extends Controller
             'actividad' => session('actividad', []),
             'paso5' => session('citas_tratamientos', []),
             'paso6' => session('valoracion', []),
-        ]);
+        ];
+
+        // Si estamos en modo edición, detectar cambios
+        if (session()->has('adulto_id')) {
+            $adultoId = session('adulto_id');
+            $adulto = AdultoMayor::findOrFail($adultoId);
+
+            // Detectar cambios en datos personales (Paso 1)
+            $datosPersonales = session('adulto_mayor', []);
+            $datosActuales = $adulto->only(array_keys($datosPersonales));
+            $tieneCambios = false;
+            $camposModificados = [];
+
+            foreach ($datosPersonales as $field => $value) {
+                if ($datosActuales[$field] != $value) {
+                    $tieneCambios = true;
+                    $camposModificados[] = $field;
+                }
+            }
+
+            $data['paso1']['_modified'] = $tieneCambios;
+            $data['paso1']['_changed_fields'] = $camposModificados;
+
+            // Detectar cambios en enfermedad (Paso 2)
+            $enfermedad = session('enfermedad', []);
+            if (!empty($enfermedad)) {
+                // Usar consulta explícita en lugar de relación problemática
+                $existingEnfermedad = \App\Models\Enfermedad::where('adulto_mayor_id', $adultoId)->first();
+                if ($existingEnfermedad) {
+                    $tieneCambios = false;
+                    $camposModificados = [];
+                    $camposAComparar = array_diff_key($enfermedad, ['id' => '', 'created_at' => '', 'updated_at' => '', 'adulto_mayor_id' => '']);
+
+                    foreach ($camposAComparar as $field => $value) {
+                        if ($existingEnfermedad->$field != $value) {
+                            $tieneCambios = true;
+                            $camposModificados[] = $field;
+                        }
+                    }
+
+                    $data['paso2']['_modified'] = $tieneCambios;
+                    $data['paso2']['_changed_fields'] = $camposModificados;
+                } else {
+                    $data['paso2']['_modified'] = true; // Es nuevo
+                    $data['paso2']['_changed_fields'] = [];
+                }
+            }
+
+            // Detectar cambios en riesgo (Paso 3)
+            $riesgo = session('riesgo', []);
+            if (!empty($riesgo)) {
+                // Usar consulta explícita en lugar de relación problemática
+                $existingRiesgo = \App\Models\Riesgo::where('adulto_mayor_id', $adultoId)->first();
+                if ($existingRiesgo) {
+                    $tieneCambios = false;
+                    $camposModificados = [];
+                    $camposAComparar = array_diff_key($riesgo, ['id' => '', 'created_at' => '', 'updated_at' => '', 'adulto_mayor_id' => '']);
+
+                    foreach ($camposAComparar as $field => $value) {
+                        if ($existingRiesgo->$field != $value) {
+                            $tieneCambios = true;
+                            $camposModificados[] = $field;
+                        }
+                    }
+
+                    $data['paso3']['_modified'] = $tieneCambios;
+                    $data['paso3']['_changed_fields'] = $camposModificados;
+                } else {
+                    $data['paso3']['_modified'] = true; // Es nuevo
+                    $data['paso3']['_changed_fields'] = [];
+                }
+            }
+
+            // Detectar cambios en valoración (Paso 6)
+            $valoracion = session('valoracion', []);
+            if (!empty($valoracion)) {
+                $existingValoracion = $adulto->valoraciones->first();
+                if ($existingValoracion) {
+                    $tieneCambios = false;
+                    $camposModificados = [];
+                    $camposAComparar = array_diff_key($valoracion, ['id' => '', 'created_at' => '', 'updated_at' => '', 'adulto_mayor_id' => '']);
+
+                    foreach ($camposAComparar as $field => $value) {
+                        if ($existingValoracion->$field != $value) {
+                            $tieneCambios = true;
+                            $camposModificados[] = $field;
+                        }
+                    }
+
+                    $data['paso6']['_modified'] = $tieneCambios;
+                    $data['paso6']['_changed_fields'] = $camposModificados;
+                } else {
+                    $data['paso6']['_modified'] = true; // Es nuevo
+                    $data['paso6']['_changed_fields'] = [];
+                }
+            }
+
+            // Detectar cambios en evaluaciones
+            $evaluaciones = session('evaluacion', []);
+            foreach ($evaluaciones as $index => $eval) {
+                if (isset($eval['id']) && !empty($eval['id'])) {
+                    // Registro existente, verificar si ha cambiado
+                    $existingEval = $adulto->evaluaciones()->find($eval['id']);
+                    if ($existingEval) {
+                        $tieneCambios = false;
+                        $camposModificados = [];
+                        $camposAComparar = array_diff_key($eval, ['id' => '', 'created_at' => '', 'updated_at' => '', 'adulto_mayor_id' => '']);
+
+                        foreach ($camposAComparar as $field => $value) {
+                            if ($existingEval->$field != $value) {
+                                $tieneCambios = true;
+                                $camposModificados[] = $field;
+                            }
+                        }
+
+                        $data['evaluacion'][$index]['_modified'] = $tieneCambios;
+                        $data['evaluacion'][$index]['_changed_fields'] = $camposModificados;
+                    } else {
+                        // ID proporcionado pero registro no encontrado
+                        $data['evaluacion'][$index]['_modified'] = false;
+                        $data['evaluacion'][$index]['_changed_fields'] = [];
+                    }
+                } else {
+                    // Sin ID, es un registro completamente nuevo
+                    $data['evaluacion'][$index]['_new'] = true;
+                    $data['evaluacion'][$index]['_changed_fields'] = [];
+                }
+            }
+
+            // Detectar cambios en actividades
+            $actividades = session('actividad', []);
+            foreach ($actividades as $index => $actividad) {
+                if (isset($actividad['id']) && !empty($actividad['id'])) {
+                    // Registro existente, verificar si ha cambiado
+                    $existingActividad = $adulto->actividadesEducativas()->find($actividad['id']);
+                    if ($existingActividad) {
+                        $tieneCambios = false;
+                        $camposAComparar = array_diff_key($actividad, ['id' => '', 'created_at' => '', 'updated_at' => '', 'adulto_mayor_id' => '']);
+                        foreach ($camposAComparar as $field => $value) {
+                            if ($existingActividad->$field != $value) {
+                                $tieneCambios = true;
+                                break;
+                            }
+                        }
+                        $data['actividad'][$index]['_modified'] = $tieneCambios;
+                    } else {
+                        // ID proporcionado pero registro no encontrado
+                        $data['actividad'][$index]['_modified'] = false;
+                    }
+                } else {
+                    // Sin ID, es un registro completamente nuevo
+                    $data['actividad'][$index]['_new'] = true;
+                }
+            }
+
+            // Detectar cambios en citas y tratamientos
+            $citasTratamientos = session('citas_tratamientos', ['citas' => [], 'tratamientos' => []]);
+
+            // Asegurar que las estructuras existan en $data
+            if (!isset($data['paso5'])) {
+                $data['paso5'] = ['citas' => [], 'tratamientos' => []];
+            }
+            if (!isset($data['paso5']['citas'])) {
+                $data['paso5']['citas'] = [];
+            }
+            if (!isset($data['paso5']['tratamientos'])) {
+                $data['paso5']['tratamientos'] = [];
+            }
+
+            // Detectar cambios en citas
+            if (isset($citasTratamientos['citas'])) {
+                foreach ($citasTratamientos['citas'] as $index => $cita) {
+                    $data['paso5']['citas'][$index] = $cita; // Asegurar datos
+
+
+                    if (isset($cita['id']) && !empty($cita['id'])) {
+                        // Registro existente, verificar si ha cambiado
+                        $existingCita = $adulto->citas()->find($cita['id']);
+
+                        if ($existingCita) {
+                            $tieneCambios = false;
+                            $camposAComparar = array_diff_key($cita, ['id' => '', 'created_at' => '', 'updated_at' => '', 'adulto_mayor_id' => '']);
+                            foreach ($camposAComparar as $field => $value) {
+                                if ($existingCita->$field != $value) {
+                                    $tieneCambios = true;
+                                    break;
+                                }
+                            }
+                            $data['paso5']['citas'][$index]['_modified'] = $tieneCambios;
+                        } else {
+                            // ID proporcionado pero registro no encontrado, probablemente eliminado
+                            $data['paso5']['citas'][$index]['_modified'] = false;
+                        }
+                    } else {
+                        // Sin ID, es un registro completamente nuevo
+                        $data['paso5']['citas'][$index]['_new'] = true;
+                    }
+                }
+            }
+
+            // Detectar cambios en tratamientos
+            if (isset($citasTratamientos['tratamientos'])) {
+                foreach ($citasTratamientos['tratamientos'] as $index => $tratamiento) {
+                    $data['paso5']['tratamientos'][$index] = $tratamiento; // Asegurar datos
+
+
+
+                    if (isset($tratamiento['id']) && !empty($tratamiento['id'])) {
+                        // Registro existente, verificar si ha cambiado
+                        $existingTratamiento = $adulto->tratamientos()->find($tratamiento['id']);
+
+                        if ($existingTratamiento) {
+                            $tieneCambios = false;
+                            $camposAComparar = array_diff_key($tratamiento, ['id' => '', 'created_at' => '', 'updated_at' => '', 'adulto_mayor_id' => '']);
+                            foreach ($camposAComparar as $field => $value) {
+                                if ($existingTratamiento->$field != $value) {
+                                    $tieneCambios = true;
+                                    break;
+                                }
+                            }
+                            $data['paso5']['tratamientos'][$index]['_modified'] = $tieneCambios;
+                        } else {
+                            // ID proporcionado pero registro no encontrado, probablemente eliminado
+                            $data['paso5']['tratamientos'][$index]['_modified'] = false;
+                        }
+                    } else {
+                        // Sin ID, es un registro completamente nuevo
+                        $data['paso5']['tratamientos'][$index]['_new'] = true;
+                    }
+                }
+            }
+        }
+
+        $data['adulto_id'] = $adulto_id;
+        return view('wizard.confirmar', $data);
     }
 
 
-    public function finalizar()
+    public function finalizar($adulto_id = null)
     {
         if (!session()->has('adulto_mayor')) {
             return redirect()->route('wizard.paso1')->with('error', 'Sesión expirada. Inicia el registro nuevamente.');
@@ -277,7 +633,7 @@ class AdultoMayorWizardController extends Controller
             }
             $adulto->valoraciones()->create($valoracion);
         });
-        
+
         // Limpiar la sesión
         session()->forget([
             'adulto_mayor',

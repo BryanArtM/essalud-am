@@ -157,8 +157,6 @@
                             <p class="text-xs lg:text-sm text-gray-600">Registrar nuevo adulto mayor</p>
                         </a>
 
-
-
                         {{-- Gestión de Usuarios (Admin) --}}
                         @if(auth()->user()->is_admin)
                             <a href="{{ route('users.index') }}"
@@ -209,7 +207,7 @@
                                             </svg>
                                         </div>
                                         <div class="min-w-0 flex-1">
-                                            <p class="text-xs lg:text-sm font-medium text-gray-800 truncate">
+                                            <p class="text-xs lg:text-sm font-medium text-gray-800 truncate capitalize">
                                                 {{ $adulto->nombres }} {{ $adulto->apellidos }}
                                             </p>
                                             <p class="text-xs text-gray-500 truncate">

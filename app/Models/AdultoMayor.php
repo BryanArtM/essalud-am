@@ -23,11 +23,11 @@ class AdultoMayor extends Model
     ];
 
     public function enfermedad() {
-        return $this->hasOne(Enfermedad::class);
+        return $this->hasOne(Enfermedad::class, 'adulto_mayor_id', 'id');
     }
 
     public function riesgo() {
-        return $this->hasOne(Riesgo::class);
+        return $this->hasOne(Riesgo::class, 'adulto_mayor_id', 'id');
     }
 
     public function evaluaciones() {

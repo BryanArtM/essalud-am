@@ -26,8 +26,8 @@ class Enfermedad extends Model
         'otros',
         'visare_numero',
         'visare_fecha',
-        'estadio_1a_3a_numero',
-        'estadio_1a_3a_fecha',
+        'estadio_1_3a_numero',
+        'estadio_1_3a_fecha',
         'estadio_3b_5_numero',
         'estadio_3b_5_fecha',
     ];

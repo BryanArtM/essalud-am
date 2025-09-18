@@ -65,13 +65,15 @@
                                     <td class="py-3 px-4 uppercase">{{ $adulto->apellidos }}</td>
                                     <td class="py-3 px-4 uppercase">{{ $adulto->nombres }}</td>
                                     <td class="py-3 px-4 text-center">
-                                        <div class="flex justify-center space-x-2">
+                                        <div class="flex justify-center space-x-1">
                                             <a href="{{ route('adultos.show', $adulto->id) }}"
-                                                class="bg-blue-400 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs shadow">
+                                                class="bg-blue-400 hover:bg-blue-500 text-white px-2 py-1 rounded text-xs shadow"
+                                                title="Ver detalles">
                                                 Ver
                                             </a>
                                             <a href="{{ route('adultos.edit', $adulto->id) }}"
-                                                class="bg-yellow-400 hover:bg-yellow-600 text-white px-3 py-1 rounded text-xs shadow">
+                                                class="bg-amber-400 hover:bg-amber-500 text-white px-2 py-1 rounded text-xs shadow"
+                                                title="Editar">
                                                 Editar
                                             </a>
                                             <form action="{{ route('adultos.destroy', $adulto->id) }}" method="POST"
@@ -80,10 +82,16 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
-                                                    class="bg-red-400 hover:bg-red-600 text-white px-3 py-1 rounded text-xs shadow">
+                                                    class="bg-red-400 hover:bg-red-500 text-white px-2 py-1 rounded text-xs shadow"
+                                                    title="Eliminar">
                                                     Eliminar
                                                 </button>
                                             </form>
+                                            <a href="{{ route('adultos.pdf', $adulto->id) }}" target="_blank"
+                                                class="bg-emerald-400 hover:bg-emerald-500 text-white px-2 py-1 rounded text-xs shadow"
+                                                title="Generar PDF">
+                                                PDF
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>

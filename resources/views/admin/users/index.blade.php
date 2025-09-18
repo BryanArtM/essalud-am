@@ -89,13 +89,13 @@
                                     </td>
                                     <td class="px-6 py-4 text-center space-x-3">
                                         <a href="{{ route('users.edit', $user) }}"
-                                            class="text-blue-600 hover:text-blue-800 font-medium">Editar</a>
+                                            class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors duration-200">Editar</a>
                                         @if (auth()->user()->id !== $user->id)
                                             <form action="{{ route('users.destroy', $user) }}" method="POST"
                                                 class="inline-block" onsubmit="return confirm('¿Eliminar este usuario?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-800 font-medium">
+                                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm font-medium transition-colors duration-200">
                                                     Eliminar
                                                 </button>
                                             </form>

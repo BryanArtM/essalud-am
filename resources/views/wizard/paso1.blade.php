@@ -23,7 +23,8 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('wizard.paso1.post') }}">
+        <form method="POST"
+            action="{{ isset($adulto_id) && $adulto_id ? route('wizard.paso1.post', ['adulto_id' => $adulto_id]) : route('wizard.paso1.post') }}">
             @csrf
             <h2 class="flex justify-center text-xl font-semibold mb-4">DATOS PERSONALES</h2>
 

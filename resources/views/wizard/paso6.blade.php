@@ -16,9 +16,12 @@
                     </div>
                 @endif
 
-                <form action="{{ route('wizard.paso6') }}" method="POST">
+                <form action="{{ isset($adulto_id) && $adulto_id ? route('wizard.paso6.post', ['adulto_id' => $adulto_id]) : route('wizard.paso6.post') }}" method="POST">
                     @csrf
-
+                    {{-- Campo hidden para preservar el ID de la valoración --}}
+                    @if(isset($data['id']))
+                        <input type="hidden" name="id" value="{{ $data['id'] }}">
+                    @endif
                     {{-- Evaluación Geriátrica --}}
                     <h2 class="text-center text-xl font-semibold mb-4">ADULTO MAYOR 75 AÑOS A MÁS</h2>
 
@@ -81,7 +84,7 @@
 
                     {{-- Botones --}}
                     <div class="flex justify-between mt-6">
-                        <a href="{{ route('wizard.paso5') }}" 
+                        <a href="{{ isset($adulto_id) && $adulto_id ? route('wizard.paso5', ['adulto_id' => $adulto_id]) : route('wizard.paso5') }}" 
                             class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
                             Atrás
                         </a>

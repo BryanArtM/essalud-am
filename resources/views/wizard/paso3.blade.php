@@ -15,8 +15,14 @@
                     </div>
                 @endif
 
-                <form action="{{ route('wizard.paso3') }}" method="POST">
+                <form action="{{ isset($adulto_id) && $adulto_id ? route('wizard.paso3.post', ['adulto_id' => $adulto_id]) : route('wizard.paso3.post') }}" method="POST">
                     @csrf
+                    
+                    {{-- Campo hidden para preservar el ID del riesgo --}}
+                    @if(isset($data['id']))
+                        <input type="hidden" name="id" value="{{ $data['id'] }}">
+                    @endif
+                    
                     <h2 class="flex justify-center text-xl font-semibold mb-4">RIESGOS IDENTIFICADOS</h2>
 
 
@@ -41,7 +47,7 @@
                     @endforeach
 
                     <div class="flex justify-between mt-6">
-                        <a href="{{ route('wizard.paso2') }}" 
+                        <a href="{{ isset($adulto_id) && $adulto_id ? route('wizard.paso2', ['adulto_id' => $adulto_id]) : route('wizard.paso2') }}" 
                             class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
                             Atrás
                         </a>

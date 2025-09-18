@@ -241,7 +241,7 @@ class CitasSeeder extends Seeder
                 'enfermera' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
+            ]
         ];
 
         DB::table('citas')->insert($citas);

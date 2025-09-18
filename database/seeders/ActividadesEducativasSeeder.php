@@ -302,7 +302,8 @@ class ActividadesEducativasSeeder extends Seeder
                 'numero_sesion' => 'SE-001',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
+            ]
+
         ];
 
         DB::table('actividades_educativas')->insert($actividades);

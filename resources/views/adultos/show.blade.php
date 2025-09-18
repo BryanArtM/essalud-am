@@ -27,11 +27,11 @@
             ? e($valorMostrado)
             : '<span class="text-gray-400 italic">No registrado</span>';
         return '
-                        <div class="p-2 border rounded-lg bg-white shadow-sm">
-                            <div class="uppercase text-[11px] text-gray-500">' . e($labelText) . '</div>
-                            <p class="text-sm font-medium text-gray-800">' . $contenido . '</p>
-                        </div>
-                    ';
+                                <div class="p-2 border rounded-lg bg-white shadow-sm">
+                                    <div class="uppercase text-[11px] text-gray-500">' . e($labelText) . '</div>
+                                    <p class="text-sm font-medium text-gray-800">' . $contenido . '</p>
+                                </div>
+                            ';
     }
 
     $paneles = [
@@ -54,10 +54,34 @@
 
     <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
 
-        <div class="mb-4">
-            <a href="{{ route('adultos.index') }}" class="text-blue-600 hover:underline text-sm">
-                ← Volver a la lista
-            </a>
+        <div class="mb-4 flex justify-between items-center">
+            <a href="{{ route('adultos.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-gray-400 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-600 focus:bg-gray-600  focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7M19 19l-7-7 7-7"></path>
+                </svg>
+                Volver a la lista
+            </a>            <!-- Botones de acción -->
+            <div class="flex space-x-2">
+                <a href="{{ route('adultos.edit', $adulto->id) }}"
+                    class="inline-flex items-center px-4 py-2 bg-amber-400 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-amber-600 focus:bg-amber-600 active:bg-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                        </path>
+                    </svg>
+                    Editar
+                </a>
+                <a href="{{ route('adultos.pdf', $adulto->id) }}" target="_blank"
+                    class="inline-flex items-center px-4 py-2 bg-emerald-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-600 focus:bg-emerald-600 active:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                    PDF
+                </a>
+            </div>
         </div>
 
         {{-- Datos principales --}}
@@ -72,12 +96,12 @@
             {!! renderCard('dni', $adulto->dni) !!}
             {!! renderCard('Apellidos', $adulto->apellidos) !!}
             {!! renderCard('Nombres', $adulto->nombres) !!}
-            {!! renderCard('fecha_nacimiento', $adulto->fecha_nacimiento) !!}
+            {!! renderCard('fecha_nacimiento', $adulto->fecha_nacimiento ? \Carbon\Carbon::parse($adulto->fecha_nacimiento)->format('d/m/Y') : null) !!}
             @php
                 $edad = $adulto->fecha_nacimiento ? \Carbon\Carbon::parse($adulto->fecha_nacimiento)->age : null;
             @endphp
             {!! renderCard('Edad', $edad) !!}
-            {!! renderCard('Fecha de Ingreso', $adulto->fecha_ingreso) !!}
+            {!! renderCard('Fecha de Ingreso', $adulto->fecha_ingreso ? \Carbon\Carbon::parse($adulto->fecha_ingreso)->format('d/m/Y') : null) !!}
             {!! renderCard('Alergias', $adulto->alergias) !!}
             {!! renderCard('Teléfono', $adulto->telefono) !!}
             {!! renderCard('adulto_mayor_fragil', $adulto->adulto_mayor_fragil) !!}
