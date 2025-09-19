@@ -86,7 +86,7 @@
                 <main class="flex-1 min-w-0">
                     {{-- Banner de bienvenida --}}
                     <div
-                        class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl lg:rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 mb-6 lg:mb-8 text-white">
+                        class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg lg:rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 mb-6 lg:mb-8 text-white">
                         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
                             <div class="mb-4 lg:mb-0">
                                 <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">
@@ -95,7 +95,7 @@
                                 <p class="text-blue-100 text-base lg:text-lg">
                                     Sistema de Gestión para Adultos Mayores
                                 </p>
-                                <p class="text-blue-200 text-sm mt-1 hidden sm:block">
+                                <p class="first-letter:capitalize text-blue-200 text-sm mt-1">
                                     {{ now()->locale('es')->translatedFormat('l, d \d\e F \d\e Y') }}
                                 </p>
                             </div>
