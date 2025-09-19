@@ -11,10 +11,7 @@
 
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-2xl font-semibold text-[#0073B6]">Adultos Mayores</h1>
-                    <a href="{{ route('adultos.create') }}"
-                        class="bg-blue-400 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded shadow">
-                        + Registrar Nuevo
-                    </a>
+                    <x-btn-crear :href="route('adultos.create')" />
                 </div>
 
                 <form method="GET" action="{{ route('adultos.index') }}"
@@ -34,23 +31,16 @@
                     </div>
 
                     <div class="flex items-end space-x-2">
-                        <button type="submit"
-                            class="bg-blue-400 hover:bg-blue-600 text-white px-4 py-2 rounded shadow text-sm">
-                            Aplicar Filtros
-                        </button>
-
+                        <x-btn-filtro-aplicar />
                         @if(request()->filled('dni') || request()->filled('apellidos'))
-                            <a href="{{ route('adultos.index') }}"
-                                class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded shadow text-sm">
-                                Quitar Filtros
-                            </a>
+                            <x-btn-filtro-quitar :href="route('adultos.index')" />
                         @endif
                     </div>
                 </form>
 
                 <div class="overflow-x-auto border rounded-lg shadow-sm">
                     <table class="min-w-full table-auto text-sm">
-                        <thead class="bg-blue-400 text-white uppercase text-xs">
+                        <thead class=" bg-blue-400 text-white uppercase text-xs">
                             <tr>
                                 <th class="py-3 px-4 text-left">DNI</th>
                                 <th class="py-3 px-4 text-left">Apellidos</th>
@@ -65,33 +55,11 @@
                                     <td class="py-3 px-4 uppercase">{{ $adulto->apellidos }}</td>
                                     <td class="py-3 px-4 uppercase">{{ $adulto->nombres }}</td>
                                     <td class="py-3 px-4 text-center">
-                                        <div class="flex justify-center space-x-1">
-                                            <a href="{{ route('adultos.show', $adulto->id) }}"
-                                                class="bg-blue-400 hover:bg-blue-500 text-white px-2 py-1 rounded text-xs shadow"
-                                                title="Ver detalles">
-                                                Ver
-                                            </a>
-                                            <a href="{{ route('adultos.edit', $adulto->id) }}"
-                                                class="bg-amber-400 hover:bg-amber-500 text-white px-2 py-1 rounded text-xs shadow"
-                                                title="Editar">
-                                                Editar
-                                            </a>
-                                            <form action="{{ route('adultos.destroy', $adulto->id) }}" method="POST"
-                                                class="inline-block"
-                                                onsubmit="return confirm('¿Está seguro de eliminar este registro?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    class="bg-red-400 hover:bg-red-500 text-white px-2 py-1 rounded text-xs shadow"
-                                                    title="Eliminar">
-                                                    Eliminar
-                                                </button>
-                                            </form>
-                                            <a href="{{ route('adultos.pdf', $adulto->id) }}" target="_blank"
-                                                class="bg-emerald-400 hover:bg-emerald-500 text-white px-2 py-1 rounded text-xs shadow"
-                                                title="Generar PDF">
-                                                PDF
-                                            </a>
+                                        <div class="flex justify-cem space-x-1">
+                                            <x-btn-ver :href="route('adultos.show', $adulto->id)" />
+                                            <x-btn-editar :href="route('adultos.edit', $adulto->id)" />
+                                            <x-btn-eliminar :action="route('adultos.destroy', $adulto->id)" />
+                                            <x-btn-pdf :href="route('adultos.pdf', $adulto->id)" />
                                         </div>
                                     </td>
                                 </tr>
