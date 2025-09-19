@@ -41,7 +41,7 @@
             </form>
 
             <div class="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto border rounded-lg shadow-sm">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class=" bg-blue-400 text-white uppercase text-xs">
                             <tr>
