@@ -191,7 +191,7 @@
                         </h2>
                         <div class="space-y-2 lg:space-y-3">
                             @php
-                                $recentAdultos = \App\Models\AdultoMayor::latest()->take(3)->get();
+                                $recentAdultos = \App\Models\AdultoMayor::latest()->take(5)->get();
                             @endphp
                             @forelse($recentAdultos as $adulto)
                                 <div

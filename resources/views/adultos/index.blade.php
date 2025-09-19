@@ -55,7 +55,7 @@
                                     <td class="py-3 px-4 uppercase">{{ $adulto->apellidos }}</td>
                                     <td class="py-3 px-4 uppercase">{{ $adulto->nombres }}</td>
                                     <td class="py-3 px-4 text-center">
-                                        <div class="flex justify-cem space-x-1">
+                                        <div class="flex justify-center space-x-1">
                                             <x-btn-ver :href="route('adultos.show', $adulto->id)" />
                                             <x-btn-editar :href="route('adultos.edit', $adulto->id)" />
                                             <x-btn-eliminar :action="route('adultos.destroy', $adulto->id)" />

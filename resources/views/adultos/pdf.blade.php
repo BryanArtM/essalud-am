@@ -275,8 +275,6 @@
 
         <!-- PRIMERA PÁGINA - 2 COLUMNAS -->
         <div class="page-one">
-
-
             <div class="two-columns clearfix">
                 <!-- PRIMERA COLUMNA: CITAS, TRATAMIENTOS, VALORACIONES -->
                 <div class="column">
