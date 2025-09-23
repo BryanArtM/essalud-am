@@ -22,6 +22,8 @@ class AdultoMayorWizardController extends Controller
                 'nombres',
                 'fecha_nacimiento',
                 'telefono',
+                'direccion',
+                'email',
                 'fecha_ingreso',
                 'alergias',
                 'adulto_mayor_fragil'
@@ -47,10 +49,12 @@ class AdultoMayorWizardController extends Controller
             'apellidos' => 'required|string|max:100',
             'dni' => 'required|digits:8',
             'telefono' => 'nullable|digits:9',
+            'direccion' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255|unique:adultos_mayores,email' . ($adulto_id ? ',' . $adulto_id : ''),
             'fecha_nacimiento' => 'required|date|before:today',
             'fecha_ingreso' => 'required|date',
             'alergias' => 'nullable|string',
-            'adulto_mayor_fragil' => 'nullable|string|max:200',
+            'adulto_mayor_fragil' => 'nullable|string|regex:/^[0-9]*$/|max:20',
         ]);
 
         session(['adulto_mayor' => $validated]);

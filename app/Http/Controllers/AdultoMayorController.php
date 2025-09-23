@@ -16,8 +16,10 @@ class AdultoMayorController extends Controller
         $request->validate([
             'dni' => 'nullable|string|regex:/^[0-9]{1,8}$/',
             'apellidos' => 'nullable|string|max:100',
+            'email' => 'nullable|email|max:255',
         ], [
             'dni.regex' => 'El DNI debe contener solo números (máximo 8 dígitos).',
+            'email.email' => 'El email debe tener un formato válido.',
         ]);
 
         //Filtrado
@@ -27,6 +29,9 @@ class AdultoMayorController extends Controller
         }
         if ($request->filled('apellidos')) {
             $query->where('apellidos', 'like', '%' . $request->apellidos . '%');
+        }
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->email . '%');
         }
         //Paginación
         $adultos = $query->paginate(10)->withQueryString();
@@ -92,6 +97,8 @@ class AdultoMayorController extends Controller
                 'nombres',
                 'fecha_nacimiento',
                 'telefono',
+                'direccion',
+                'email',
                 'fecha_ingreso',
                 'alergias',
                 'adulto_mayor_fragil'

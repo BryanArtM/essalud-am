@@ -16,11 +16,14 @@ class AdultoMayor extends Model
         'apellidos',
         'dni',
         'telefono',
+        'direccion',    //añadido
+        'email',        //añadido
         'fecha_nacimiento',
         'fecha_ingreso',
         'alergias',
         'adulto_mayor_fragil',
     ];
+
 
     public function enfermedad() {
         return $this->hasOne(Enfermedad::class, 'adulto_mayor_id', 'id');

@@ -9,7 +9,7 @@
             'ipress' => 'IPRESS',
             'numero_ficha' => 'Número de Ficha',
             'fecha_nacimiento' => 'Fecha de Nacimiento',
-            'adulto_mayor_fragil' => '¿Adulto Mayor Frágil?',
+            'adulto_mayor_fragil' => 'Adulto Mayor Frágil (N°)',
         ];
         return $map[$label] ?? ucwords(str_replace('_', ' ', $label));
     }
@@ -107,6 +107,8 @@
                 {!! renderCard('Fecha de Ingreso', $adulto->fecha_ingreso ? \Carbon\Carbon::parse($adulto->fecha_ingreso)->format('d/m/Y') : null) !!}
                 {!! renderCard('Alergias', $adulto->alergias) !!}
                 {!! renderCard('Teléfono', $adulto->telefono) !!}
+                {!! renderCard('Dirección', $adulto->direccion) !!}
+                {!! renderCard('Email', $adulto->email) !!}
                 {!! renderCard('adulto_mayor_fragil', $adulto->adulto_mayor_fragil) !!}
             </div>
 

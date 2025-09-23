@@ -29,6 +29,7 @@ class Evaluacion extends Model
         'tasa_filtracion_glomerular',
         'control_renal_fecha'
     ];
+    //LAS TALLAS SE DEBEN AGREGAR EN CADA REGISTRO
 
     public function adultoMayor() {
         return $this->belongsTo(AdultoMayor::class);

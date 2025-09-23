@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('nombres');
             $table->string('dni')->unique();
             $table->string('telefono')->nullable();
+            $table->string('direccion')->nullable(); //añadido
+            $table->string('email')->nullable();     //añadido
             $table->date('fecha_ingreso');
             $table->date('fecha_nacimiento');
             $table->text('alergias')->nullable();

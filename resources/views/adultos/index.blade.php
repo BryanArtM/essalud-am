@@ -15,7 +15,7 @@
                 </div>
 
                 <form method="GET" action="{{ route('adultos.index') }}"
-                    class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
                         <label class="block text-sm font-semibold mb-1 text-gray-700" for="dni">Filtrar por DNI</label>
                         <input type="text" name="dni" id="dni" pattern="[0-9]{1,8}" maxlength="8"
@@ -45,6 +45,8 @@
                                 <th class="py-3 px-4 text-left">DNI</th>
                                 <th class="py-3 px-4 text-left">Apellidos</th>
                                 <th class="py-3 px-4 text-left">Nombres</th>
+                                <th class="py-3 px-4 text-left">Teléfono</th>
+                                <th class="py-3 px-4 text-left">Email</th>
                                 <th class="py-3 px-4 text-center">Acciones</th>
                             </tr>
                         </thead>
@@ -54,6 +56,8 @@
                                     <td class="py-3 px-4">{{ $adulto->dni }}</td>
                                     <td class="py-3 px-4 uppercase">{{ $adulto->apellidos }}</td>
                                     <td class="py-3 px-4 uppercase">{{ $adulto->nombres }}</td>
+                                    <td class="py-3 px-4">{{ $adulto->telefono ?? 'N/A' }}</td>
+                                    <td class="py-3 px-4">{{ $adulto->email ?? 'N/A' }}</td>
                                     <td class="py-3 px-4 text-center">
                                         <div class="flex justify-center space-x-1">
                                             <x-btn-ver :href="route('adultos.show', $adulto->id)" />
@@ -65,7 +69,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="py-6 text-center text-gray-500 italic">
+                                    <td colspan="6" class="py-6 text-center text-gray-500 italic">
                                         No hay registros disponibles.
                                     </td>
                                 </tr>

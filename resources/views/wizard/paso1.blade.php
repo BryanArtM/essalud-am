@@ -64,6 +64,20 @@
             </div>
 
             <div class="mb-4">
+                <label for="direccion" class="block text-gray-700 font-semibold mb-2">Dirección</label>
+                <input type="text" name="direccion" maxlength="255"
+                    value="{{ old('direccion', $data['direccion'] ?? '') }}"
+                    class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
+                <input type="email" name="email" maxlength="255"
+                    value="{{ old('email', $data['email'] ?? '') }}"
+                    class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div class="mb-4">
                 <label for="dni" class="block text-gray-700 font-semibold mb-2">DNI</label>
                 <input type="text" name="dni" required pattern="\d{8}" title="Debe tener 8 dígitos"
                     value="{{ old('dni', $data['dni'] ?? '') }}"
@@ -93,10 +107,12 @@
 
             <div class="mb-6">
                 <label for="adulto_mayor_fragil" class="block text-gray-700 font-semibold mb-2">Adulto Mayor
-                    Frágil</label>
-                <input type="text" name="adulto_mayor_fragil" required maxlength="100"
+                    Frágil (N°)</label>
+                <input type="text" name="adulto_mayor_fragil" pattern="[0-9]*" maxlength="20"
                     value="{{ old('adulto_mayor_fragil', $data['adulto_mayor_fragil'] ?? '') }}"
-                    class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Ingrese solo números (ej: 0005, 123)"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             </div>
 
             <div class="flex justify-between">

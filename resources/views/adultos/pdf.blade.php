@@ -94,6 +94,7 @@
 
         .section-title {
             background-color: #969696;
+            text-align: center;
             color: white;
             padding: 3px 5px;
             margin: 0 0 6px 0;
@@ -492,6 +493,14 @@
                                 <td class="info-value">{{ $adulto->telefono ?? 'No registrado' }}</td>
                             </tr>
                             <tr class="info-row">
+                                <td class="info-label">Dirección:</td>
+                                <td class="info-value">{{ $adulto->direccion ?? 'No registrada' }}</td>
+                            </tr>
+                            <tr class="info-row">
+                                <td class="info-label">Email:</td>
+                                <td class="info-value">{{ $adulto->email ?? 'No registrado' }}</td>
+                            </tr>
+                            <tr class="info-row">
                                 <td class="info-label">Fecha de Nacimiento:</td>
                                 <td class="info-value">
                                     {{ $adulto->fecha_nacimiento ? \Carbon\Carbon::parse($adulto->fecha_nacimiento)->format('d/m/Y') : 'No registrado' }}
@@ -513,10 +522,8 @@
                             <tr class="info-row">
                                 <td class="info-label">Adulto Mayor Frágil:</td>
                                 <td class="info-value">
-                                    @if($adulto->adulto_mayor_fragil == "Sí")
-                                        <span>SÍ</span>
-                                    @elseif($adulto->adulto_mayor_fragil == "No")
-                                        <span>NO</span>
+                                    @if($adulto->adulto_mayor_fragil !== null)
+                                        N° {{ $adulto->adulto_mayor_fragil }}
                                     @else
                                         No evaluado
                                     @endif
