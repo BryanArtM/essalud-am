@@ -20,14 +20,27 @@
                     method="POST">
                     @csrf
                     {{-- Citas Médicas --}}
-                    <h2 class="text-center text-xl font-semibold mb-4">CITAS MÉDICAS</h2>
+                    <h2 class="mt-4 mb-3 text-center text-xl font-semibold">CITAS MÉDICAS</h2>
+                    <div class="mt-4  flex gap-2" id="citas-controls">
+                        <button type="button" onclick="agregarCita()"
+                            class="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600 flex items-center"
+                            title="Añadir Cita">
+
+                            <span>Añadir</span>
+                        </button>
+                        <button type="button" onclick="eliminarCita()"
+                            class="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 flex items-center"
+                            id="eliminar-cita-btn" title="Eliminar Cita" style="display: none;">
+                            <span>Eliminar</span>
+                        </button>
+                    </div>
                     <div class="flex justify-around font-semibold text-gray-800">
                         <label>Fecha</label>
                         <label>Médico</label>
                         <label>Enfermera</label>
                     </div>
                     <div id="citas-wrapper">
-                        @if(old('citas', $citas))
+                        @if(old('citas', $citas ?? false))
                             @foreach(old('citas', $citas) as $i => $cita)
                                 <div class="grid grid-cols-3 gap-4 mb-4">
                                     {{-- Campo hidden para preservar el ID del registro --}}
@@ -45,28 +58,32 @@
                                         class="w-full border rounded px-3 py-2">
                                 </div>
                             @endforeach
-                        @else
-                            <div class="grid grid-cols-3 gap-4 mb-4">
-                                <input type="date" name="citas[0][fecha]" class="w-full border rounded px-3 py-2">
-                                <input type="text" name="citas[0][medico]" class="w-full border rounded px-3 py-2">
-                                <input type="text" name="citas[0][enfermera]" class="w-full border rounded px-3 py-2">
-                            </div>
                         @endif
                     </div>
 
-                    <button type="button" onclick="agregarCita()"
-                        class="mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                        + Añadir Cita
-                    </button>
-
                     {{-- Tratamiento Farmacológico --}}
-                    <h2 class="text-center text-xl font-semibold mb-4">TRATAMIENTO FARMACOLÓGICO</h2>
+                    <hr class="border-gray-300 mt-7">
+                    <h2 class="mt-7 mb-4 text-center text-xl font-semibold">TRATAMIENTO FARMACOLÓGICO</h2>
+                    <div class="mt-4 flex gap-2" id="tratamientos-controls">
+                        <button type="button" onclick="agregarTratamiento()"
+                            class="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600 flex items-center"
+                            title="Añadir Tratamiento">
+
+                            <span>Añadir</span>
+                        </button>
+                        <button type="button" onclick="eliminarTratamiento()"
+                            class="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 flex items-center"
+                            id="eliminar-tratamiento-btn" title="Eliminar Tratamiento" style="display: none;">
+
+                            <span>Eliminar</span>
+                        </button>
+                    </div>
                     <div class="flex justify-around font-semibold text-gray-800">
                         <label>Medicación</label>
                         <label>Dosis</label>
                     </div>
                     <div id="tratamientos-wrapper">
-                        @if(old('tratamientos', $tratamientos))
+                        @if(old('tratamientos', $tratamientos ?? false))
                             @foreach(old('tratamientos', $tratamientos) as $i => $tratamiento)
                                 <div class="grid grid-cols-2 gap-4 mb-4">
                                     {{-- Campo hidden para preservar el ID del registro --}}
@@ -81,21 +98,10 @@
                                         value="{{ $tratamiento['dosis'] ?? '' }}" class="w-full border rounded px-3 py-2">
                                 </div>
                             @endforeach
-                        @else
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <input type="text" name="tratamientos[0][medicacion]"
-                                    class="w-full border rounded px-3 py-2">
-                                <input type="number" step="any" name="tratamientos[0][dosis]"
-                                    class="w-full border rounded px-3 py-2">
-                            </div>
                         @endif
                     </div>
 
-                    <button type="button" onclick="agregarTratamiento()"
-                        class="mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                        + Añadir Tratamiento
-                    </button>
-
+                    {{-- Botones Navegación --}}
                     <div class="flex justify-between mt-6">
                         <a href="{{ isset($adulto_id) && $adulto_id ? route('wizard.paso4', ['adulto_id' => $adulto_id]) : route('wizard.paso4') }}"
                             class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
@@ -113,7 +119,34 @@
 
     {{-- Scripts --}}
     <script>
-        let index = {{ old('tratamientos', $tratamientos ?? []) ? count(old('tratamientos', $tratamientos ?? [])) : 1 }};
+        // Variables para control de registros originales vs nuevos
+        const tratamientosOriginales = @if(old('tratamientos', $tratamientos ?? false)) {{ count(old('tratamientos', $tratamientos ?? [])) }} @else 0 @endif;
+        const citasOriginales = @if(old('citas', $citas ?? false)) {{ count(old('citas', $citas ?? [])) }} @else 0 @endif;
+
+        // Mostrar/ocultar botón eliminar según registros agregados
+        function actualizarBotonEliminarTratamiento() {
+            const btn = document.getElementById('eliminar-tratamiento-btn');
+            if (!btn) return;
+            const wrapper = document.getElementById('tratamientos-wrapper');
+            const registros = wrapper.querySelectorAll('.grid');
+            btn.style.display = (registros.length > tratamientosOriginales) ? 'flex' : 'none';
+        }
+
+        function actualizarBotonEliminarCita() {
+            const btn = document.getElementById('eliminar-cita-btn');
+            if (!btn) return;
+            const wrapper = document.getElementById('citas-wrapper');
+            const registros = wrapper.querySelectorAll('.grid');
+            btn.style.display = (registros.length > citasOriginales) ? 'flex' : 'none';
+        }
+
+        // Llamar al cargar la página
+        window.addEventListener('DOMContentLoaded', function () {
+            actualizarBotonEliminarTratamiento();
+            actualizarBotonEliminarCita();
+        });
+
+        let index = tratamientosOriginales;
         function agregarTratamiento() {
             const wrapper = document.getElementById('tratamientos-wrapper');
             const div = document.createElement('div');
@@ -124,9 +157,10 @@
             `;
             wrapper.appendChild(div);
             index++;
+            actualizarBotonEliminarTratamiento();
         }
 
-        let citaIndex = {{ old('citas', $citas ?? []) ? count(old('citas', $citas ?? [])) : 1 }};
+        let citaIndex = citasOriginales;
         function agregarCita() {
             const wrapper = document.getElementById('citas-wrapper');
             const div = document.createElement('div');
@@ -138,6 +172,40 @@
             `;
             wrapper.appendChild(div);
             citaIndex++;
+            actualizarBotonEliminarCita();
+        }
+
+        // Funciones para eliminar registros (solo los agregados en esta sesión)
+        function eliminarTratamiento() {
+            const wrapper = document.getElementById('tratamientos-wrapper');
+            const registros = wrapper.querySelectorAll('.grid');
+
+            // Solo se pueden eliminar los registros agregados en esta sesión
+            if (registros.length <= tratamientosOriginales) {
+                alert('No se pueden eliminar los tratamientos ya registrados. Solo se pueden eliminar los que acabas de agregar en esta sesión.');
+                return;
+            }
+
+            // Eliminar el último registro
+            registros[registros.length - 1].remove();
+            index--;
+            actualizarBotonEliminarTratamiento();
+        }
+
+        function eliminarCita() {
+            const wrapper = document.getElementById('citas-wrapper');
+            const registros = wrapper.querySelectorAll('.grid');
+
+            // Solo se pueden eliminar los registros agregados en esta sesión
+            if (registros.length <= citasOriginales) {
+                alert('No se pueden eliminar las citas ya registradas. Solo se pueden eliminar las que acabas de agregar en esta sesión.');
+                return;
+            }
+
+            // Eliminar el último registro
+            registros[registros.length - 1].remove();
+            citaIndex--;
+            actualizarBotonEliminarCita();
         }
     </script>
 </x-app-layout>

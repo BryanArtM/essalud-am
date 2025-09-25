@@ -31,13 +31,13 @@
 
             <div class="mb-4">
                 <label for="ipress" class="block text-gray-700 font-semibold mb-2">IPRESS</label>
-                <input type="text" name="ipress" id="ipress" required value="{{ old('ipress', $data['ipress'] ?? '') }}"
+                <input type="text" name="ipress" id="ipress" value="{{ old('ipress', $data['ipress'] ?? '') }}"
                     class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
             <div class="mb-4">
                 <label for="numero_ficha" class="block text-gray-700 font-semibold mb-2">N° Ficha</label>
-                <input type="text" name="numero_ficha" id="numero_ficha" required
+                <input type="text" name="numero_ficha" id="numero_ficha"
                     value="{{ old('numero_ficha', $data['numero_ficha'] ?? '') }}"
                     class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
@@ -58,7 +58,7 @@
 
             <div class="mb-4">
                 <label for="telefono" class="block text-gray-700 font-semibold mb-2">Teléfono</label>
-                <input type="text" name="telefono" required pattern="\d{9}" title="Debe tener 9 dígitos"
+                <input type="text" name="telefono" pattern="\d{9}" title="Debe tener 9 dígitos"
                     value="{{ old('telefono', $data['telefono'] ?? '') }}"
                     class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
@@ -86,14 +86,14 @@
 
             <div class="mb-4">
                 <label for="fecha_ingreso" class="block text-gray-700 font-semibold mb-2">Fecha de Ingreso</label>
-                <input type="date" name="fecha_ingreso" id="fecha_ingreso" required
+                <input type="date" name="fecha_ingreso" id="fecha_ingreso"
                     value="{{ old('fecha_ingreso', $data['fecha_ingreso'] ?? '') }}"
                     class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
             <div class="mb-4">
                 <label for="fecha_nacimiento" class="block text-gray-700 font-semibold mb-2">Fecha de Nacimiento</label>
-                <input type="date" name="fecha_nacimiento" required max="{{ date('Y-m-d') }}"
+                <input type="date" name="fecha_nacimiento" max="{{ date('Y-m-d') }}"
                     value="{{ old('fecha_nacimiento', $data['fecha_nacimiento'] ?? '') }}"
                     class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>

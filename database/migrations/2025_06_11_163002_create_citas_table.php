@@ -12,7 +12,7 @@ return new class extends Migration
         Schema::create('citas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('adulto_mayor_id')->constrained('adultos_mayores')->onDelete('cascade');
-            $table->date('fecha');
+            $table->date('fecha')->nullable();
             $table->string('medico')->nullable();
             $table->string('enfermera')->nullable();
             $table->timestamps();

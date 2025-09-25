@@ -177,12 +177,12 @@
             padding: 2px 2px;
             border: 1px solid #ccc;
             font-weight: bold;
-            text-align: left;
+            text-align: center;
             font-size: 10px;
         }
 
         .list-table td {
-            padding: 2px 2px;
+            padding-left: 5px;
             border: 1px solid #ccc;
             font-size: 10px;
         }
@@ -197,6 +197,7 @@
             padding: 5px 2px;
             min-height: 20px;
             height: 20px;
+
         }
 
         .margen {
@@ -212,7 +213,7 @@
         .data-table th:first-child,
         .data-table td:first-child {
             width: 16%;
-            
+            padding-left: 8px;
         }
 
         .data-table th:not(:first-child),
@@ -256,9 +257,6 @@
             display: table;
         }
 
-        .checkbox-grid {
-            display: table;
-        }
 
         .footer {
             text-align: center;
@@ -280,7 +278,6 @@
                 <!-- PRIMERA COLUMNA: CITAS, TRATAMIENTOS, VALORACIONES -->
                 <div class="column">
                     <!-- CITAS MÉDICAS -->
-                    @if($adulto->citas->count() > 0)
                         <div class="section compact-section">
                             <h3 class="section-title">HISTORIAL DE CITAS MÉDICAS</h3>
                             <table class="list-table">
@@ -289,7 +286,6 @@
                                         <th>Fecha</th>
                                         <th>Médico</th>
                                         <th>Enfermera</th>
-                                        <th>Registrado</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -301,11 +297,9 @@
                                                 echo '<td>' . ($cita->fecha ? \Carbon\Carbon::parse($cita->fecha)->format('d/m/Y') : 'N/E') . '</td>';
                                                 echo '<td>' . ($cita->medico ?? '-') . '</td>';
                                                 echo '<td>' . ($cita->enfermera ?? '-') . '</td>';
-                                                echo '<td>' . $cita->created_at->format('d/m/Y') . '</td>';
                                                 echo '</tr>';
                                             } else {
                                                 echo '<tr>';
-                                                echo '<td>&nbsp;</td>';
                                                 echo '<td>&nbsp;</td>';
                                                 echo '<td>&nbsp;</td>';
                                                 echo '<td>&nbsp;</td>';
@@ -316,15 +310,8 @@
                                 </tbody>
                             </table>
                         </div>
-                    @else
-                        <div class="section compact-section">
-                            <h3 class="section-title">HISTORIAL DE CITAS MÉDICAS</h3>
-                            <div class="no-data">No se han registrado citas médicas</div>
-                        </div>
-                    @endif
 
                     <!-- TRATAMIENTOS -->
-                    @if($adulto->tratamientos->count() > 0)
                         <div class="section compact-section">
                             <h3 class="section-title">TRATAMIENTOS</h3>
                             <table class="list-table">
@@ -332,7 +319,6 @@
                                     <tr>
                                         <th>Medicación</th>
                                         <th>Dosis</th>
-                                        <th>Fecha</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -343,11 +329,9 @@
                                                 echo '<tr>';
                                                 echo '<td>' . ($tratamiento->medicacion ?? 'No especificada') . '</td>';
                                                 echo '<td>' . ($tratamiento->dosis ?? '-') . '</td>';
-                                                echo '<td>' . $tratamiento->created_at->format('d/m/Y') . '</td>';
                                                 echo '</tr>';
                                             } else {
                                                 echo '<tr>';
-                                                echo '<td>&nbsp;</td>';
                                                 echo '<td>&nbsp;</td>';
                                                 echo '<td>&nbsp;</td>';
                                                 echo '</tr>';
@@ -357,15 +341,8 @@
                                 </tbody>
                             </table>
                         </div>
-                    @else
-                        <div class="section compact-section">
-                            <h3 class="section-title">TRATAMIENTO FARMACOLÓGICO</h3>
-                            <div class="no-data">No se han registrado tratamientos</div>
-                        </div>
-                    @endif
 
                     <!-- VALORACIONES -->
-                    @if($adulto->valoraciones->count() > 0)
                         <div class="section compact-section">
                             <h3 class="section-title">ADULTO MAYOR 75 AÑOS A MÁS</h3>
                             @foreach($adulto->valoraciones as $valoracion)
@@ -447,12 +424,6 @@
                                 </table>
                             @endforeach
                         </div>
-                    @else
-                        <div class="section compact-section">
-                            <h3 class="section-title">VALORACIONES</h3>
-                            <div class="no-data">No se han registrado valoraciones</div>
-                        </div>
-                    @endif
                     <div class="footer">
                         <p>Generado el {{ date('d/m/Y H:i') }} - Sistema de Gestión de Adultos Mayores - EsSalud</p>
                     </div>
@@ -705,7 +676,6 @@
         <!-- SEGUNDA PÁGINA - PÁGINA COMPLETA -->
         <div class="page-two">
             <!-- EVALUACIONES MÉDICAS -->
-            @if($adulto->evaluaciones->count() > 0)
                 <div class="section compact-section margen">
                     <h3 class="section-title">EVALUACIONES MÉDICAS</h3>
                     <p style="margin: 6px 0; font-size: 10px;">
@@ -886,17 +856,10 @@
                         </tbody>
                     </table>
                 </div>
-            @else
-                <div class="section compact-section margen">
-                    <h3 class="section-title">EVALUACIONES MÉDICAS</h3>
-                    <div class="no-data">No se han registrado evaluaciones médicas</div>
-                </div>
-            @endif
 
             <!-- ACTIVIDADES EDUCATIVAS -->
-            @if($adulto->actividadesEducativas->count() > 0)
                 <div class="section compact-section margen">
-                    <h3 class="section-title">ACTIVIDADES EDUCATIVAS</h3>
+                    <h3 class="section-title" style="margin-top: 10px;">ACTIVIDADES EDUCATIVAS</h3>
                     <table class="list-table data-table tabla-horizontal">
                         <tbody>
                             <tr>
@@ -923,27 +886,9 @@
                                     }
                                 @endphp
                             </tr>
-                            <tr>
-                                <td><strong>Registrado</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = '';
-                                        if (isset($adulto->actividadesEducativas[$i - 1])) {
-                                            $valor = $adulto->actividadesEducativas[$i - 1]->created_at->format('d/m/Y');
-                                        }
-                                        echo '<td>' . $valor . '</td>';
-                                    }
-                                @endphp
-                            </tr>
                         </tbody>
                     </table>
                 </div>
-            @else
-                <div class="section compact-section margen">
-                    <h3 class="section-title">ACTIVIDADES EDUCATIVAS</h3>
-                    <div class="no-data">No se han registrado actividades educativas</div>
-                </div>
-            @endif
         </div> <!-- Cierre de page-two -->
     </div> <!-- Cierre de container -->
 

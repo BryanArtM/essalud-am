@@ -11,16 +11,16 @@ return new class extends Migration
         // CREACIÓN DE LA TABLA CON LOS DATOS DE LOS ADULTOS MAYORES
         Schema::create('adultos_mayores', function (Blueprint $table) {
             $table->id();
-            $table->string('ipress');
-            $table->string('numero_ficha');
+            $table->string('ipress')->nullable();
+            $table->string('numero_ficha')->nullable();
             $table->string('apellidos');
             $table->string('nombres');
             $table->string('dni')->unique();
             $table->string('telefono')->nullable();
             $table->string('direccion')->nullable(); //añadido
             $table->string('email')->nullable();     //añadido
-            $table->date('fecha_ingreso');
-            $table->date('fecha_nacimiento');
+            $table->date('fecha_ingreso')->nullable();
+            $table->date('fecha_nacimiento')->nullable();
             $table->text('alergias')->nullable();
             $table->string('adulto_mayor_fragil')->nullable(); 
             $table->index(['apellidos', 'nombres']);

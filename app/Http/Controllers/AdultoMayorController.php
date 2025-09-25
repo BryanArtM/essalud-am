@@ -149,13 +149,13 @@ class AdultoMayorController extends Controller
                 $query->orderBy('created_at', 'desc')->limit(15);
             },
             'actividadesEducativas' => function($query) {
-                $query->orderBy('created_at', 'desc')->limit(15);
+                $query->orderBy('fecha', 'desc')->limit(15);
             },
             'tratamientos' => function($query) {
                 $query->orderBy('created_at', 'desc')->limit(10);
             },
             'citas' => function($query) {
-                $query->orderBy('created_at', 'desc')->limit(10);
+                $query->orderBy('fecha', 'desc')->limit(10);
             },
             'valoraciones' => function($query) {
                 $query->orderBy('created_at', 'asc');
@@ -165,9 +165,9 @@ class AdultoMayorController extends Controller
 
         // Reordenar las colecciones para mostrar de izquierda a derecha (más antiguo al más reciente)
         $adulto->evaluaciones = $adulto->evaluaciones->sortBy('created_at')->values();
-        $adulto->actividadesEducativas = $adulto->actividadesEducativas->sortBy('created_at')->values();
+        $adulto->actividadesEducativas = $adulto->actividadesEducativas->sortBy('fecha')->values();
         $adulto->tratamientos = $adulto->tratamientos->sortBy('created_at')->values();
-        $adulto->citas = $adulto->citas->sortBy('created_at')->values();
+        $adulto->citas = $adulto->citas->sortBy('fecha')->values();
 
         $fechaNacimiento = \Carbon\Carbon::parse($adulto->fecha_nacimiento);
         $edad = $fechaNacimiento->age;

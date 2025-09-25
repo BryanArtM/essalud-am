@@ -13,25 +13,35 @@ class AdultoMayorWizardController extends Controller
     {
         // Si tenemos adulto_id (modo edición), cargar datos directamente de la base de datos
         if ($adulto_id) {
-            $adulto = AdultoMayor::findOrFail($adulto_id);
-            $data = $adulto->only([
-                'ipress',
-                'numero_ficha',
-                'dni',
-                'apellidos',
-                'nombres',
-                'fecha_nacimiento',
-                'telefono',
-                'direccion',
-                'email',
-                'fecha_ingreso',
-                'alergias',
-                'adulto_mayor_fragil'
-            ]);
+            // Verificar si ya hay datos en sesión (usuario navegando entre pasos)
+            $sessionAdultoMayor = session('adulto_mayor', []);
+            $sessionAdultoId = session('adulto_id');
 
-            // Actualizar la sesión con los datos correctos
-            session(['adulto_mayor' => $data]);
-            session(['adulto_id' => $adulto_id]);
+            if (!empty($sessionAdultoMayor) && $sessionAdultoId == $adulto_id) {
+                // Ya hay datos de este adulto en sesión, usar esos (preservar cambios)
+                $data = $sessionAdultoMayor;
+            } else {
+                // Primera vez editando o diferente adulto, cargar desde BD
+                $adulto = AdultoMayor::findOrFail($adulto_id);
+                $data = $adulto->only([
+                    'ipress',
+                    'numero_ficha',
+                    'dni',
+                    'apellidos',
+                    'nombres',
+                    'fecha_nacimiento',
+                    'telefono',
+                    'direccion',
+                    'email',
+                    'fecha_ingreso',
+                    'alergias',
+                    'adulto_mayor_fragil'
+                ]);
+
+                // Actualizar la sesión con los datos correctos
+                session(['adulto_mayor' => $data]);
+                session(['adulto_id' => $adulto_id]);
+            }
         } else {
             // Modo nuevo registro, usar datos de sesión
             $data = session('adulto_mayor', []);
@@ -43,16 +53,16 @@ class AdultoMayorWizardController extends Controller
     public function guardarPaso1(Request $request, $adulto_id = null)
     {
         $validated = $request->validate([
-            'numero_ficha' => 'required|string',
-            'ipress' => 'required|string',
+            'numero_ficha' => 'nullable|string',
+            'ipress' => 'nullable|string',
             'nombres' => 'required|string|max:100',
             'apellidos' => 'required|string|max:100',
-            'dni' => 'required|digits:8',
+            'dni' => 'required|digits:8|unique:adultos_mayores,dni' . ($adulto_id ? ',' . $adulto_id : ''),
             'telefono' => 'nullable|digits:9',
             'direccion' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255|unique:adultos_mayores,email' . ($adulto_id ? ',' . $adulto_id : ''),
-            'fecha_nacimiento' => 'required|date|before:today',
-            'fecha_ingreso' => 'required|date',
+            'email' => 'nullable|email|max:255',
+            'fecha_nacimiento' => 'nullable|date|before:today',
+            'fecha_ingreso' => 'nullable|date',
             'alergias' => 'nullable|string',
             'adulto_mayor_fragil' => 'nullable|string|regex:/^[0-9]*$/|max:20',
         ]);
@@ -223,10 +233,10 @@ class AdultoMayorWizardController extends Controller
     public function guardarPaso4(Request $request, $adulto_id = null)
     {
         $validated = $request->validate([
-            'talla' => 'required|numeric',
-            'peso_aceptable' => 'required|numeric',
+            'talla' => 'nullable|numeric',
+            'peso_aceptable' => 'nullable|numeric',
             //Validación de registros de evaluaciones
-            'evaluaciones' => 'required|array',
+            'evaluaciones' => 'nullable|array',
             'evaluaciones.*.peso' => 'nullable|numeric',
             'evaluaciones.*.presion_arterial' => 'nullable|string|max:20',
             'evaluaciones.*.glucosa' => 'nullable|numeric',
@@ -281,14 +291,14 @@ class AdultoMayorWizardController extends Controller
     {
         $validated = $request->validate([
             //Validación de registros de citas
-            'citas' => 'array',
+            'citas' => 'nullable|array',
             'citas.*.id' => 'nullable|integer|exists:citas,id',
             'citas.*.fecha' => 'nullable|date',
             'citas.*.medico' => 'nullable|string|max:100',
             'citas.*.enfermera' => 'nullable|string|max:100',
 
             //Validación de registros de tratamientos
-            'tratamientos' => 'array',
+            'tratamientos' => 'nullable|array',
             'tratamientos.*.id' => 'nullable|integer|exists:tratamientos,id',
             'tratamientos.*.medicacion' => 'nullable|string|max:100',
             'tratamientos.*.dosis' => 'nullable|numeric|min:0',

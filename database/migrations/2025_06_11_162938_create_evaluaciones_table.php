@@ -12,8 +12,8 @@ return new class extends Migration
         Schema::create('evaluaciones', function (Blueprint $table) {
             $table->id();
             $table->foreignId('adulto_mayor_id')->constrained('adultos_mayores')->onDelete('cascade');
-            $table->integer('talla')->required();
-            $table->decimal('peso_aceptable', 5, 2)->required();
+            $table->integer('talla')->nullable();
+            $table->decimal('peso_aceptable', 5, 2)->nullable();
             $table->decimal('peso', 5, 2)->nullable();
             $table->string('presion_arterial')->nullable();
             $table->decimal('glucosa', 5, 2)->nullable();
