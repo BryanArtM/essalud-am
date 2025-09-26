@@ -1,7 +1,7 @@
 @props(['href', 'text' => null])
 
 <a href="{{ $href }}" target="_blank"
-    class="bg-emerald-400 hover:bg-emerald-500 text-white px-2 py-1 rounded text-xs shadow flex items-center gap-1 transition-colors duration-200"
+    class="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 px-2 py-1 rounded text-xs shadow flex items-center transition-colors duration-200"
     title="Generar PDF">
     <svg class="w-5 h-5 lg:w-6 lg:h-6" viewBox="0 0 24 24" fill="none"
         xmlns="http://www.w3.org/2000/svg">

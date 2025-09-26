@@ -13,22 +13,17 @@ class AdminUserSeeder extends Seeder
     {
         // Administrador principal
         User::updateOrCreate(
-            ['email' => env('ADMIN_EMAIL', 'admin@gmail.com')],
+            ['id' => 1],
             [
-                'name' => env('ADMIN_NAME', 'Administrador'),
-                'password' => Hash::make(env('ADMIN_PASSWORD', 'admin123')),
+                'name' => env('SUPER_ADMIN_NAME', 'Administrador'),
+                'email' => env('SUPER_ADMIN_EMAIL', 'barteagame@gmail.com'),
+                'password' => Hash::make(env('SUPER_ADMIN_PASSWORD', 'Bryan1901_')),
                 'is_admin' => 1,
             ]
         );
 
         // 20 usuarios mezclados (administradores y usuarios regulares)
         $usuarios = [
-            [
-                'name' => 'Dr. Carlos Mendoza',
-                'email' => 'carlos.mendoza@gmail.com',
-                'password' => Hash::make('admin123'),
-                'is_admin' => 1,
-            ],
             [
                 'name' => 'Pedro Ramírez',
                 'email' => 'pedro.ramirez@gmail.com',
@@ -50,96 +45,6 @@ class AdminUserSeeder extends Seeder
             [
                 'name' => 'Enf. Ana Torres',
                 'email' => 'ana.torres@gmail.com',
-                'password' => Hash::make('admin123'),
-                'is_admin' => 1,
-            ],
-            [
-                'name' => 'Luis Fernández',
-                'email' => 'luis.fernandez@gmail.com',
-                'password' => Hash::make('user123'),
-                'is_admin' => 0,
-            ],
-            [
-                'name' => 'Dr. Roberto Silva',
-                'email' => 'roberto.silva@gmail.com',
-                'password' => Hash::make('admin123'),
-                'is_admin' => 1,
-            ],
-            [
-                'name' => 'Rosa Martínez',
-                'email' => 'rosa.martinez@gmail.com',
-                'password' => Hash::make('user123'),
-                'is_admin' => 0,
-            ],
-            [
-                'name' => 'José Herrera',
-                'email' => 'jose.herrera@gmail.com',
-                'password' => Hash::make('user123'),
-                'is_admin' => 0,
-            ],
-            [
-                'name' => 'Dra. Elena Vargas',
-                'email' => 'elena.vargas@gmail.com',
-                'password' => Hash::make('admin123'),
-                'is_admin' => 1,
-            ],
-            [
-                'name' => 'Miguel Ángel Castro',
-                'email' => 'miguel.castro@gmail.com',
-                'password' => Hash::make('user123'),
-                'is_admin' => 0,
-            ],
-            [
-                'name' => 'Enf. Patricia Ruiz',
-                'email' => 'patricia.ruiz@gmail.com',
-                'password' => Hash::make('admin123'),
-                'is_admin' => 1,
-            ],
-            [
-                'name' => 'Diana Flores',
-                'email' => 'diana.flores@gmail.com',
-                'password' => Hash::make('user123'),
-                'is_admin' => 0,
-            ],
-            [
-                'name' => 'Antonio Morales',
-                'email' => 'antonio.morales@gmail.com',
-                'password' => Hash::make('user123'),
-                'is_admin' => 0,
-            ],
-            [
-                'name' => 'Dr. Andrés Jiménez',
-                'email' => 'andres.jimenez@gmail.com',
-                'password' => Hash::make('admin123'),
-                'is_admin' => 1,
-            ],
-            [
-                'name' => 'Lucía Romero',
-                'email' => 'lucia.romero@gmail.com',
-                'password' => Hash::make('user123'),
-                'is_admin' => 0,
-            ],
-            [
-                'name' => 'Enf. Sandra Paredes',
-                'email' => 'sandra.paredes@gmail.com',
-                'password' => Hash::make('admin123'),
-                'is_admin' => 1,
-            ],
-            [
-                'name' => 'Fernando Guerrero',
-                'email' => 'fernando.guerrero@gmail.com',
-                'password' => Hash::make('user123'),
-                'is_admin' => 0,
-            ],
-            [
-                'name' => 'Gabriela Ortiz',
-                'email' => 'gabriela.ortiz@gmail.com',
-                'password' => Hash::make('user123'),
-                'is_admin' => 0,
-            ],
-            [
-                'name' => 'Dr. Raúl Delgado',
-                'email' => 'raul.delgado@gmail.com',
                 'password' => Hash::make('admin123'),
                 'is_admin' => 1,
             ],

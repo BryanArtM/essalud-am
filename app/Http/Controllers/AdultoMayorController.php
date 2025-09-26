@@ -9,11 +9,11 @@ use App\Models\AdultoMayor;
 
 class AdultoMayorController extends Controller
 {
-        public function index(Request $request)
+    public function index(Request $request)
     {
         $adultos = AdultoMayor::all();
         //Validación de los campos de búsqueda
-        $request->validate([
+        $request->  validate([
             'dni' => 'nullable|string|regex:/^[0-9]{1,8}$/',
             'apellidos' => 'nullable|string|max:100',
             'email' => 'nullable|email|max:255',
@@ -25,19 +25,16 @@ class AdultoMayorController extends Controller
         //Filtrado
         $query = AdultoMayor::query();
         if ($request->filled('dni')) {
-            $query->where('dni', 'like',$request->dni . '%');
+            $query->where('dni', 'like', $request->dni . '%');
         }
         if ($request->filled('apellidos')) {
             $query->where('apellidos', 'like', '%' . $request->apellidos . '%');
-        }
-        if ($request->filled('email')) {
-            $query->where('email', 'like', '%' . $request->email . '%');
         }
         //Paginación
         $adultos = $query->paginate(10)->withQueryString();
         return view('adultos.index', compact('adultos'));
     }
-        public function create()
+    public function create()
     {
         session()->forget([
             'adulto_id',
@@ -53,11 +50,11 @@ class AdultoMayorController extends Controller
 
     }
 
-    
+
     public function store(Request $request)
     {
     }
-        public function show($id)
+    public function show($id)
     {
         $adulto = AdultoMayor::with([
             'enfermedad',
@@ -72,7 +69,7 @@ class AdultoMayorController extends Controller
         return view('adultos.show', compact('adulto'));
     }
 
-        public function edit(AdultoMayor $adulto)
+    public function edit(AdultoMayor $adulto)
     {
         // Limpiar la sesión de datos previos antes de cargar los nuevos
         session()->forget([
@@ -126,12 +123,12 @@ class AdultoMayorController extends Controller
 
         return redirect()->route('wizard.paso1', ['adulto_id' => $adulto->id])->with('success', 'Datos cargados para edición.');
     }
-        public function update(Request $request, string $id)
+    public function update(Request $request, string $id)
     {
-        
+
     }
 
-        public function destroy($id)
+    public function destroy($id)
     {
         $adulto = AdultoMayor::findOrFail($id);
         $adulto->delete();
@@ -145,19 +142,19 @@ class AdultoMayorController extends Controller
         $adulto = AdultoMayor::with([
             'enfermedad',
             'riesgo',
-            'evaluaciones' => function($query) {
+            'evaluaciones' => function ($query) {
                 $query->orderBy('created_at', 'desc')->limit(15);
             },
-            'actividadesEducativas' => function($query) {
+            'actividadesEducativas' => function ($query) {
                 $query->orderBy('fecha', 'desc')->limit(15);
             },
-            'tratamientos' => function($query) {
+            'tratamientos' => function ($query) {
                 $query->orderBy('created_at', 'desc')->limit(10);
             },
-            'citas' => function($query) {
+            'citas' => function ($query) {
                 $query->orderBy('fecha', 'desc')->limit(10);
             },
-            'valoraciones' => function($query) {
+            'valoraciones' => function ($query) {
                 $query->orderBy('created_at', 'asc');
             }
         ])->findOrFail($id);
@@ -182,10 +179,10 @@ class AdultoMayorController extends Controller
         // Generar PDF
         $pdf = Pdf::loadView('adultos.pdf', $data);
         $pdf->setPaper('A4', 'portrait');
-        
+
         // Nombre del archivo
         $filename = 'Ficha_' . str_replace(' ', '_', $adulto->nombres . '_' . $adulto->apellidos) . '_' . now()->format('Y-m-d') . '.pdf';
-        
+
         // Siempre mostrar en el navegador para imprimir
         return $pdf->stream($filename);
     }

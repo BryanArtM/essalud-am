@@ -26,23 +26,22 @@ class UserController extends Controller
         $request->validate([
             'name' => 'nullable|string|max:100',
         ]);
+
         //Filtrado
-        $query = User::query();
+        $query = User::where('id', '!=', 1); 
+
         if ($request->filled('name')) {
             $query->where('name', 'LIKE', '%' . $request->name . '%');
         }
         //Paginación   
         $users = $query->paginate(10)->appends($request->all());
         return view('admin.users.index', compact('users'));
-
-
     }
 
     public function create()
     {
         return view('admin.users.create');
     }
-
     public function store(Request $request)
     {
         //Validación de datos

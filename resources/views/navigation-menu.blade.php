@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -6,15 +6,15 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center space-x-4">
                     <a href="{{ route('dashboard') }}" class="flex items-center space-x-4">
-                        <x-authentication-card-logo class="max-h-12 max-w-12 mx-auto ring-1 ring-blue-300 shadow-md" />
+                        <x-authentication-card-logo class="max-h-12 max-w-12 mx-auto ring-1 ring-sky-300 shadow-md" />
                         <div class="flex-shrink-0">
-                            <h1 class="text-lg font-bold text-blue-500">Adultos Mayores</h1>
+                            <h1 class="text-lg font-semibold text-sky-800 hover:text-sky-600">Adultos Mayores</h1>
                         </div>
                     </a>
                 </div>
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                    <x-nav-link  href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     @auth
@@ -31,7 +31,7 @@
 
                 <!-- Settings Dropdown -->
                 <div class="ms-3 relative">
-                    <x-dropdown align="right" width="48">
+                    <x-dropdown :align="'right'" :width="48">
                         <x-slot name="trigger">
                             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                                 <button

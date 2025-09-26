@@ -10,10 +10,12 @@
     @livewireStyles
 </head>
 <body class="font-sans antialiased">
+    @include('sidebar-menu')  <!-- aquí tu sidebar -->
     <div class="min-h-screen bg-gray-100">
+
         @livewire('navigation-menu')
 
-        <main>
+        <main class="pt-16 ml-0 lg:ml-64 transition-all duration-200">
             {{ $slot }}
         </main>
     </div>

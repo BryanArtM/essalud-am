@@ -10,7 +10,8 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
 
                 <div class="flex justify-between items-center mb-6">
-                    <h1 class="text-2xl font-semibold text-[#0073B6]">Adultos Mayores</h1>
+                    <h1 class="text-sky-800 text-xl font-bold">Adultos Mayores</h1>
+
                     <x-btn-crear :href="route('adultos.create')" />
                 </div>
 
@@ -40,7 +41,7 @@
 
                 <div class="overflow-x-auto border rounded-lg shadow-sm">
                     <table class="min-w-full table-auto text-sm">
-                        <thead class=" bg-blue-400 text-white uppercase text-xs">
+                        <thead class=" bg-sky-700 text-white uppercase text-xs">
                             <tr>
                                 <th class="py-3 px-4 text-left">DNI</th>
                                 <th class="py-3 px-4 text-left">Apellidos</th>
