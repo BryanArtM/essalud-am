@@ -23,7 +23,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1945-03-15',
                 'alergias' => 'Penicilina, Polen',
                 'adulto_mayor_fragil' => '0455',
-                'created_at' => now(),
+                'created_at' => '2024-01-15 09:30:00',
                 'updated_at' => now(),
             ],
             [
@@ -39,7 +39,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1940-08-22',
                 'alergias' => null,
                 'adulto_mayor_fragil' => '0555',
-                'created_at' => now(),
+                'created_at' => '2024-02-10 14:15:00',
                 'updated_at' => now(),
             ],
             [
@@ -55,7 +55,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1950-12-05',
                 'alergias' => 'Sulfas',
                 'adulto_mayor_fragil' => '0456',
-                'created_at' => now(),
+                'created_at' => '2024-03-05 11:20:00',
                 'updated_at' => now(),
             ],
             [
@@ -71,7 +71,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1948-07-20',
                 'alergias' => null,
                 'adulto_mayor_fragil' => '0457',
-                'created_at' => now(),
+                'created_at' => '2024-03-15 16:45:00',
                 'updated_at' => now(),
             ],
             [
@@ -87,7 +87,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1955-09-10',
                 'alergias' => 'Aspirina',
                 'adulto_mayor_fragil' => '0458',
-                'created_at' => now(),
+                'created_at' => '2024-03-20 10:00:00',
                 'updated_at' => now(),
             ],
             [
@@ -103,7 +103,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1942-11-18',
                 'alergias' => null,
                 'adulto_mayor_fragil' => '0459',
-                'created_at' => now(),
+                'created_at' => '2024-04-01 08:30:00',
                 'updated_at' => now(),
             ],
             [
@@ -119,7 +119,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1946-06-25',
                 'alergias' => 'Yodo, Mariscos',
                 'adulto_mayor_fragil' => '0460',
-                'created_at' => now(),
+                'created_at' => '2024-04-05 13:25:00',
                 'updated_at' => now(),
             ],
             [
@@ -135,7 +135,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1951-02-14',
                 'alergias' => null,
                 'adulto_mayor_fragil' => '0461',
-                'created_at' => now(),
+                'created_at' => '2024-04-10 15:40:00',
                 'updated_at' => now(),
             ],
             [
@@ -151,7 +151,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1949-04-30',
                 'alergias' => 'Contraste yodado',
                 'adulto_mayor_fragil' => '0462',
-                'created_at' => now(),
+                'created_at' => '2024-04-12 12:10:00',
                 'updated_at' => now(),
             ],
             [
@@ -167,7 +167,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1944-08-07',
                 'alergias' => null,
                 'adulto_mayor_fragil' => '0463',
-                'created_at' => now(),
+                'created_at' => '2024-04-15 09:55:00',
                 'updated_at' => now(),
             ],
             [
@@ -183,7 +183,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1947-01-22',
                 'alergias' => 'Sulfonamidas',
                 'adulto_mayor_fragil' => '0464',
-                'created_at' => now(),
+                'created_at' => '2024-04-18 14:30:00',
                 'updated_at' => now(),
             ],
             [
@@ -199,7 +199,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1943-10-15',
                 'alergias' => null,
                 'adulto_mayor_fragil' => '0465',
-                'created_at' => now(),
+                'created_at' => '2024-04-20 11:05:00',
                 'updated_at' => now(),
             ],
             [
@@ -215,7 +215,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1952-05-08',
                 'alergias' => 'Latex, Penicilina',
                 'adulto_mayor_fragil' => '0466',
-                'created_at' => now(),
+                'created_at' => '2024-04-22 16:20:00',
                 'updated_at' => now(),
             ],
             [
@@ -231,7 +231,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1941-12-03',
                 'alergias' => null,
                 'adulto_mayor_fragil' => '0467',
-                'created_at' => now(),
+                'created_at' => '2024-04-25 08:45:00',
                 'updated_at' => now(),
             ],
             [
@@ -247,7 +247,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1954-03-17',
                 'alergias' => 'Morfina',
                 'adulto_mayor_fragil' => '0468',
-                'created_at' => now(),
+                'created_at' => '2024-04-28 13:15:00',
                 'updated_at' => now(),
             ],
             [
@@ -263,7 +263,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1946-07-11',
                 'alergias' => null,
                 'adulto_mayor_fragil' => '0469',
-                'created_at' => now(),
+                'created_at' => '2024-05-02 10:30:00',
                 'updated_at' => now(),
             ],
             [
@@ -279,7 +279,7 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1948-09-28',
                 'alergias' => 'Codeína',
                 'adulto_mayor_fragil' => '0469',
-                'created_at' => now(),
+                'created_at' => '2024-05-05 15:50:00',
                 'updated_at' => now(),
             ],
             [
@@ -295,8 +295,8 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1950-11-14',
                 'alergias' => null,
                 'adulto_mayor_fragil' => '0470',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => '2025-05-08 13:50:00',
+                'updated_at' => '2025-05-08 13:50:00',
             ],
             [
                 'ipress' => '001234',
@@ -311,8 +311,8 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1945-04-19',
                 'alergias' => 'Anestésicos locales',
                 'adulto_mayor_fragil' => '0471',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => '2025-08-10 10:25:00',
+                'updated_at' => '2025-08-24 14:40:00',
             ],
             [
                 'ipress' => '001234',
@@ -327,8 +327,8 @@ class AdultosMayoresSeeder extends Seeder
                 'fecha_nacimiento' => '1953-06-02',
                 'alergias' => null,
                 'adulto_mayor_fragil' => '0472',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => '2025-09-12 11:05:00',
+                'updated_at' => '2025-09-12 11:05:00',
             ],
         ];
 

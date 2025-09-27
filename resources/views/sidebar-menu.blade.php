@@ -1,7 +1,7 @@
 {{-- Sidebar fijo --}}
 <aside class="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-200 transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out z-40 lg:z-40">
     <!-- Header del Sidebar -->
-    <div class="px-6 py-5 border-b border-gray-100">
+    <div class="px-3 py-3 border-b border-gray-100">
         <h3 class="text-base font-semibold text-gray-900 tracking-tight">Panel de Control</h3>
         <p class="text-sm text-gray-500 mt-1">Gestión del sistema</p>
     </div>
@@ -20,8 +20,8 @@
             </a>
 
             <a href="{{ route('adultos.index') }}"
-                class="group flex items-center px-3 py-2.5 text-sm font-medium {{ request()->routeIs('adultos.*') ? 'text-blue-600 bg-blue-10 0 border-l-3 border-blue-500' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50 border-l-3 border-transparent hover:border-blue-500' }} transition-all duration-200">
-                <svg class="w-5 h-5 mr-3 {{ request()->routeIs('adultos.*') ? 'text-blue-500' : 'text-gray-400 group-hover:text-blue-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="group flex items-center px-3 py-2.5 text-sm font-medium {{ request()->routeIs('adultos.*') ? 'text-sky-600 bg-sky-100 0 border-l-3 border-sky-500' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50 border-l-3 border-transparent hover:border-blue-500' }} transition-all duration-200">
+                <svg class="w-5 h-5 mr-3 {{ request()->routeIs('adultos.*') ? 'text-sky-500' : 'text-gray-400 group-hover:text-sky-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
