@@ -1,61 +1,114 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="public/favicon.ico" width="400" alt="Logo EsSalud-AM">
 </p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<h1 align="center">🧓 EsSalud-AM: Sistema de Gestión de Adultos Mayores</h1>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+<p align="center">
+  <b>Gestión de información clínica, social y de riesgo para adultos mayores.</b><br>
+  <img src="https://img.shields.io/badge/Laravel-12.x-red?logo=laravel" alt="Laravel">
+  <img src="https://img.shields.io/badge/PHP-8.2-blue?logo=php">
+  <img src="https://img.shields.io/badge/Estado-Activo-brightgreen">
+  <img src="https://img.shields.io/badge/Idioma-Español-yellow">
+</p>
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 📋 Descripción
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+EsSalud-AM es una plataforma web para la gestión y seguimiento de adultos mayores, permitiendo registrar, consultar y analizar información clínica, social, de riesgo, evaluaciones, tratamientos, actividades educativas y más. Está diseñada para facilitar el trabajo de profesionales de la salud y cuidadores, mejorando la atención integral de esta población vulnerable.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🚀 Características principales
 
-## Laravel Sponsors
+-   Registro y gestión de adultos mayores (datos personales, contacto, historial)
+-   Valoraciones geriátricas (autovalencia, tests funcionales, fragilidad, fechas de atención)
+-   Control de enfermedades crónicas y factores de riesgo
+-   Registro de citas, tratamientos, evaluaciones médicas y actividades educativas
+-   Generación de fichas PDF completas y reportes
+-   Panel de administración de usuarios (con roles)
+-   Sistema de backup automático a Google Drive
+-   Interfaz moderna y responsiva (Tailwind CSS, Livewire)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🏗️ Estructura del proyecto
 
-### Premium Partners
+```
+├── app/                # Lógica de negocio, modelos, controladores
+├── resources/          # Vistas Blade, assets, markdown
+├── routes/             # Definición de rutas web y API
+├── database/           # Migraciones, seeders, factories
+├── public/             # Archivos públicos y punto de entrada
+├── config/             # Configuración de la app y paquetes
+├── composer.json       # Dependencias PHP
+├── package.json        # Dependencias JS/CSS
+└── README.md           # Este archivo
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## ⚙️ Instalación rápida
 
-## Contributing
+1. Clona el repositorio y entra al directorio:
+    ```bash
+    git clone https://github.com/BryanArtM/essalud-am.git
+    cd essalud-am
+    ```
+2. Instala dependencias PHP y JS:
+    ```bash
+    composer install
+    npm install
+    ```
+3. Copia el archivo de entorno y configura tu base de datos:
+    ```bash
+    cp .env.example .env
+    # Edita .env según tu entorno
+    php artisan key:generate
+    ```
+4. Ejecuta migraciones y (opcional) seeders:
+    ```bash
+    php artisan migrate --seed
+    ```
+5. Inicia el servidor de desarrollo:
+    ```bash
+    npm run dev
+    php artisan serve
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🔐 Requisitos
 
-## Code of Conduct
+-   PHP >= 8.2
+-   Node.js >= 18
+-   Composer
+-   MySQL/MariaDB
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🧩 Principales dependencias
 
-## Security Vulnerabilities
+-   Laravel 12.x
+-   Jetstream, Fortify, Sanctum, Livewire
+-   Tailwind CSS, Vite
+-   barryvdh/laravel-dompdf (PDF)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🗄️ Sistema de Backup Automático
 
-## License
+El sistema realiza backups automáticos de la base de datos y los sube a Google Drive cada 3 horas. Puedes ver y restaurar backups fácilmente. Logs en `storage/logs/backup.log`.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Comando manual:**
+
+```bash
+php artisan backup:google-drive
+```
+
+## 🛠️ Comandos útiles
+
+-   `php artisan migrate` — Ejecutar migraciones
+-   `php artisan db:seed` — Poblar la base de datos
+-   `php artisan serve` — Servidor local
+-   `npm run dev` — Compilar assets en modo desarrollo
+-   `npm run build` — Compilar assets para producción
+
+## 👤 Autor
+
+-   BryanArtM ([github.com/BryanArtM](https://github.com/BryanArtM))
+
+## 📄 Licencia
+
+Este proyecto está bajo licencia MIT. Ver [LICENSE](LICENSE).
