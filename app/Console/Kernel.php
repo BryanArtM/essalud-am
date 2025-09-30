@@ -12,10 +12,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-    // Backup de la base de datos cada 30 minutos (temporal para pruebas)
-    $schedule->command('backup:google-drive')
-        ->everyThirtyMinutes()
-        ->appendOutputTo(storage_path('logs/backup.log'));
+        // Backup de la base de datos cada 30 minutos (temporal para pruebas)
+        $schedule->command('backup:google-drive')
+            ->everyThirtyMinutes()
+            ->appendOutputTo(storage_path('logs/backup.log'));
     }
 
     /**

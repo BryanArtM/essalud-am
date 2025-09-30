@@ -24,7 +24,7 @@ Tu aplicación tiene un sistema de backup automático que protege la base de dat
 
 ## 🔄 Cómo volver a hacer backups cada 3 horas
 
-1. Abre el archivo `app/Console/Kernel.php`
+1. Abre el archivo `app/Providers/ScheduleServiceProvider.php`
 2. Busca la línea:
 	```php
 	->everyThirtyMinutes()
@@ -34,19 +34,23 @@ Tu aplicación tiene un sistema de backup automático que protege la base de dat
 	->everyThreeHours()
 	```
 4. Guarda los cambios.
-5. Reinicia el cron para que tome la nueva configuración:
+5. (Opcional) Limpia la caché de optimización:
+	```bash
+	php artisan optimize:clear
+	```
+6. Reinicia el cron para que tome la nueva configuración:
 
-	 - Si usas el cron de Linux estándar (crontab):
-		 ```bash
-		 sudo service cron restart
-		 # o en algunos sistemas:
-		 sudo systemctl restart cron
-		 ```
+	- Si usas el cron de Linux estándar (crontab):
+	  ```bash
+	  sudo service cron restart
+	  # o en algunos sistemas:
+	  sudo systemctl restart cron
+	  ```
 
-	 - Si usas supervisor para correr el scheduler:
-		 ```bash
-		 sudo supervisorctl restart all
-		 ```
+	- Si usas supervisor para correr el scheduler:
+	  ```bash
+	  sudo supervisorctl restart all
+	  ```
 
 Esto restaurará la frecuencia de backup automático a cada 3 horas.
 
@@ -67,7 +71,8 @@ php artisan schedule:run
 ## 📁 Archivos importantes
 
 - `app/Console/Commands/BackupToGoogleDrive.php` - Comando principal
-- `app/Console/Kernel.php` - Configuración del scheduler
+- `app/Providers/ScheduleServiceProvider.php` - Configuración del scheduler (Laravel 12+)
+- `bootstrap/app.php` - Registro de providers
 - `config/backup.php` - Configuración de Spatie Backup
 - `install_cron.sh` - Script de instalación del cron
 - `.env` - Variables de configuración de Google Drive
