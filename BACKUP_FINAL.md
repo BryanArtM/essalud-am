@@ -15,23 +15,19 @@ Tu aplicación tiene un sistema de backup automático que protege la base de dat
 ## 📊 Información actual
 
 - **Comando principal**: `php artisan backup:google-drive`
-- **Frecuencia**: Cada 30 minutos (temporal para pruebas)
+- **Frecuencia**: Cada 3 horas
 - **Retención**: Máximo 10 backups en Google Drive
-- **Tamaño promedio**: ~11 KB por backup
 - **Logs**: `storage/logs/backup.log`
 
 ## 🛠️ Comandos útiles
 
-## 🔄 Cómo volver a hacer backups cada 3 horas
+## 🔄 Modificar tiempos para generar los backups
 
 1. Abre el archivo `app/Providers/ScheduleServiceProvider.php`
-2. Busca la línea:
-	```php
-	->everyThirtyMinutes()
-	```
+
 3. Cámbiala por:
 	```php
-	->everyThreeHours()
+	->everyThreeHours() // modificar dependiendo del tiempo deseado
 	```
 4. Guarda los cambios.
 5. (Opcional) Limpia la caché de optimización:
