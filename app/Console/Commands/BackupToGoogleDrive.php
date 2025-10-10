@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 use Google\Client;
 use Google\Service\Drive;
 
@@ -26,6 +27,7 @@ class BackupToGoogleDrive extends Command
 
             if ($exitCode !== 0) {
                 $this->error('❌ Error al crear backup local');
+                $this->sendFailureNotification('Error al crear backup local de la base de datos');
                 return 1;
             }
 
@@ -40,6 +42,7 @@ class BackupToGoogleDrive extends Command
 
             if (empty($backupFiles)) {
                 $this->error('❌ No se encontraron archivos de backup');
+                $this->sendFailureNotification('No se encontraron archivos de backup para subir a Google Drive');
                 return 1;
             }
 
@@ -80,11 +83,13 @@ class BackupToGoogleDrive extends Command
                 return 0;
             } else {
                 $this->error('❌ Error al subir a Google Drive');
+                $this->sendFailureNotification('Error al subir archivos de backup a Google Drive. Revisar credenciales y configuración.');
                 return 1;
             }
 
         } catch (\Exception $e) {
             $this->error('❌ Error: ' . $e->getMessage());
+            $this->sendFailureNotification('Error general en backup: ' . $e->getMessage());
             return 1;
         }
     }
@@ -166,7 +171,7 @@ class BackupToGoogleDrive extends Command
                 return $file->getName() === '.env';
             });
 
-            $keepCount = 10;
+            $keepCount = 20;
 
             // Limpiar backups .zip
             if (count($zipFiles) > $keepCount) {
@@ -202,6 +207,43 @@ class BackupToGoogleDrive extends Command
 
         } catch (\Exception $e) {
             $this->warn('⚠️  Error en limpieza automática: ' . $e->getMessage());
+        }
+    }
+
+    private function sendFailureNotification($message)
+    {
+        try {
+            $to = env('BACKUP_ALERT_EMAIL', 'barteagame@gmail.com');
+            $subject = '🚨 ALERTA: Fallo en Backup Automático - EsSalud AM';
+            
+            $emailBody = "
+            <h2 style='color: #dc2626;'>⚠️ Error en Backup Automático</h2>
+            <p><strong>Aplicación:</strong> Programa del Adulto Mayor - EsSalud</p>
+            <p><strong>Fecha/Hora:</strong> " . now()->format('d/m/Y H:i:s') . "</p>
+            <p><strong>Servidor:</strong> " . gethostname() . "</p>
+            <p><strong>Error:</strong> {$message}</p>
+            
+            <h3>📋 Acciones recomendadas:</h3>
+            <ul>
+                <li>Verificar conectividad con Google Drive</li>
+                <li>Revisar credenciales de Google OAuth</li>
+                <li>Comprobar logs en: storage/logs/backup.log</li>
+                <li>Ejecutar manualmente: php artisan backup:google-drive</li>
+            </ul>
+            
+            <p><em>Este es un mensaje automático del sistema de backup.</em></p>
+            ";
+
+            Mail::html($emailBody, function ($mail) use ($to, $subject) {
+                $mail->to($to)
+                     ->subject($subject)
+                     ->from(env('MAIL_FROM_ADDRESS', 'noreply.essalud.am@gmail.com'), 'Sistema Backup EsSalud-AM');
+            });
+
+            $this->info('📧 Notificación de error enviada a: ' . $to);
+            
+        } catch (\Exception $e) {
+            $this->warn('⚠️  No se pudo enviar notificación por email: ' . $e->getMessage());
         }
     }
 }
