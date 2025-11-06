@@ -6,7 +6,7 @@ use Illuminate\Routing\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Artisan;
 class UserController extends Controller
 {
     public function __construct()
@@ -35,12 +35,12 @@ class UserController extends Controller
         }
         //Paginación   
         $users = $query->paginate(10)->appends($request->all());
-        return view('admin.users.index', compact('users'));
+        return view('admin.partials.users.index', compact('users'));
     }
 
     public function create()
     {
-        return view('admin.users.create');
+        return view('admin.partials.users.create');
     }
     public function store(Request $request)
     {
@@ -84,9 +84,14 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Usuario creado correctamente');
     }
 
+    public function show(User $user)
+    {
+        return view('admin.partials.users.show', compact('user'));
+    }
+
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        return view('admin.partials.users.edit', compact('user'));
     }
 
     public function update(Request $request, User $user)
@@ -139,5 +144,77 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.index')->with('success', 'Usuario eliminado correctamente');
+    }
+
+    /**
+     * Limpiar diferentes tipos de caché
+     */
+    public function clearCache($type)
+    {
+        try {
+            $message = '';
+            
+            switch ($type) {
+                case 'application':
+                    Artisan::call('cache:clear');
+                    $message = 'Caché de aplicación limpiado correctamente';
+                    break;
+                    
+                case 'config':
+                    Artisan::call('config:clear');
+                    $message = 'Caché de configuración limpiado correctamente';
+                    break;
+                    
+                case 'route':
+                    Artisan::call('route:clear');
+                    $message = 'Caché de rutas limpiado correctamente';
+                    break;
+                    
+                case 'view':
+                    Artisan::call('view:clear');
+                    $message = 'Caché de vistas limpiado correctamente';
+                    break;
+                    
+                default:
+                    return redirect()->route('admin.index', ['tab' => 'configuracion'])
+                        ->with('cache_error', 'Tipo de caché no válido');
+            }
+            
+            return redirect()->route('admin.index', ['tab' => 'configuracion'])
+                ->with('cache_success', $message);
+                
+        } catch (\Exception $e) {
+            return redirect()->route('admin.index', ['tab' => 'configuracion'])
+                ->with('cache_error', 'Error al limpiar caché: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Optimizar la aplicación
+     */
+    public function optimizeApp()
+    {
+        try {
+            if (config('app.env') === 'production') {
+                // En producción: limpiar y luego optimizar (cachear todo)
+                Artisan::call('optimize:clear'); // Limpia todo
+                Artisan::call('optimize'); // Cachea config, routes, views, events
+                
+                $message = 'Aplicación optimizada para producción. Se limpiaron y cachearon config, rutas, vistas y eventos.';
+            } else {
+                // En desarrollo: solo limpiar (no cachear para evitar problemas con closures)
+                Artisan::call('cache:clear');
+                Artisan::call('view:clear');
+                
+                $message = 'Caché limpiado correctamente (cache + vistas).';
+            }
+            
+            return redirect()->route('admin.index', ['tab' => 'configuracion'])
+                ->with('cache_success', $message);
+                
+        } catch (\Exception $e) {
+            return redirect()->route('admin.index', ['tab' => 'configuracion'])
+                ->with('cache_error', 'Error al optimizar aplicación: ' . $e->getMessage());
+        }
     }
 }

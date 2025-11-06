@@ -26,9 +26,19 @@ Route::middleware([
     // Generar PDF de adulto mayor
     Route::get('adultos/{id}/pdf', [AdultoMayorController::class, 'generatePDF'])->name('adultos.pdf');
 
-    // Administración de usuarios (solo admins)
+    // Administración (solo admins)
     Route::middleware('isAdmin')->group(function () {
-        Route::resource('admin/users', UserController::class)->except(['show']);
+        // Panel de administración
+        Route::get('/administracion', function () {
+            return view('admin.index');
+        })->name('admin.index');
+        
+        // Gestión de usuarios
+        Route::resource('admin/users', UserController::class);
+        
+        // Gestión de caché
+        Route::post('admin/cache/clear/{type}', [UserController::class, 'clearCache'])->name('admin.cache.clear');
+        Route::post('admin/cache/optimize', [UserController::class, 'optimizeApp'])->name('admin.cache.optimize');
     });
 
     // Wizard de registro de adultos mayores
