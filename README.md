@@ -10,6 +10,8 @@
   <b>Gestión de información clínica, social y de riesgo para adultos mayores.</b><br>
   <img src="https://img.shields.io/badge/Laravel-12.x-red?logo=laravel" alt="Laravel">
   <img src="https://img.shields.io/badge/PHP-8.2-blue?logo=php">
+  <img src="https://img.shields.io/badge/Livewire-3.x-purple?logo=livewire">
+  <img src="https://img.shields.io/badge/TailwindCSS-4.x-teal?logo=tailwindcss">
   <img src="https://img.shields.io/badge/Estado-Activo-brightgreen">
   <img src="https://img.shields.io/badge/Idioma-Español-yellow">
 </p>
@@ -27,72 +29,211 @@ EsSalud-AM es una plataforma web para la gestión y seguimiento de adultos mayor
 -   Control de enfermedades crónicas y factores de riesgo
 -   Registro de citas, tratamientos, evaluaciones médicas y actividades educativas
 -   Generación de fichas PDF completas y reportes
--   Panel de administración de usuarios (con roles)
+-   Panel de Administración
+    - Gestión de Usuarios 
+    - Reportes y Estadísticas
+    - Gestión de Caché
+    - Acceso Rápido
+    - Estadísticas de BD
+
 -   Sistema de backup automático a Google Drive
 -   Interfaz moderna y responsiva (Tailwind CSS, Livewire)
 
-## 🏗️ Estructura del proyecto
+
+
+
+
+
+
+## 🏗️ Arquitectura del Proyecto
 
 ```
-├── app/                # Lógica de negocio, modelos, controladores
-├── resources/          # Vistas Blade, assets, markdown
-├── routes/             # Definición de rutas web y API
-├── database/           # Migraciones, seeders, factories
-├── public/             # Archivos públicos y punto de entrada
-├── config/             # Configuración de la app y paquetes
-├── composer.json       # Dependencias PHP
-├── package.json        # Dependencias JS/CSS
-└── README.md           # Este archivo
+essalud-am/
+├── app/
+│   ├── Console/
+│   │   ├── Commands/          # Comandos Artisan personalizados
+│   │   └── Kernel.php          # Scheduler para backups automáticos
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── AdultoMayorController.php      # CRUD adultos mayores
+│   │   │   ├── AdultoMayorWizardController.php # Wizard de registro
+│   │   │   └── UserController.php              # Gestión usuarios + caché
+│   │   └── Middleware/
+│   │       └── IsAdmin.php     # Protección rutas admin
+│   ├── Models/
+│   │   ├── AdultoMayor.php
+│   │   ├── Valoracion.php
+│   │   ├── Evaluacion.php
+│   │   ├── Tratamiento.php
+│   │   ├── Enfermedad.php
+│   │   ├── Riesgo.php
+│   │   ├── Cita.php
+│   │   ├── ActividadEducativa.php
+│   │   └── User.php
+│   └── Providers/
+│       └── ScheduleServiceProvider.php # Programación de tareas
+├── resources/
+│   ├── views/
+│   │   ├── admin/
+│   │   │   ├── index.blade.php # Vista principal admin
+│   │   │   └── partials/
+│   │   │       ├── usuarios.blade.php    # Gestión usuarios
+│   │   │       ├── reportes.blade.php    # Dashboard estadísticas
+│   │   │       └── configuracion.blade.php # Configuración sistema
+│   │   ├── adultos/
+│   │   │   ├── index.blade.php # Listado adultos mayores
+│   │   │   ├── show.blade.php  # Ficha completa
+│   │   │   └── pdf.blade.php   # Template PDF
+│   │   └── wizard/             # 6 pasos del wizard
+│   └── css/ & js/
+├── database/
+│   ├── migrations/
+│   └── seeders/
+├── routes/
+│   └── web.php
+│   
+├── config/
+│   ├── backup.php              # Configuración backups
+│   └── google_drive.php        # Integración Google Drive
+└── public/
 ```
 
 ## ⚙️ Instalación rápida
 
-1. Clona el repositorio y entra al directorio:
-    ```bash
-    git clone https://github.com/BryanArtM/essalud-am.git
-    cd essalud-am
-    ```
-2. Instala dependencias PHP y JS:
-    ```bash
-    composer install
-    npm install
-    ```
-3. Copia el archivo de entorno y configura tu base de datos:
-    ```bash
-    cp .env.example .env
-    # Edita .env según tu entorno
-    php artisan key:generate
-    ```
-4. Ejecuta migraciones y (opcional) seeders:
-    ```bash
-    php artisan migrate --seed
-    ```
-5. Inicia el servidor de desarrollo:
-    ```bash
-    npm run dev
-    php artisan serve
-    ```
+1. **Clonar el repositorio**
+   ```bash
+   git clone https://github.com/BryanArtM/essalud-am.git
+   cd essalud-am
+   ```
 
-## 🔐 Requisitos
+2. **Instalar dependencias PHP**
+   ```bash
+   composer install
+   ```
 
--   PHP >= 8.2
--   Node.js >= 18
--   Composer
--   MySQL/MariaDB
+3. **Instalar dependencias JavaScript**
+   ```bash
+   npm install
+   ```
 
-## 🧩 Principales dependencias
+4. **Configurar variables de entorno**
+   ```bash
+   cp .env.example .env
+   ```
+   Edita el archivo `.env` con tus credenciales:
+   ```env
+   DB_DATABASE=essalud_am
+   DB_USERNAME=tu_usuario
+   DB_PASSWORD=tu_contraseña
+   
+   # Google Drive (opcional)
+   GOOGLE_DRIVE_CLIENT_ID=
+   GOOGLE_DRIVE_CLIENT_SECRET=
+   GOOGLE_DRIVE_REFRESH_TOKEN=
+   ```
 
--   Laravel 12.x
--   Jetstream, Fortify, Sanctum, Livewire
--   Tailwind CSS, Vite
--   barryvdh/laravel-dompdf (PDF)
+5. **Generar clave de aplicación**
+   ```bash
+   php artisan key:generate
+   ```
 
-## 🗄️ Sistema de Backup Automático
+6. **Ejecutar migraciones**
+   ```bash
+   php artisan migrate
+   ```
 
-El sistema realiza backups automáticos de la base de datos y los sube a Google Drive cada 3 horas. Puedes ver y restaurar backups fácilmente. Logs en `storage/logs/backup.log`.
+7. **Poblar base de datos (opcional)**
+   ```bash
+   php artisan db:seed
+   ```
+   Esto creará:
+   - Usuario administrador: `admin@gmail.com` / `Admin123!`
+   - Actividades educativas predefinidas
+   - Datos de ejemplo
 
-**Comando manual:**
+8. **Compilar assets**
+   ```bash
+   npm run build
+   # O para desarrollo con hot reload:
+   npm run dev
+   ```
 
+9. **Iniciar servidor**
+   ```bash
+   php artisan serve
+   ```
+   Accede a: `http://localhost:8000`
+
+## 🔧 Configuración Adicional
+
+### Google Drive Backup
+Para habilitar backups automáticos a Google Drive:
+
+1. Crear proyecto en Google Cloud Console
+2. Habilitar Google Drive API
+3. Crear credenciales OAuth 2.0
+4. Configurar variables en `.env`
+5. Ejecutar: `php artisan backup:google-drive` para validar conexión
+
+### Cron para Backups Automáticos
+Agrega a tu crontab (Linux/Mac):
+```bash
+* * * * * cd /ruta/essalud-am && php artisan schedule:run >> /dev/null 2>&1
+```
+
+
+Ejecutar cada minuto (Laravel se encarga del timing interno)
+
+## 🛠️ Comandos Útiles
+
+### Desarrollo
+```bash
+# Servidor de desarrollo
+php artisan serve
+
+# Compilar assets en tiempo real
+npm run dev
+
+# Limpiar caché
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+
+# Ver rutas
+php artisan route:list
+```
+
+### Base de Datos
+```bash
+# Ejecutar migraciones
+php artisan migrate
+
+# Revertir última migración
+php artisan migrate:rollback
+
+# Refrescar BD (elimina todo y recrea)
+php artisan migrate:fresh --seed
+
+# Poblar con seeders
+php artisan db:seed
+```
+
+### Producción
+```bash
+# Optimizar aplicación
+php artisan optimize
+
+# Compilar assets para producción
+npm run build
+
+# Cachear configuración
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+### Backup
 ```bash
 php artisan backup:google-drive
 ```
