@@ -8,7 +8,7 @@
     </div>
 
     <!-- Navegación Principal -->
-    <nav class="px-4 pt-4 overflow-y-auto h-full pb-20">
+    <nav class="px-4 pt-10 overflow-y-auto h-full pb-20">
         <div class="space-y-1">
             <a href="{{ route('dashboard') }}"
                 class="group flex items-center px-3 py-2.5 text-sm font-medium {{ request()->routeIs('dashboard') ? 'text-white bg-slate-900 border-l-3 border-blue-400' : 'text-white hover:text-blue-200 hover:bg-gray-700 border-l-3 border-transparent' }} transition-all duration-200">
@@ -46,6 +46,20 @@
                 <span>Nuevo Registro</span>
             </a>
 
+            @if (!auth()->user()->is_admin)
+                <a href="{{ route('profesional.configuracion') }}"
+                    class="group flex items-center px-3 py-2.5 text-sm font-medium {{ request()->routeIs('profesional.configuracion') ? 'text-white bg-slate-900 border-l-3 border-purple-400' : 'text-white hover:text-purple-200 hover:bg-gray-700 border-l-3 border-transparent ' }} transition-all duration-200">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span>Configuración</span>
+                </a>
+            @endif
+
             @if (auth()->user()->is_admin)
                 <a href="{{ route('admin.index') }}"
                     class="group flex items-center px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin.index') ? 'text-white bg-slate-900 border-l-3 border-orange-400' : 'text-white hover:text-orange-200 hover:bg-gray-700 border-l-3 border-transparent ' }} transition-all duration-200">
@@ -61,43 +75,7 @@
             @endif
         </div>
 
-        <!-- Separador -->
-        <div class="mx-0 my-3">
-            <div class="border-t border-gray-200"></div>
-        </div>
 
-        <!-- Sección de Estadísticas -->
-        <div class="pt-3 pb-6">
-            <h4 class="text-xs font-semibold text-white uppercase tracking-wider mb-3 px-3">
-                Estadísticas del Sistema
-            </h4>
-
-            <div class="space-y-2">
-                <div class="bg-cya-950 border border-sky-800 px-4 py-3 text-white">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                            <span class="text-sm font-medium text-white">Adultos Mayores</span>
-                        </div>
-                        <span class="text-lg font-bold text-blue-300">{{ \App\Models\AdultoMayor::count() }}</span>
-                    </div>
-                    <div class="mt-2 text-xs text-blue-300">Total registrados</div>
-                </div>
-
-                @if (auth()->user()->is_admin)
-                    <div class="bg-blue-950 border border-blue-800 px-4 py-3 text-white">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
-                                <span class="text-sm font-medium text-white">Profesionales Sistema</span>
-                            </div>
-                            <span class="text-lg font-bold text-purple-300">{{ \App\Models\User::count() }}</span>
-                        </div>
-                        <div class="mt-2 text-xs text-purple-300">Activos en sistema</div>
-                    </div>
-                @endif
-            </div>
-        </div>
     </nav>
 </aside>
 

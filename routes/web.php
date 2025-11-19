@@ -26,6 +26,11 @@ Route::middleware([
     // Generar PDF de adulto mayor
     Route::get('adultos/{id}/pdf', [AdultoMayorController::class, 'generatePDF'])->name('adultos.pdf');
 
+    // Configuración de Profesional (solo para usuarios NO admin)
+    Route::get('/configuracion', function () {
+        return view('profesional.configuracion');
+    })->name('profesional.configuracion');
+
     // Administración (solo admins)
     Route::middleware('isAdmin')->group(function () {
         // Panel de administración

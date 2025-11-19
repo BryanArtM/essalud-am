@@ -311,7 +311,7 @@
         @endif
 
         {{-- Sesiones del Navegador --}}
-        <div class="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
+        <div class="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden mb-4">
             <div class="px-6 py-4 bg-white border-b border-gray-100">
                 <h4 class="text-base font-semibold text-gray-900">Sesiones del Navegador</h4>
                 <p class="text-sm text-gray-500 mt-0.5">Administre y cierre sesiones activas en otros dispositivos</p>
@@ -320,5 +320,14 @@
                 @livewire('profile.logout-other-browser-sessions-form')
             </div>
         </div>
+
+        {{-- Eliminar Cuenta --}}
+        @if (Laravel\Jetstream\Jetstream::hasAccountDeletionFeatures())
+            <div class="bg-white shadow-sm rounded-lg border border-red-200 overflow-hidden">
+                <div class="p-6 bg-white">
+                    @livewire('profile.delete-user-form')
+                </div>
+            </div>
+        @endif
     </div>
 </div>
