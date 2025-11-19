@@ -89,7 +89,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div class="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
-                                <span class="text-sm font-medium text-white">Usuarios Sistema</span>
+                                <span class="text-sm font-medium text-white">Profesionales Sistema</span>
                             </div>
                             <span class="text-lg font-bold text-purple-300">{{ \App\Models\User::count() }}</span>
                         </div>

@@ -73,7 +73,7 @@ class UserController extends Controller
         //Convertir el rol a valor booleano para is_admin
         $is_admin = $request->role === 'admin' ? 1 : 0;
 
-        //Crear el usuario en la base de datos
+        //Crear el profesional en la base de datos
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -81,7 +81,7 @@ class UserController extends Controller
             'is_admin' => $is_admin,
         ]);
 
-        return redirect()->route('users.index')->with('success', 'Usuario creado correctamente');
+        return redirect()->route('users.index')->with('success', 'Profesional creado correctamente');
     }
 
     public function show(User $user)
@@ -124,7 +124,7 @@ class UserController extends Controller
         //Convertir el rol a valor booleano para is_admin
         $is_admin = $request->role === 'admin' ? 1 : 0;
 
-        //Actualizar el usuario en la base de datos
+        //Actualizar el profesional en la base de datos
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
@@ -132,18 +132,18 @@ class UserController extends Controller
             'is_admin' => $is_admin,
         ]);
 
-        return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente');
+        return redirect()->route('users.index')->with('success', 'Profesional actualizado correctamente');
     }
 
     public function destroy(User $user)
     {
-        //El usuario no puede eliminar su propia cuenta desde el listado
+        //El profesional no puede eliminar su propia cuenta desde el listado
         if ($user->id === auth()->id()) {
-            return back()->with('error', 'No puedes eliminar tu propio usuario');
+            return back()->with('error', 'No puedes eliminar tu propio perfil');
         }
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'Usuario eliminado correctamente');
+        return redirect()->route('users.index')->with('success', 'Profesional eliminado correctamente');
     }
 
     /**

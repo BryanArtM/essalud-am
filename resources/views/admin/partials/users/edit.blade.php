@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Editar Usuario') }}
+            {{ __('Editar Profesional') }}
         </h2>
     </x-slot>
 
@@ -44,13 +44,13 @@
                 <div class="mt-4">
                     <x-label for="role" value="Rol" />
                     <select id="role" name="role" class="mt-1 block w-full rounded border-gray-300">
-                        <option value="user" @if($user->role === 'user') selected @endif>Usuario</option>
+                        <option value="user" @if($user->role === 'user') selected @endif>Profesional</option>
                         <option value="admin" @if($user->role === 'admin') selected @endif>Administrador</option>
                     </select>
                 </div>
 
                 <div class="flex justify-center mt-6">
-                    <x-button id="submitBtn">Actualizar Usuario</x-button>
+                    <x-button id="submitBtn">Actualizar Profesional</x-button>
                 </div>
             </form>
         </div>
@@ -65,7 +65,7 @@
                 if (roleSelect.value === 'admin') {
                     submitBtn.textContent = 'Actualizar Administrador';
                 } else {
-                    submitBtn.textContent = 'Actualizar Usuario';
+                    submitBtn.textContent = 'Actualizar Profesional';
                 }
             }
             // Validación en tiempo real del email

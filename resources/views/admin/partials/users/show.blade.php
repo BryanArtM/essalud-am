@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Detalles del Usuario') }}
+            {{ __('Detalles del Profesional') }}
         </h2>
     </x-slot>
 
@@ -11,8 +11,8 @@
             <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
                 <div class="flex items-center justify-between mb-4">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Detalles del Usuario</h1>
-                        <p class="text-sm text-gray-600 mt-1">Información completa del usuario</p>
+                        <h1 class="text-2xl font-bold text-gray-900">Detalles del Profesional</h1>
+                        <p class="text-sm text-gray-600 mt-1">Información completa del profesional</p>
                     </div>
                     <div class="flex items-center space-x-2">
                         <a href="{{ route('users.edit', $user->id) }}"
@@ -32,7 +32,7 @@
                 </div>
             </div>
 
-            <!-- Tarjeta de perfil del usuario -->
+            <!-- Tarjeta de perfil del profesional -->
             <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
                 <!-- Banner superior con información principal -->
                 <div class="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-8">
@@ -54,7 +54,7 @@
                             @else
                                 <span
                                     class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-400 text-white">
-                                    Usuario
+                                    Profesional
                                 </span>
                             @endif
                         </div>
@@ -92,7 +92,7 @@
                                 @else
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 text-gray-800">
-                                        Usuario
+                                        Profesional
                                     </span>
                                 @endif
                             </div>

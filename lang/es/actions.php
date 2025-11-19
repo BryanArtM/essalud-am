@@ -113,7 +113,7 @@ return [
     'unsubscribe'     => 'Darse de baja',
     'up'              => 'Arriba',
     'update'          => 'Actualizar',
-    'user'            => 'Usuario',
+    'user'            => 'Profesional',
     'view'            => 'Ver',
     'yes'             => 'Sí',
 ];

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Crear Usuario') }}
+            {{ __('Crear Profesional') }}
         </h2>
     </x-slot>
 
@@ -40,13 +40,13 @@
                 <div class="mt-4">
                     <x-label for="role" value="Rol" />
                     <select id="role" name="role" class="mt-1 block w-full rounded border-gray-300" required>
-                        <option value="user">Usuario</option>
+                        <option value="user">Profesional</option>
                         <option value="admin">Administrador</option>
                     </select>
                 </div>
 
                 <div class="flex justify-center mt-6">
-                    <x-button id="submitBtn">Registrar Usuario</x-button>
+                    <x-button id="submitBtn">Registrar Profesional</x-button>
                 </div>
             </form>
         </div>
@@ -62,7 +62,7 @@
                 if (roleSelect.value === 'admin') {
                     submitBtn.textContent = 'Registrar Administrador';
                 } else {
-                    submitBtn.textContent = 'Registrar Usuario';
+                    submitBtn.textContent = 'Registrar Profesional';
                 }
             }
             // Validación en tiempo real del email

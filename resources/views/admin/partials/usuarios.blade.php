@@ -1,9 +1,9 @@
-{{-- Pestaña de Gestión de Usuarios --}}
+{{-- Pestaña de Gestión de Profesionales --}}
 <div class="p-6">
     <div class="flex items-center justify-between mb-6">
         <div>
-            <h2 class="text-xl font-bold text-gray-900">Gestión de Usuarios</h2>
-            <p class="text-sm text-gray-600 mt-1">Total de usuarios: <span
+            <h2 class="text-xl font-bold text-gray-900">Gestión de Profesionales</h2>
+            <p class="text-sm text-gray-600 mt-1">Total de profesionales: <span
                     class="font-semibold">{{ \App\Models\User::count() - 1 }}</span></p>
         </div>
         <a href="{{ route('users.create') }}"
@@ -11,7 +11,7 @@
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
-            Nuevo Usuario
+            Nuevo Profesional
         </a>
     </div>
 
@@ -32,7 +32,7 @@
                     class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">Todos los roles</option>
                     <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Administrador</option>
-                    <option value="user" {{ request('role') === 'user' ? 'selected' : '' }}>Usuario</option>
+                    <option value="user" {{ request('role') === 'user' ? 'selected' : '' }}>Profesional</option>
                 </select>
             </div>
 
@@ -109,7 +109,7 @@
                                 @else
                                     <span
                                         class="px-3 py-1 inline-flex text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
-                                        Usuario
+                                        Profesional
                                     </span>
                                 @endif
                             </td>
@@ -142,7 +142,7 @@
                                     @if (auth()->user()->id !== $user->id)
                                         <form action="{{ route('users.destroy', $user->id) }}" method="POST"
                                             class="inline"
-                                            onsubmit="return confirm('¿Estás seguro de eliminar este usuario?')">
+                                            onsubmit="return confirm('¿Estás seguro de eliminar este profesional?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -170,7 +170,7 @@
                                         d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
                                     </path>
                                 </svg>
-                                No se encontraron usuarios con los filtros aplicados.
+                                No se encontraron profesionales con los filtros aplicados.
                             </td>
                         </tr>
                     @endforelse

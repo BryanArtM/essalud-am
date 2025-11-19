@@ -44,7 +44,7 @@
 
     {{-- Estadísticas Principales --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {{-- Total Usuarios --}}
+        {{-- Total Profesionales --}}
         <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
             <div class="flex items-center justify-between mb-4">
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -57,7 +57,7 @@
                 <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded">Total</span>
             </div>
             <div class="text-3xl font-bold text-gray-900 mb-1">{{ $totalUsuarios }}</div>
-            <div class="text-sm text-gray-600">Total Usuarios</div>
+            <div class="text-sm text-gray-600">Total Profesionales</div>
             <div class="mt-3 flex items-center text-xs">
                 <span class="text-green-600 font-semibold">+{{ $usuariosEsteMes }}</span>
                 <span class="text-gray-500 ml-1">este mes</span>

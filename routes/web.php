@@ -33,7 +33,7 @@ Route::middleware([
             return view('admin.index');
         })->name('admin.index');
         
-        // Gestión de usuarios
+        // Gestión de profesionales
         Route::resource('admin/users', UserController::class);
         
         // Gestión de caché

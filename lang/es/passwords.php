@@ -8,5 +8,5 @@ return [
                 Revisa también tu carpeta de SPAM o correo no deseado.',
     'throttled' => 'Por favor espere antes de intentar de nuevo.',
     'token' => 'El token de restablecimiento de contraseña es inválido.',
-    'user' => 'No encontramos ningún usuario con ese correo electrónico.',
+    'user' => 'No encontramos ningún profesional con ese correo electrónico.',
 ];

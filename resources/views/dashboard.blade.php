@@ -138,7 +138,7 @@
                             <p class="text-xs lg:text-sm text-gray-600">Registrar nuevo adulto mayor</p>
                         </a>
 
-                        {{-- Gestión de Usuarios (Admin) --}}
+                        {{-- Gestión de Profesionales (Admin) --}}
                         @if(auth()->user()->is_admin)
                             <a href="{{ route('users.index') }}"
                                 class="group bg-white rounded-lg lg:rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 p-4 lg:p-6 border border-gray-100 hover:border-purple-200">
@@ -160,8 +160,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <h3 class="font-semibold text-gray-800 mb-1 text-sm lg:text-base">Gestión Usuarios</h3>
-                                <p class="text-xs lg:text-sm text-gray-600">Administrar usuarios del sistema</p>
+                                <h3 class="font-semibold text-gray-800 mb-1 text-sm lg:text-base">Gestión Profesionales</h3>
+                                <p class="text-xs lg:text-sm text-gray-600">Administrar profesionales del sistema</p>
                             </a>
                         @endif
                     </div>
