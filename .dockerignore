@@ -1,0 +1,19 @@
+# Docker ignore
+.git
+.gitignore
+.env
+.env.backup
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/.fleet
+/.idea
+/.vscode
+node_modules/
+vendor/
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+*.md
