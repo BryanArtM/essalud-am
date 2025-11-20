@@ -30,7 +30,7 @@ services:
             - dbdata:/var/lib/mysql
             - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
         ports:
-            - "3306:3306"
+            - "3307:3306"
         networks:
             - essalud-network
 
@@ -40,8 +40,8 @@ services:
         container_name: essalud-nginx
         restart: unless-stopped
         ports:
-            - "80:80"
-            - "443:443"
+            - "8080:80"
+            - "8443:443"
         volumes:
             - ./:/var/www
             - ./docker/nginx/conf.d:/etc/nginx/conf.d

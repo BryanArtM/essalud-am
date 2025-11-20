@@ -16,7 +16,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     vim \
     nodejs \
-    npm
+    npm \
+    cron
 
 # Limpiar caché
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -38,10 +39,25 @@ WORKDIR /var/www
 # Copiar archivos existentes
 COPY --chown=$user:$user . /var/www
 
+# Configurar cron para Laravel Scheduler
+COPY docker/cron/laravel-scheduler /etc/cron.d/laravel-scheduler
+RUN chmod 0644 /etc/cron.d/laravel-scheduler && \
+    touch /var/log/cron.log
+
+# Copiar y dar permisos al script de entrada
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Crear directorio de logs
+RUN mkdir -p /var/www/storage/logs && \
+    chown -R $user:$user /var/www/storage
+
 # Cambiar a usuario no root
 USER $user
 
 # Exponer puerto
 EXPOSE 9000
 
-CMD ["php-fpm"]
+# Cambiar CMD por ENTRYPOINT
+USER root
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
