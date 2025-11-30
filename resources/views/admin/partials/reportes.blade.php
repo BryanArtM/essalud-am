@@ -128,85 +128,7 @@
 
     </div>
 
-    {{-- Gráfico de Registros por Mes --}}
-    <div class="bg-white border border-gray-200 rounded-lg p-6 mb-8">
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z">
-                        </path>
-                    </svg>
-                    Registro de Adultos Mayores (Último año)
-                </h3>
-                <p class="text-sm text-gray-600 mt-1">Tendencia de registros mensuales</p>
-            </div>
-        </div>
-
-        <div class="relative" style="height: 300px;">
-            <canvas id="registrosChart"></canvas>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('registrosChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: {!! json_encode($mesesLabels) !!},
-                datasets: [{
-                    label: 'Adultos Mayores Registrados',
-                    data: {!! json_encode($registrosPorMes) !!},
-                    borderColor: 'rgb(98, 98, 111)',
-                    backgroundColor: 'rgba(98, 98, 111, 0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 5,
-                    pointHoverRadius: 7,
-                    pointBackgroundColor: 'rgb(98, 98, 111)',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        padding: 12,
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        borderColor: 'rgb(98, 98, 111)',
-                        borderWidth: 1
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        },
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        }
-                    }
-                }
-            }
-        });
-    </script>
-
+ 
     {{-- Actividad Reciente --}}
     <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
@@ -266,5 +188,127 @@
                 </div>
             @endforelse
         </div>
+    </div>
+
+    {{-- Sección de Auditoría --}}
+    <div  id="tabla-auditoria" class="mt-8">
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-gray-900 flex items-center">
+                Registro de Auditoría
+            </h2>
+            <p class="text-sm text-gray-600 mt-1">Historial de cambios y actividades en el sistema</p>
+        </div>
+
+        @php
+            use App\Models\AdultoMayor;
+            
+            // Obtener los últimos adultos mayores modificados con información del usuario
+            $ultimasModificaciones = AdultoMayor::with(['createdBy', 'updatedBy'])
+                ->orderBy('updated_at', 'desc')
+                ->paginate(10, ['*'], 'auditoria_page')
+                ->appends(['tab' => 'reportes'])
+                ->fragment('tabla-auditoria');
+                
+        @endphp
+
+        {{-- Tabla de Auditoría --}}
+        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <div class="flex px-6 py-4 border-b border-gray-200 bg-gray-50">
+                <svg class="w-6 h-6 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                    </path>
+                </svg>
+                <h3 class="text-lg font-semibold text-gray-900">Últimas Modificaciones</h3>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Adulto Mayor
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Creado Por
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Fecha Creación
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Modificado Por
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Última Modificación
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Acciones
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @forelse($ultimasModificaciones as $adulto)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        {{ $adulto->apellidos }}, {{ $adulto->nombres }}
+                                    </div>
+                                </td>
+
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        @if($adulto->createdBy)
+                                            <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-semibold mr-2">
+                                                {{ strtoupper(substr($adulto->createdBy->name, 0, 1)) }}
+                                            </div>
+                                            <span class="text-sm text-gray-900">{{ $adulto->createdBy->name }}</span>
+                                        @else
+                                            <span class="text-sm text-gray-400 italic">Sistema</span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ $adulto->created_at->format('d/m/Y H:i') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        @if($adulto->updatedBy)
+                                            <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white text-xs font-semibold mr-2">
+                                                {{ strtoupper(substr($adulto->updatedBy->name, 0, 1)) }}
+                                            </div>
+                                            <span class="text-sm text-gray-900">{{ $adulto->updatedBy->name }}</span>
+                                        @else
+                                            <span class="text-sm text-gray-400 italic">Sistema</span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    @if($adulto->updated_at->diffInHours() < 24)
+                                        <span class="text-green-600 font-medium">{{ $adulto->updated_at->diffForHumans() }}</span>
+                                    @else
+                                        {{ $adulto->updated_at->format('d/m/Y H:i') }}
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <a href="{{ route('adultos.show', $adulto->id) }}" 
+                                       class="text-blue-600 hover:text-blue-900 font-medium">
+                                        Ver detalles
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                                    No hay registros disponibles
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <x-paginacion :pagina="$ultimasModificaciones" />
+        </div>
+
     </div>
 </div>

@@ -63,7 +63,9 @@ class AdultoMayorController extends Controller
             'actividadeseducativas',
             'tratamientos',
             'citas',
-            'valoraciones'
+            'valoraciones',
+            'createdBy',
+            'updatedBy'
         ])->findOrFail($id);
 
         return view('adultos.show', compact('adulto'));
@@ -103,23 +105,67 @@ class AdultoMayorController extends Controller
         ]);
 
         $enfermedad = $adulto->enfermedad->first();
-        session(['enfermedad' => $enfermedad ? $enfermedad->toArray() : []]);
+        if ($enfermedad) {
+            $enfermedadData = $enfermedad->toArray();
+            unset($enfermedadData['created_by'], $enfermedadData['updated_by'], $enfermedadData['id'], $enfermedadData['adulto_mayor_id']);
+            session(['enfermedad' => $enfermedadData]);
+        } else {
+            session(['enfermedad' => []]);
+        }
 
         $riesgo = $adulto->riesgo->first();
-        session(['riesgo' => $riesgo ? $riesgo->toArray() : []]);
+        if ($riesgo) {
+            $riesgoData = $riesgo->toArray();
+            unset($riesgoData['created_by'], $riesgoData['updated_by'], $riesgoData['id'], $riesgoData['adulto_mayor_id']);
+            session(['riesgo' => $riesgoData]);
+        } else {
+            session(['riesgo' => []]);
+        }
 
-        session(['evaluacion' => $adulto->evaluaciones->toArray()]);
-        session(['actividad' => $adulto->actividadesEducativas->toArray()]);
+        // Limpiar campos de auditoría de evaluaciones
+        $evaluacionesData = $adulto->evaluaciones->map(function($eval) {
+            $data = $eval->toArray();
+            unset($data['created_by'], $data['updated_by'], $data['adulto_mayor_id']);
+            return $data;
+        })->toArray();
+        session(['evaluacion' => $evaluacionesData]);
+
+        // Limpiar campos de auditoría de actividades
+        $actividadesData = $adulto->actividadesEducativas->map(function($act) {
+            $data = $act->toArray();
+            unset($data['created_by'], $data['updated_by'], $data['adulto_mayor_id']);
+            return $data;
+        })->toArray();
+        session(['actividad' => $actividadesData]);
+
+        // Limpiar campos de auditoría de citas y tratamientos
+        $tratamientosData = $adulto->tratamientos->map(function($trat) {
+            $data = $trat->toArray();
+            unset($data['created_by'], $data['updated_by'], $data['adulto_mayor_id']);
+            return $data;
+        })->toArray();
+
+        $citasData = $adulto->citas->map(function($cita) {
+            $data = $cita->toArray();
+            unset($data['created_by'], $data['updated_by'], $data['adulto_mayor_id']);
+            return $data;
+        })->toArray();
 
         session([
             'citas_tratamientos' => [
-                'tratamientos' => $adulto->tratamientos->toArray(),
-                'citas' => $adulto->citas->toArray(),
+                'tratamientos' => $tratamientosData,
+                'citas' => $citasData,
             ]
         ]);
 
         $valoracion = $adulto->valoraciones->first();
-        session(['valoracion' => $valoracion ? $valoracion->toArray() : []]);
+        if ($valoracion) {
+            $valoracionData = $valoracion->toArray();
+            unset($valoracionData['created_by'], $valoracionData['updated_by'], $valoracionData['id'], $valoracionData['adulto_mayor_id']);
+            session(['valoracion' => $valoracionData]);
+        } else {
+            session(['valoracion' => []]);
+        }
 
         return redirect()->route('wizard.paso1', ['adulto_id' => $adulto->id])->with('success', 'Datos cargados para edición.');
     }

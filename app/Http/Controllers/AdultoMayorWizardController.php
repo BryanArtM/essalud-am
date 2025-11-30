@@ -98,22 +98,16 @@ class AdultoMayorWizardController extends Controller
                 $enfermedad = \App\Models\Enfermedad::where('adulto_mayor_id', $adulto_id)->first();
                 $data = $enfermedad ? $enfermedad->toArray() : [];
 
-                // Debugging temporal
-                \Log::info("PASO 2 - Cargando desde BD para usuario ID: " . $adulto_id);
-                \Log::info("PASO 2 - Datos de enfermedad cargados: " . json_encode($data));
-
                 // Actualizar la sesión con los datos correctos
                 session(['enfermedad' => $data]);
                 session(['adulto_id' => $adulto_id]);
             } else {
                 // Usar datos de sesión existentes (ya modificados por el usuario)
                 $data = $sessionData;
-                \Log::info("PASO 2 - Usando datos de sesión existentes: " . json_encode($data));
             }
         } else {
             // Modo nuevo registro, usar datos de sesión
             $data = session('enfermedad', []);
-            \Log::info("PASO 2 - Modo nuevo registro, datos de sesión: " . json_encode($data));
         }
 
         return view('wizard.paso2', compact('data', 'adulto_id'));
@@ -178,22 +172,16 @@ class AdultoMayorWizardController extends Controller
                 $riesgo = \App\Models\Riesgo::where('adulto_mayor_id', $adulto_id)->first();
                 $data = $riesgo ? $riesgo->toArray() : [];
 
-                // Debugging temporal
-                \Log::info("PASO 3 - Cargando desde BD para usuario ID: " . $adulto_id);
-                \Log::info("PASO 3 - Datos de riesgo cargados: " . json_encode($data));
-
                 // Actualizar la sesión con los datos correctos
                 session(['riesgo' => $data]);
                 session(['adulto_id' => $adulto_id]);
             } else {
                 // Usar datos de sesión existentes (ya modificados por el usuario)
                 $data = $sessionData;
-                \Log::info("PASO 3 - Usando datos de sesión existentes: " . json_encode($data));
             }
         } else {
             // Modo nuevo registro, usar datos de sesión
             $data = session('riesgo', []);
-            \Log::info("PASO 3 - Modo nuevo registro, datos de sesión: " . json_encode($data));
         }
 
         return view('wizard.paso3', compact('data', 'adulto_id'));
@@ -301,7 +289,7 @@ class AdultoMayorWizardController extends Controller
             'tratamientos' => 'nullable|array',
             'tratamientos.*.id' => 'nullable|integer|exists:tratamientos,id',
             'tratamientos.*.medicacion' => 'nullable|string|max:100',
-            'tratamientos.*.dosis' => 'nullable|numeric|min:0',
+            'tratamientos.*.dosis' => 'nullable|string|max:100',
         ]);
 
         session([
@@ -613,6 +601,12 @@ class AdultoMayorWizardController extends Controller
             $citasTratamientos = session('citas_tratamientos', ['citas' => [], 'tratamientos' => []]);
             $valoracion = session('valoracion');
 
+            // Eliminar campos de auditoría de los datos (para que el boot() los maneje automáticamente)
+            unset($data['created_by'], $data['updated_by']);
+            unset($enfermedad['created_by'], $enfermedad['updated_by']);
+            unset($riesgo['created_by'], $riesgo['updated_by']);
+            unset($valoracion['created_by'], $valoracion['updated_by']);
+
             // Verifica si es edición o nuevo registro
             if (session()->has('adulto_id')) {
                 $adulto = AdultoMayor::findOrFail(session('adulto_id'));
@@ -630,21 +624,30 @@ class AdultoMayorWizardController extends Controller
                 $adulto = AdultoMayor::create($data);
             }
 
-            // Re-crear relaciones
+            // Re-crear relaciones (sin campos de auditoría para que boot() los maneje)
             $adulto->enfermedad()->create($enfermedad);
             $adulto->riesgo()->create($riesgo);
+            
             foreach ($evaluaciones as $eval) {
+                unset($eval['created_by'], $eval['updated_by']);
                 $adulto->evaluaciones()->create($eval);
             }
+            
             foreach ($actividades as $actividad) {
+                unset($actividad['created_by'], $actividad['updated_by']);
                 $adulto->actividadesEducativas()->create($actividad);
             }
+            
             foreach ($citasTratamientos['citas'] as $cita) {
+                unset($cita['created_by'], $cita['updated_by']);
                 $adulto->citas()->create($cita);
             }
+            
             foreach ($citasTratamientos['tratamientos'] as $tratamiento) {
+                unset($tratamiento['created_by'], $tratamiento['updated_by']);
                 $adulto->tratamientos()->create($tratamiento);
             }
+            
             $adulto->valoraciones()->create($valoracion);
         });
 

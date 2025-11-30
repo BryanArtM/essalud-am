@@ -29,6 +29,9 @@ return new class extends Migration
             $table->date('estadio_1_3a_fecha')->nullable();
             $table->integer('estadio_3b_5_numero')->nullable();
             $table->date('estadio_3b_5_fecha')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+ 
             $table->timestamps();
         });
     }

@@ -20,6 +20,9 @@ return new class extends Migration
             $table->boolean('bajo_peso')->default(false);
             $table->boolean('perimetro_abdominal_aumentado')->default(false);
             $table->boolean('hdl_bajo')->default(false);
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
 });
 

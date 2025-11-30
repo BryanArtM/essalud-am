@@ -94,8 +94,8 @@
                                     <input type="text" name="tratamientos[{{ $i }}][medicacion]"
                                         value="{{ $tratamiento['medicacion'] ?? '' }}" class="w-full border rounded px-3 py-2">
 
-                                    <input type="number" step="any" name="tratamientos[{{ $i }}][dosis]"
-                                        value="{{ $tratamiento['dosis'] ?? '' }}" class="w-full border rounded px-3 py-2">
+                                    <input type="text" name="tratamientos[{{ $i }}][dosis]"
+                                        value="{{ $tratamiento['dosis'] ?? '' }}" class="w-full border rounded px-3 py-2" placeholder="Ej: 5 mg, 10 ml">
                                 </div>
                             @endforeach
                         @endif
@@ -153,7 +153,7 @@
             div.className = "grid grid-cols-2 gap-4 mb-4";
             div.innerHTML = `
                 <input type="text" name="tratamientos[${index}][medicacion]" class="w-full border rounded px-3 py-2" >
-                <input type="number" step="any" name="tratamientos[${index}][dosis]" class="w-full border rounded px-3 py-2" >
+                <input type="text" name="tratamientos[${index}][dosis]" class="w-full border rounded px-3 py-2" placeholder="Ej: 5 mg, 10 ml">
             `;
             wrapper.appendChild(div);
             index++;

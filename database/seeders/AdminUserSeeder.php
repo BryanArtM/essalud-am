@@ -15,7 +15,7 @@ class AdminUserSeeder extends Seeder
         User::updateOrCreate(
             ['id' => 1],
             [
-                'name' => env('SUPER_ADMIN_NAME', 'Administrador'),
+                'name' => env('SUPER_ADMIN_NAME', 'Bryan Arteaga'),
                 'email' => env('SUPER_ADMIN_EMAIL', 'barteagame@gmail.com'),
                 'password' => Hash::make(env('SUPER_ADMIN_PASSWORD', 'Bryan1901_')),
                 'is_admin' => 1,
@@ -27,8 +27,8 @@ class AdminUserSeeder extends Seeder
             [
                 'name' => 'Pedro Ramírez',
                 'email' => 'pedro.ramirez@gmail.com',
-                'password' => Hash::make('user123'),
-                'is_admin' => 0,
+                'password' => Hash::make('admin123'),
+                'is_admin' => 1,
             ],
             [
                 'name' => 'Dra. María García',

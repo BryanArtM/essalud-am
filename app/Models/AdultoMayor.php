@@ -22,7 +22,27 @@ class AdultoMayor extends Model
         'fecha_ingreso',
         'alergias',
         'adulto_mayor_fragil',
+        'created_by',
+        'updated_by',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (auth()->check()) {
+                $model->created_by = auth()->id();
+                $model->updated_by = auth()->id();
+            }
+        });
+
+        static::updating(function ($model) {
+            if (auth()->check()) {
+                $model->updated_by = auth()->id();
+            }
+        });
+    }
 
 
     public function enfermedad() {
@@ -53,5 +73,12 @@ class AdultoMayor extends Model
         return $this->hasMany(ActividadEducativa::class);
     }
 
+    public function createdBy() {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy() {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
 }
 

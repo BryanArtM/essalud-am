@@ -14,6 +14,9 @@ return new class extends Migration
             $table->foreignId('adulto_mayor_id')->constrained('adultos_mayores')->onDelete('cascade');
             $table->date('fecha')->nullable();
             $table->string('numero_sesion')->nullable(); 
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+ 
             $table->timestamps();
         });
     }

@@ -23,6 +23,8 @@ return new class extends Migration
             $table->date('fecha_nacimiento')->nullable();
             $table->text('alergias')->nullable();
             $table->string('adulto_mayor_fragil')->nullable(); 
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
             $table->index(['apellidos', 'nombres']);
             $table->timestamps();
         });

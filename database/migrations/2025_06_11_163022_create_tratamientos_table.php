@@ -13,7 +13,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('adulto_mayor_id')->constrained('adultos_mayores')->onDelete('cascade');
             $table->string('medicacion')->nullable();
-            $table->integer('dosis')->nullable();
+            $table->string('dosis')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
         });
         

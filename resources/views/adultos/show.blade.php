@@ -1,5 +1,5 @@
 @php
-    $omitidos = ['id', 'adulto_mayor_id', 'created_at', 'updated_at'];
+    $omitidos = ['id', 'adulto_mayor_id', 'created_at', 'updated_at', 'created_by', 'updated_by'];
 
     // Opcional: mapa de etiquetas "bonitas"
     function prettyLabel($label)
@@ -27,21 +27,21 @@
             ? e($valorMostrado)
             : '<span class="text-gray-400 italic">No registrado</span>';
         return '
-                                                <div class="p-2 border rounded-lg bg-white shadow-sm">
-                                                    <div class="uppercase text-[11px] text-gray-500">' . e($labelText) . '</div>
-                                                    <p class="text-sm font-medium text-gray-800">' . $contenido . '</p>
-                                                </div>
-                                            ';
+            <div class="p-2 border rounded-lg bg-white shadow-sm">
+                <div class="uppercase text-[11px] text-gray-500">' . e($labelText) . '</div>
+                <p class="text-sm font-medium text-gray-800">' . $contenido . '</p>
+            </div>
+        ';
     }
 
     $paneles = [
-        '🦠 Enfermedades' => $adulto->enfermedad ? [$adulto->enfermedad] : [],
-        '⚠️ Riesgos Identificados' => $adulto->riesgo ? [$adulto->riesgo] : [],
-        '🩺 Evaluaciones Médicas' => $adulto->evaluaciones ?? [],
-        '📚 Actividades Educativas' => $adulto->actividadeseducativas ?? [],
-        '📆 Citas' => $adulto->citas ?? [],
-        '💊 Tratamientos' => $adulto->tratamientos ?? [],
-        '👵 Adulto Mayor 75 Años a Más' => $adulto->valoraciones ?? [],
+        'Enfermedades' => $adulto->enfermedad ? [$adulto->enfermedad] : [],
+        'Riesgos Identificados' => $adulto->riesgo ? [$adulto->riesgo] : [],
+        'Evaluaciones Médicas' => $adulto->evaluaciones ?? [],
+        'Actividades Educativas' => $adulto->actividadeseducativas ?? [],
+        'Citas' => $adulto->citas ?? [],
+        'Tratamientos' => $adulto->tratamientos ?? [],
+        'Adulto Mayor 75 Años a Más' => $adulto->valoraciones ?? [],
     ];
 @endphp
 

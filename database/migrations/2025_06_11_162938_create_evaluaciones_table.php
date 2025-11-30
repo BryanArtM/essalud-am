@@ -29,6 +29,9 @@ return new class extends Migration
             $table->decimal('tasa_albuminuria_creatinuria', 5, 2)->nullable();
             $table->decimal('tasa_filtracion_glomerular', 5, 2)->nullable();
             $table->date('control_renal_fecha')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+ 
             $table->timestamps();
         });
     }
