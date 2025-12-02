@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('valoraciones', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('adulto_mayor_id')->constrained('adultos_mayores')->onDelete('cascade');
+            $table->foreignId('adulto_mayor_id')->unique()->constrained('adultos_mayores')->onDelete('cascade');
             $table->boolean('autovalente')->default(true);
             $table->string('test_barber')->nullable();
             $table->string('test_barthel')->nullable();

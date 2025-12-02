@@ -23,13 +23,18 @@
         $isBoolLike = is_bool($value) || $value === 1 || $value === 0 || $value === '1' || $value === '0';
         $valorMostrado = $isBoolLike ? ((int) $value === 1 ? 'Sí' : 'No') : $value;
         // Si es nulo o cadena vacía, mostramos "No registrado"
-        $contenido = ($value !== null && $value !== '')
-            ? e($valorMostrado)
-            : '<span class="text-gray-400 italic">No registrado</span>';
+        $contenido =
+            $value !== null && $value !== ''
+                ? e($valorMostrado)
+                : '<span class="text-gray-400 italic">No registrado</span>';
         return '
             <div class="p-2 border rounded-lg bg-white shadow-sm">
-                <div class="uppercase text-[11px] text-gray-500">' . e($labelText) . '</div>
-                <p class="text-sm font-medium text-gray-800">' . $contenido . '</p>
+                <div class="uppercase text-[11px] text-gray-500">' .
+            e($labelText) .
+            '</div>
+                <p class="text-sm font-medium text-gray-800">' .
+            $contenido .
+            '</p>
             </div>
         ';
     }
@@ -41,7 +46,7 @@
         'Actividades Educativas' => $adulto->actividadeseducativas ?? [],
         'Citas' => $adulto->citas ?? [],
         'Tratamientos' => $adulto->tratamientos ?? [],
-        'Adulto Mayor 75 Años a Más' => $adulto->valoraciones ?? [],
+        'Adulto Mayor 75 Años a Más' => $adulto->valoracion ? [$adulto->valoracion] : [],
     ];
 @endphp
 
@@ -57,8 +62,8 @@
             <div class="mb-4 flex justify-between items-center">
                 <a href="{{ route('adultos.index') }}"
                     class="inline-flex items-center px-2 py-1 sm:px-4 sm:py-2 bg-gray-400 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-600 focus:bg-gray-600  focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M11 19l-7-7 7-7M19 19l-7-7 7-7"></path>
                     </svg>
@@ -99,12 +104,18 @@
                 {!! renderCard('dni', $adulto->dni) !!}
                 {!! renderCard('Apellidos', $adulto->apellidos) !!}
                 {!! renderCard('Nombres', $adulto->nombres) !!}
-                {!! renderCard('fecha_nacimiento', $adulto->fecha_nacimiento ? \Carbon\Carbon::parse($adulto->fecha_nacimiento)->format('d/m/Y') : null) !!}
+                {!! renderCard(
+                    'fecha_nacimiento',
+                    $adulto->fecha_nacimiento ? \Carbon\Carbon::parse($adulto->fecha_nacimiento)->format('d/m/Y') : null,
+                ) !!}
                 @php
                     $edad = $adulto->fecha_nacimiento ? \Carbon\Carbon::parse($adulto->fecha_nacimiento)->age : null;
                 @endphp
                 {!! renderCard('Edad', $edad) !!}
-                {!! renderCard('Fecha de Ingreso', $adulto->fecha_ingreso ? \Carbon\Carbon::parse($adulto->fecha_ingreso)->format('d/m/Y') : null) !!}
+                {!! renderCard(
+                    'Fecha de Ingreso',
+                    $adulto->fecha_ingreso ? \Carbon\Carbon::parse($adulto->fecha_ingreso)->format('d/m/Y') : null,
+                ) !!}
                 {!! renderCard('Alergias', $adulto->alergias) !!}
                 {!! renderCard('Teléfono', $adulto->telefono) !!}
                 {!! renderCard('Dirección', $adulto->direccion) !!}
@@ -133,7 +144,8 @@
                                 </h4>
                             @endif
 
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-50 p-3 rounded-lg border capitalize">
+                            <div
+                                class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-50 p-3 rounded-lg border capitalize">
                                 @foreach ($item->toArray() as $campo => $valor)
                                     @continue(in_array($campo, $omitidos))
                                     {!! renderCard($campo, $valor) !!}

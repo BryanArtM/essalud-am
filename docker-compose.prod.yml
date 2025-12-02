@@ -7,7 +7,7 @@ services:
           #     dockerfile: Dockerfile
         
         # Para producción, se usa la imagen de Docker Hub:
-        image: bryanartm/essalud-am:latest
+        image: bryandckr/essalud-am:latest 
         container_name: essalud-app
         restart: unless-stopped
         working_dir: /var/www

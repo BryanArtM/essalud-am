@@ -65,8 +65,8 @@ class AdultoMayor extends Model
         return $this->hasMany(Tratamiento::class);
     }
 
-    public function valoraciones() {
-        return $this->hasMany(Valoracion::class);
+    public function valoracion() {
+        return $this->hasOne(Valoracion::class);
     }
 
     public function actividadesEducativas() {

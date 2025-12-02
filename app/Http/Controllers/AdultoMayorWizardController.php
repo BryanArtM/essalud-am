@@ -424,7 +424,7 @@ class AdultoMayorWizardController extends Controller
             // Detectar cambios en valoración (Paso 6)
             $valoracion = session('valoracion', []);
             if (!empty($valoracion)) {
-                $existingValoracion = $adulto->valoraciones->first();
+                $existingValoracion = $adulto->valoracion;
                 if ($existingValoracion) {
                     $tieneCambios = false;
                     $camposModificados = [];
@@ -619,7 +619,7 @@ class AdultoMayorWizardController extends Controller
                 $adulto->actividadesEducativas()->delete();
                 $adulto->tratamientos()->delete();
                 $adulto->citas()->delete();
-                $adulto->valoraciones()->delete();
+                $adulto->valoracion()->delete();
             } else {
                 $adulto = AdultoMayor::create($data);
             }
@@ -648,7 +648,7 @@ class AdultoMayorWizardController extends Controller
                 $adulto->tratamientos()->create($tratamiento);
             }
             
-            $adulto->valoraciones()->create($valoracion);
+            $adulto->valoracion()->create($valoracion);
         });
 
         // Limpiar la sesión

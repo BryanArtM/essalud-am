@@ -278,152 +278,157 @@
                 <!-- PRIMERA COLUMNA: CITAS, TRATAMIENTOS, VALORACIONES -->
                 <div class="column">
                     <!-- CITAS MÉDICAS -->
-                        <div class="section compact-section">
-                            <h3 class="section-title">HISTORIAL DE CITAS MÉDICAS</h3>
-                            <table class="list-table">
-                                <thead>
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>Médico</th>
-                                        <th>Enfermera</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        for ($i = 0; $i < 10; $i++) {
-                                            if (isset($adulto->citas[$i])) {
-                                                $cita = $adulto->citas[$i];
-                                                echo '<tr>';
-                                                echo '<td>' . ($cita->fecha ? \Carbon\Carbon::parse($cita->fecha)->format('d/m/Y') : 'N/E') . '</td>';
-                                                echo '<td>' . ($cita->medico ?? '-') . '</td>';
-                                                echo '<td>' . ($cita->enfermera ?? '-') . '</td>';
-                                                echo '</tr>';
-                                            } else {
-                                                echo '<tr>';
-                                                echo '<td>&nbsp;</td>';
-                                                echo '<td>&nbsp;</td>';
-                                                echo '<td>&nbsp;</td>';
-                                                echo '</tr>';
-                                            }
+                    <div class="section compact-section">
+                        <h3 class="section-title">HISTORIAL DE CITAS MÉDICAS</h3>
+                        <table class="list-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Médico</th>
+                                    <th>Enfermera</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    for ($i = 0; $i < 10; $i++) {
+                                        if (isset($adulto->citas[$i])) {
+                                            $cita = $adulto->citas[$i];
+                                            echo '<tr>';
+                                            echo '<td>' .
+                                                ($cita->fecha
+                                                    ? \Carbon\Carbon::parse($cita->fecha)->format('d/m/Y')
+                                                    : 'N/E') .
+                                                '</td>';
+                                            echo '<td>' . ($cita->medico ?? '-') . '</td>';
+                                            echo '<td>' . ($cita->enfermera ?? '-') . '</td>';
+                                            echo '</tr>';
+                                        } else {
+                                            echo '<tr>';
+                                            echo '<td>&nbsp;</td>';
+                                            echo '<td>&nbsp;</td>';
+                                            echo '<td>&nbsp;</td>';
+                                            echo '</tr>';
                                         }
-                                    @endphp
-                                </tbody>
-                            </table>
-                        </div>
+                                    }
+                                @endphp
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!-- TRATAMIENTOS -->
-                        <div class="section compact-section">
-                            <h3 class="section-title">TRATAMIENTOS</h3>
-                            <table class="list-table">
-                                <thead>
-                                    <tr>
-                                        <th>Medicación</th>
-                                        <th>Dosis</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        for ($i = 0; $i < 10; $i++) {
-                                            if (isset($adulto->tratamientos[$i])) {
-                                                $tratamiento = $adulto->tratamientos[$i];
-                                                echo '<tr>';
-                                                echo '<td>' . ($tratamiento->medicacion ?? 'No especificada') . '</td>';
-                                                echo '<td>' . ($tratamiento->dosis ?? '-') . '</td>';
-                                                echo '</tr>';
-                                            } else {
-                                                echo '<tr>';
-                                                echo '<td>&nbsp;</td>';
-                                                echo '<td>&nbsp;</td>';
-                                                echo '</tr>';
-                                            }
+                    <div class="section compact-section">
+                        <h3 class="section-title">TRATAMIENTOS</h3>
+                        <table class="list-table">
+                            <thead>
+                                <tr>
+                                    <th>Medicación</th>
+                                    <th>Dosis</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    for ($i = 0; $i < 10; $i++) {
+                                        if (isset($adulto->tratamientos[$i])) {
+                                            $tratamiento = $adulto->tratamientos[$i];
+                                            echo '<tr>';
+                                            echo '<td>' . ($tratamiento->medicacion ?? 'No especificada') . '</td>';
+                                            echo '<td>' . ($tratamiento->dosis ?? '-') . '</td>';
+                                            echo '</tr>';
+                                        } else {
+                                            echo '<tr>';
+                                            echo '<td>&nbsp;</td>';
+                                            echo '<td>&nbsp;</td>';
+                                            echo '</tr>';
                                         }
-                                    @endphp
-                                </tbody>
-                            </table>
-                        </div>
+                                    }
+                                @endphp
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!-- VALORACIONES -->
-                        <div class="section compact-section">
-                            <h3 class="section-title">ADULTO MAYOR 75 AÑOS A MÁS</h3>
-                            @foreach($adulto->valoraciones as $valoracion)
-                                <table class="info-grid">
-                                    <tr class="info-row">
-                                        <td class="info-label">Autovalente:</td>
-                                        <td class="info-value">
-                                            @if($valoracion->autovalente === 1)
-                                                SÍ
-                                            @elseif($valoracion->autovalente === 0)
-                                                NO
-                                            @else
-                                                No evaluado
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr class="info-row">
-                                        <td class="info-label">Test Barber:</td>
-                                        <td class="info-value">{{ $valoracion->test_barber ?? 'No registrado' }}</td>
-                                    </tr>
-                                    <tr class="info-row">
-                                        <td class="info-label">Test Barthel:</td>
-                                        <td class="info-value">{{ $valoracion->test_barthel ?? 'No registrado' }}</td>
-                                    </tr>
-                                    <tr class="info-row">
-                                        <td class="info-label">Frágil:</td>
-                                        <td class="info-value">
-                                            @if($valoracion->fragil === 1)
-                                                SÍ
-                                            @elseif($valoracion->fragil === 0)
-                                                NO
-                                            @else
-                                                No evaluado
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr class="info-row">
-                                        <td class="info-label">Test Lawton Brody:</td>
-                                        <td class="info-value">{{ $valoracion->test_lawton_brody ?? 'No registrado' }}</td>
-                                    </tr>
-                                    <tr class="info-row">
-                                        <td class="info-label">Test Katz:</td>
-                                        <td class="info-value">{{ $valoracion->test_katz ?? 'No registrado' }}</td>
-                                    </tr>
-                                </table>
+                    <div class="section compact-section">
+                        <h3 class="section-title">ADULTO MAYOR 75 AÑOS A MÁS</h3>
+                        @if ($adulto->valoracion)
+                            @php $valoracion = $adulto->valoracion; @endphp
+                            <table class="info-grid">
+                                <tr class="info-row">
+                                    <td class="info-label">Autovalente:</td>
+                                    <td class="info-value">
+                                        @if ($valoracion->autovalente === 1)
+                                            SÍ
+                                        @elseif($valoracion->autovalente === 0)
+                                            NO
+                                        @else
+                                            No evaluado
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr class="info-row">
+                                    <td class="info-label">Test Barber:</td>
+                                    <td class="info-value">{{ $valoracion->test_barber ?? 'No registrado' }}</td>
+                                </tr>
+                                <tr class="info-row">
+                                    <td class="info-label">Test Barthel:</td>
+                                    <td class="info-value">{{ $valoracion->test_barthel ?? 'No registrado' }}</td>
+                                </tr>
+                                <tr class="info-row">
+                                    <td class="info-label">Frágil:</td>
+                                    <td class="info-value">
+                                        @if ($valoracion->fragil === 1)
+                                            SÍ
+                                        @elseif($valoracion->fragil === 0)
+                                            NO
+                                        @else
+                                            No evaluado
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr class="info-row">
+                                    <td class="info-label">Test Lawton Brody:</td>
+                                    <td class="info-value">{{ $valoracion->test_lawton_brody ?? 'No registrado' }}</td>
+                                </tr>
+                                <tr class="info-row">
+                                    <td class="info-label">Test Katz:</td>
+                                    <td class="info-value">{{ $valoracion->test_katz ?? 'No registrado' }}</td>
+                                </tr>
+                            </table>
 
-                                <h4 style="margin: 4px 0 2px 0; color: #666; font-size: 9px;">Fechas de Atención:</h4>
-                                <table class="checkbox-grid" style="font-size: 8px;">
-                                    <tr class="checkbox-row">
-                                        <td class="checkbox-cell">
-                                            <strong>Enfermería:</strong>
-                                            {{ $valoracion->fecha_enfermeria ? \Carbon\Carbon::parse(time: $valoracion->fecha_enfermeria)->format('d/m/Y') : 'No registrado' }}
-                                        </td>
-                                        <td class="checkbox-cell">
-                                            <strong>Medicina:</strong>
-                                            {{ $valoracion->fecha_medicina ? \Carbon\Carbon::parse($valoracion->fecha_medicina)->format('d/m/Y') : 'No registrado' }}
-                                        </td>
-                                    </tr>
-                                    <tr class="checkbox-row">
-                                        <td class="checkbox-cell">
-                                            <strong>Nutrición:</strong>
-                                            {{ $valoracion->fecha_nutricion ? \Carbon\Carbon::parse($valoracion->fecha_nutricion)->format('d/m/Y') : 'No registrado' }}
-                                        </td>
-                                        <td class="checkbox-cell">
-                                            <strong>Psicología:</strong>
-                                            {{ $valoracion->fecha_psicologia ? \Carbon\Carbon::parse($valoracion->fecha_psicologia)->format('d/m/Y') : 'No registrado' }}
-                                        </td>
-                                    </tr>
-                                    <tr class="checkbox-row">
-                                        <td class="checkbox-cell">
-                                            <strong>Servicio Social:</strong>
-                                            {{ $valoracion->fecha_servicio_social ? \Carbon\Carbon::parse($valoracion->fecha_servicio_social)->format('d/m/Y') : 'No registrado' }}
-                                        </td>
-                                        <td class="checkbox-cell">
-                                            <strong>Visita Domiciliaria:</strong>
-                                            {{ $valoracion->fecha_visita_domiciliaria ? \Carbon\Carbon::parse($valoracion->fecha_visita_domiciliaria)->format('d/m/Y') : 'No registrado' }}
-                                        </td>
-                                    </tr>
-                                </table>
-                            @endforeach
-                        </div>
+                            <h4 style="margin: 4px 0 2px 0; color: #666; font-size: 9px;">Fechas de Atención:</h4>
+                            <table class="checkbox-grid" style="font-size: 8px;">
+                                <tr class="checkbox-row">
+                                    <td class="checkbox-cell">
+                                        <strong>Enfermería:</strong>
+                                        {{ $valoracion->fecha_enfermeria ? \Carbon\Carbon::parse(time: $valoracion->fecha_enfermeria)->format('d/m/Y') : 'No registrado' }}
+                                    </td>
+                                    <td class="checkbox-cell">
+                                        <strong>Medicina:</strong>
+                                        {{ $valoracion->fecha_medicina ? \Carbon\Carbon::parse($valoracion->fecha_medicina)->format('d/m/Y') : 'No registrado' }}
+                                    </td>
+                                </tr>
+                                <tr class="checkbox-row">
+                                    <td class="checkbox-cell">
+                                        <strong>Nutrición:</strong>
+                                        {{ $valoracion->fecha_nutricion ? \Carbon\Carbon::parse($valoracion->fecha_nutricion)->format('d/m/Y') : 'No registrado' }}
+                                    </td>
+                                    <td class="checkbox-cell">
+                                        <strong>Psicología:</strong>
+                                        {{ $valoracion->fecha_psicologia ? \Carbon\Carbon::parse($valoracion->fecha_psicologia)->format('d/m/Y') : 'No registrado' }}
+                                    </td>
+                                </tr>
+                                <tr class="checkbox-row">
+                                    <td class="checkbox-cell">
+                                        <strong>Servicio Social:</strong>
+                                        {{ $valoracion->fecha_servicio_social ? \Carbon\Carbon::parse($valoracion->fecha_servicio_social)->format('d/m/Y') : 'No registrado' }}
+                                    </td>
+                                    <td class="checkbox-cell">
+                                        <strong>Visita Domiciliaria:</strong>
+                                        {{ $valoracion->fecha_visita_domiciliaria ? \Carbon\Carbon::parse($valoracion->fecha_visita_domiciliaria)->format('d/m/Y') : 'No registrado' }}
+                                    </td>
+                                </tr>
+                            </table>
+                        @endif
+                    </div>
                     <div class="footer">
                         <p>Generado el {{ date('d/m/Y H:i') }} - Sistema de Gestión de Adultos Mayores - EsSalud</p>
                     </div>
@@ -475,7 +480,7 @@
                                 <td class="info-label">Fecha de Nacimiento:</td>
                                 <td class="info-value">
                                     {{ $adulto->fecha_nacimiento ? \Carbon\Carbon::parse($adulto->fecha_nacimiento)->format('d/m/Y') : 'No registrado' }}
-                                    @if($adulto->fecha_nacimiento)
+                                    @if ($adulto->fecha_nacimiento)
                                         ({{ $edad }} años)
                                     @endif
                                 </td>
@@ -493,7 +498,7 @@
                             <tr class="info-row">
                                 <td class="info-label">Adulto Mayor Frágil:</td>
                                 <td class="info-value">
-                                    @if($adulto->adulto_mayor_fragil !== null)
+                                    @if ($adulto->adulto_mayor_fragil !== null)
                                         N° {{ $adulto->adulto_mayor_fragil }}
                                     @else
                                         No evaluado
@@ -506,13 +511,14 @@
                     <!-- ENFERMEDADES -->
 
                     <!-- ENFERMEDADES -->
-                    @if($adulto->enfermedad)
+                    @if ($adulto->enfermedad)
                         <div class="section compact-section">
                             <h3 class="section-title">ENFERMEDADES</h3>
                             <table class="checkbox-grid">
                                 <tr class="checkbox-row">
                                     <td class="checkbox-cell">
-                                        <span class="checkbox {{ $adulto->enfermedad->obesidad ? 'checked' : '' }}"></span>
+                                        <span
+                                            class="checkbox {{ $adulto->enfermedad->obesidad ? 'checked' : '' }}"></span>
                                         Obesidad
                                     </td>
                                     <td class="checkbox-cell">
@@ -546,11 +552,13 @@
                                 </tr>
                                 <tr class="checkbox-row">
                                     <td class="checkbox-cell">
-                                        <span class="checkbox {{ $adulto->enfermedad->asma ? 'checked' : '' }}"></span>
+                                        <span
+                                            class="checkbox {{ $adulto->enfermedad->asma ? 'checked' : '' }}"></span>
                                         Asma
                                     </td>
                                     <td class="checkbox-cell">
-                                        <span class="checkbox {{ $adulto->enfermedad->epoc ? 'checked' : '' }}"></span>
+                                        <span
+                                            class="checkbox {{ $adulto->enfermedad->epoc ? 'checked' : '' }}"></span>
                                         EPOC
                                     </td>
                                 </tr>
@@ -570,11 +578,13 @@
                             <table class="info-grid">
                                 <tr class="info-row">
                                     <td class="info-label">Otras Enfermedades:</td>
-                                    <td class="info-value">{{ $adulto->enfermedad->otros ?? 'Ninguna registrada' }}</td>
+                                    <td class="info-value">{{ $adulto->enfermedad->otros ?? 'Ninguna registrada' }}
+                                    </td>
                                 </tr>
                                 <tr class="info-row">
                                     <td class="info-label">VISARE Número:</td>
-                                    <td class="info-value">{{ $adulto->enfermedad->visare_numero ?? 'No registrado' }}</td>
+                                    <td class="info-value">{{ $adulto->enfermedad->visare_numero ?? 'No registrado' }}
+                                    </td>
                                 </tr>
                                 <tr class="info-row">
                                     <td class="info-label">VISARE Fecha:</td>
@@ -596,7 +606,8 @@
                                 </tr>
                                 <tr class="info-row">
                                     <td class="info-label">Estadio 3B-5 Numero:</td>
-                                    <td class="info-value">{{ $adulto->enfermedad->estadio_3b_5_numero ?? 'No registrado' }}
+                                    <td class="info-value">
+                                        {{ $adulto->enfermedad->estadio_3b_5_numero ?? 'No registrado' }}
                                     </td>
                                 </tr>
                                 <tr class="info-row">
@@ -616,17 +627,19 @@
 
 
                     <!-- FACTORES DE RIESGO -->
-                    @if($adulto->riesgo)
+                    @if ($adulto->riesgo)
                         <div class="section compact-section">
                             <h3 class="section-title">FACTORES DE RIESGO</h3>
                             <table class="checkbox-grid">
                                 <tr class="checkbox-row">
                                     <td class="checkbox-cell">
-                                        <span class="checkbox {{ $adulto->riesgo->sobrepeso ? 'checked' : '' }}"></span>
+                                        <span
+                                            class="checkbox {{ $adulto->riesgo->sobrepeso ? 'checked' : '' }}"></span>
                                         Sobrepeso
                                     </td>
                                     <td class="checkbox-cell">
-                                        <span class="checkbox {{ $adulto->riesgo->sedentarismo ? 'checked' : '' }}"></span>
+                                        <span
+                                            class="checkbox {{ $adulto->riesgo->sedentarismo ? 'checked' : '' }}"></span>
                                         Sedentarismo
                                     </td>
                                 </tr>
@@ -646,7 +659,8 @@
                                         Estrés
                                     </td>
                                     <td class="checkbox-cell">
-                                        <span class="checkbox {{ $adulto->riesgo->bajo_peso ? 'checked' : '' }}"></span>
+                                        <span
+                                            class="checkbox {{ $adulto->riesgo->bajo_peso ? 'checked' : '' }}"></span>
                                         Bajo Peso
                                     </td>
                                 </tr>
@@ -657,7 +671,8 @@
                                         Perímetro Abd. Aumentado
                                     </td>
                                     <td class="checkbox-cell">
-                                        <span class="checkbox {{ $adulto->riesgo->hdl_bajo ? 'checked' : '' }}"></span>
+                                        <span
+                                            class="checkbox {{ $adulto->riesgo->hdl_bajo ? 'checked' : '' }}"></span>
                                         HDL Bajo
                                     </td>
                                 </tr>
@@ -676,219 +691,251 @@
         <!-- SEGUNDA PÁGINA - PÁGINA COMPLETA -->
         <div class="page-two">
             <!-- EVALUACIONES MÉDICAS -->
-                <div class="section compact-section margen">
-                    <h3 class="section-title">EVALUACIONES MÉDICAS</h3>
-                    <p style="margin: 6px 0; font-size: 10px;">
-                        <strong>Peso Aceptable (kg):</strong>
-                        &nbsp;{{ $adulto->evaluaciones->last()->peso_aceptable ?? '-' }}
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <strong>Talla (cm):</strong>&nbsp; {{ $adulto->evaluaciones->last()->talla ?? '-' }}
-                    </p>
+            <div class="section compact-section margen">
+                <h3 class="section-title">EVALUACIONES MÉDICAS</h3>
+                <p style="margin: 6px 0; font-size: 10px;">
+                    <strong>Peso Aceptable (kg):</strong>
+                    &nbsp;{{ $adulto->evaluaciones->last()->peso_aceptable ?? '-' }}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <strong>Talla (cm):</strong>&nbsp; {{ $adulto->evaluaciones->last()->talla ?? '-' }}
+                </p>
 
-                    <table class="list-table data-table tabla-horizontal">
-                        <thead>
-                            <tr>
-                                <th>EVALUACIONES</th>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        echo '<td>   </td>';
-                                    }
-                                @endphp
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Peso (kg)</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = isset($adulto->evaluaciones[$i - 1]) ? ($adulto->evaluaciones[$i - 1]->peso ?? '-') : '';
-                                        echo '<td>' . $valor . '</td>';
-                                    }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong>Presión Arterial</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = isset($adulto->evaluaciones[$i - 1]) ? ($adulto->evaluaciones[$i - 1]->presion_arterial ?? '-') : '';
-                                        echo '<td>' . $valor . '</td>';
-                                    }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong>Glucosa</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = isset($adulto->evaluaciones[$i - 1]) ? ($adulto->evaluaciones[$i - 1]->glucosa ?? '-') : '';
-                                        echo '<td>' . $valor . '</td>';
-                                    }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong>HB Glicosilada (HbA1C%)</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = isset($adulto->evaluaciones[$i - 1]) ? ($adulto->evaluaciones[$i - 1]->hb_glicosilada ?? '-') : '';
-                                        echo '<td>' . $valor . '</td>';
-                                    }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong>IMC</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = isset($adulto->evaluaciones[$i - 1]) ? ($adulto->evaluaciones[$i - 1]->imc ?? '-') : '';
-                                        echo '<td>' . $valor . '</td>';
-                                    }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong>Perimetro Abdominal</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = isset($adulto->evaluaciones[$i - 1]) ? ($adulto->evaluaciones[$i - 1]->perimetro_abdominal ?? '-') : '';
-                                        echo '<td>' . $valor . '</td>';
-                                    }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong>Evaluación Pie DM </strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = isset($adulto->evaluaciones[$i - 1]) ? ($adulto->evaluaciones[$i - 1]->evaluacion_pie_dm ?? '-') : '';
-                                        echo '<td style="text-transform: capitalize;">' . $valor . '</td>';
-                                    }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong>Test Morisky Green</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = isset($adulto->evaluaciones[$i - 1]) ? ($adulto->evaluaciones[$i - 1]->test_morisky_green ?? '-') : '';
-                                        echo '<td style="text-transform: capitalize;">' . $valor . '</td>';
-                                    }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong>Vacuna Influenza</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = '';
-                                        if (isset($adulto->evaluaciones[$i - 1])) {
-                                            if ($adulto->evaluaciones[$i - 1]->vacuna_influenza === 1) {
-                                                $valor = 'SÍ';
-                                            } elseif ($adulto->evaluaciones[$i - 1]->vacuna_influenza === 0) {
-                                                $valor = 'NO';
-                                            } else {
-                                                $valor = '-';
-                                            }
+                <table class="list-table data-table tabla-horizontal">
+                    <thead>
+                        <tr>
+                            <th>EVALUACIONES</th>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    echo '<td>   </td>';
+                                }
+                            @endphp
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Peso (kg)</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = isset($adulto->evaluaciones[$i - 1])
+                                        ? $adulto->evaluaciones[$i - 1]->peso ?? '-'
+                                        : '';
+                                    echo '<td>' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong>Presión Arterial</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = isset($adulto->evaluaciones[$i - 1])
+                                        ? $adulto->evaluaciones[$i - 1]->presion_arterial ?? '-'
+                                        : '';
+                                    echo '<td>' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong>Glucosa</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = isset($adulto->evaluaciones[$i - 1])
+                                        ? $adulto->evaluaciones[$i - 1]->glucosa ?? '-'
+                                        : '';
+                                    echo '<td>' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong>HB Glicosilada (HbA1C%)</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = isset($adulto->evaluaciones[$i - 1])
+                                        ? $adulto->evaluaciones[$i - 1]->hb_glicosilada ?? '-'
+                                        : '';
+                                    echo '<td>' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong>IMC</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = isset($adulto->evaluaciones[$i - 1])
+                                        ? $adulto->evaluaciones[$i - 1]->imc ?? '-'
+                                        : '';
+                                    echo '<td>' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong>Perimetro Abdominal</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = isset($adulto->evaluaciones[$i - 1])
+                                        ? $adulto->evaluaciones[$i - 1]->perimetro_abdominal ?? '-'
+                                        : '';
+                                    echo '<td>' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong>Evaluación Pie DM </strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = isset($adulto->evaluaciones[$i - 1])
+                                        ? $adulto->evaluaciones[$i - 1]->evaluacion_pie_dm ?? '-'
+                                        : '';
+                                    echo '<td style="text-transform: capitalize;">' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong>Test Morisky Green</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = isset($adulto->evaluaciones[$i - 1])
+                                        ? $adulto->evaluaciones[$i - 1]->test_morisky_green ?? '-'
+                                        : '';
+                                    echo '<td style="text-transform: capitalize;">' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong>Vacuna Influenza</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = '';
+                                    if (isset($adulto->evaluaciones[$i - 1])) {
+                                        if ($adulto->evaluaciones[$i - 1]->vacuna_influenza === 1) {
+                                            $valor = 'SÍ';
+                                        } elseif ($adulto->evaluaciones[$i - 1]->vacuna_influenza === 0) {
+                                            $valor = 'NO';
+                                        } else {
+                                            $valor = '-';
                                         }
-                                        echo '<td>' . $valor . '</td>';
                                     }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong>Vacuna Neumococo</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = '';
-                                        if (isset($adulto->evaluaciones[$i - 1])) {
-                                            if ($adulto->evaluaciones[$i - 1]->vacuna_neumococo === 1) {
-                                                $valor = 'SÍ';
-                                            } elseif ($adulto->evaluaciones[$i - 1]->vacuna_neumococo === 0) {
-                                                $valor = 'NO';
-                                            } else {
-                                                $valor = '-';
-                                            }
+                                    echo '<td>' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong>Vacuna Neumococo</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = '';
+                                    if (isset($adulto->evaluaciones[$i - 1])) {
+                                        if ($adulto->evaluaciones[$i - 1]->vacuna_neumococo === 1) {
+                                            $valor = 'SÍ';
+                                        } elseif ($adulto->evaluaciones[$i - 1]->vacuna_neumococo === 0) {
+                                            $valor = 'NO';
+                                        } else {
+                                            $valor = '-';
                                         }
-                                        echo '<td>' . $valor . '</td>';
                                     }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong> PERFIL RENAL: </br> Microalbuminuria</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = isset($adulto->evaluaciones[$i - 1]) ? ($adulto->evaluaciones[$i - 1]->microalbuminuria ?? '-') : '';
-                                        echo '<td>' . $valor . '</td>';
+                                    echo '<td>' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong> PERFIL RENAL: </br> Microalbuminuria</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = isset($adulto->evaluaciones[$i - 1])
+                                        ? $adulto->evaluaciones[$i - 1]->microalbuminuria ?? '-'
+                                        : '';
+                                    echo '<td>' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong>Creatinina en sangre</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = isset($adulto->evaluaciones[$i - 1])
+                                        ? $adulto->evaluaciones[$i - 1]->creatinina ?? '-'
+                                        : '';
+                                    echo '<td>' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong>Tasa albuminuria/creatinuria</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = isset($adulto->evaluaciones[$i - 1])
+                                        ? $adulto->evaluaciones[$i - 1]->tasa_albuminuria_creatinuria ?? '-'
+                                        : '';
+                                    echo '<td>' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong>Tasa Filtración Glomerular estamida ml/min/1.73 m2</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = isset($adulto->evaluaciones[$i - 1])
+                                        ? $adulto->evaluaciones[$i - 1]->tasa_filtracion_glomerular ?? '-'
+                                        : '';
+                                    echo '<td>' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong>Control médico por enfermedad renal (fecha)</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = '';
+                                    if (isset($adulto->evaluaciones[$i - 1])) {
+                                        $valor = $adulto->evaluaciones[$i - 1]->control_renal_fecha
+                                            ? \Carbon\Carbon::parse(
+                                                $adulto->evaluaciones[$i - 1]->control_renal_fecha,
+                                            )->format('d/m/Y')
+                                            : 'No registrado';
                                     }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong>Creatinina en sangre</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = isset($adulto->evaluaciones[$i - 1]) ? ($adulto->evaluaciones[$i - 1]->creatinina ?? '-') : '';
-                                        echo '<td>' . $valor . '</td>';
-                                    }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong>Tasa albuminuria/creatinuria</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = isset($adulto->evaluaciones[$i - 1]) ? ($adulto->evaluaciones[$i - 1]->tasa_albuminuria_creatinuria ?? '-') : '';
-                                        echo '<td>' . $valor . '</td>';
-                                    }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong>Tasa Filtración Glomerular estamida ml/min/1.73 m2</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = isset($adulto->evaluaciones[$i - 1]) ? ($adulto->evaluaciones[$i - 1]->tasa_filtracion_glomerular ?? '-') : '';
-                                        echo '<td>' . $valor . '</td>';
-                                    }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong>Control médico por enfermedad renal (fecha)</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = '';
-                                        if (isset($adulto->evaluaciones[$i - 1])) {
-                                            $valor = $adulto->evaluaciones[$i - 1]->control_renal_fecha ? \Carbon\Carbon::parse($adulto->evaluaciones[$i - 1]->control_renal_fecha)->format('d/m/Y') : 'No registrado';
-                                        }
-                                        echo '<td>' . $valor . '</td>';
-                                    }
-                                @endphp
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                    echo '<td>' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <!-- ACTIVIDADES EDUCATIVAS -->
-                <div class="section compact-section margen">
-                    <h3 class="section-title" style="margin-top: 10px;">ACTIVIDADES EDUCATIVAS</h3>
-                    <table class="list-table data-table tabla-horizontal">
-                        <tbody>
-                            <tr>
-                                <td><strong>Fecha</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = '';
-                                        if (isset($adulto->actividadesEducativas[$i - 1])) {
-                                            $valor = $adulto->actividadesEducativas[$i - 1]->fecha ? \Carbon\Carbon::parse($adulto->actividadesEducativas[$i - 1]->fecha)->format('d/m/Y') : 'N/E';
-                                        }
-                                        echo '<td>' . $valor . '</td>';
+            <div class="section compact-section margen">
+                <h3 class="section-title" style="margin-top: 10px;">ACTIVIDADES EDUCATIVAS</h3>
+                <table class="list-table data-table tabla-horizontal">
+                    <tbody>
+                        <tr>
+                            <td><strong>Fecha</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = '';
+                                    if (isset($adulto->actividadesEducativas[$i - 1])) {
+                                        $valor = $adulto->actividadesEducativas[$i - 1]->fecha
+                                            ? \Carbon\Carbon::parse(
+                                                $adulto->actividadesEducativas[$i - 1]->fecha,
+                                            )->format('d/m/Y')
+                                            : 'N/E';
                                     }
-                                @endphp
-                            </tr>
-                            <tr>
-                                <td><strong>Sesión</strong></td>
-                                @php
-                                    for ($i = 1; $i <= 15; $i++) {
-                                        $valor = '';
-                                        if (isset($adulto->actividadesEducativas[$i - 1])) {
-                                            $valor = $adulto->actividadesEducativas[$i - 1]->numero_sesion ?? '-';
-                                        }
-                                        echo '<td class="text-center">' . $valor . '</td>';
+                                    echo '<td>' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                        <tr>
+                            <td><strong>Sesión</strong></td>
+                            @php
+                                for ($i = 1; $i <= 15; $i++) {
+                                    $valor = '';
+                                    if (isset($adulto->actividadesEducativas[$i - 1])) {
+                                        $valor = $adulto->actividadesEducativas[$i - 1]->numero_sesion ?? '-';
                                     }
-                                @endphp
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                    echo '<td class="text-center">' . $valor . '</td>';
+                                }
+                            @endphp
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div> <!-- Cierre de page-two -->
     </div> <!-- Cierre de container -->
 

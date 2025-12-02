@@ -60,10 +60,10 @@ class AdultoMayorController extends Controller
             'enfermedad',
             'riesgo',
             'evaluaciones',
-            'actividadeseducativas',
+            'actividadesEducativas',
             'tratamientos',
             'citas',
-            'valoraciones',
+            'valoracion',
             'createdBy',
             'updatedBy'
         ])->findOrFail($id);
@@ -158,7 +158,7 @@ class AdultoMayorController extends Controller
             ]
         ]);
 
-        $valoracion = $adulto->valoraciones->first();
+        $valoracion = $adulto->valoracion;
         if ($valoracion) {
             $valoracionData = $valoracion->toArray();
             unset($valoracionData['created_by'], $valoracionData['updated_by'], $valoracionData['id'], $valoracionData['adulto_mayor_id']);
@@ -200,9 +200,7 @@ class AdultoMayorController extends Controller
             'citas' => function ($query) {
                 $query->orderBy('fecha', 'desc')->limit(10);
             },
-            'valoraciones' => function ($query) {
-                $query->orderBy('created_at', 'asc');
-            }
+            'valoracion'
         ])->findOrFail($id);
 
 
