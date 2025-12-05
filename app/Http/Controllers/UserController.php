@@ -24,23 +24,38 @@ class UserController extends Controller
     {
         // Validación básica para filtros
         $request->validate([
-            'name' => 'nullable|string|max:100',
+            'search' => 'nullable|string|max:100',
+            'role' => 'nullable|string|in:admin,user',
         ]);
 
         //Filtrado
         $query = User::where('id', '!=', 1); 
 
-        if ($request->filled('name')) {
-            $query->where('name', 'LIKE', '%' . $request->name . '%');
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', '%' . $search . '%')
+                  ->orWhere('email', 'LIKE', '%' . $search . '%');
+            });
         }
+
+        if ($request->filled('role')) {
+            $role = $request->role;
+            if ($role === 'admin') {
+                $query->where('is_admin', 1);
+            } elseif ($role === 'user') {
+                $query->where('is_admin', 0);
+            }
+        }
+
         //Paginación   
-        $users = $query->paginate(10)->appends($request->all());
-        return view('admin.partials.users.index', compact('users'));
+        $users = $query->paginate(2)->appends($request->all());
+        return view('admin.users.index', compact('users'));
     }
 
     public function create()
     {
-        return view('admin.partials.users.create');
+        return view('admin.users.create');
     }
     public function store(Request $request)
     {
@@ -86,12 +101,12 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        return view('admin.partials.users.show', compact('user'));
+        return view('admin.users.show', compact('user'));
     }
 
     public function edit(User $user)
     {
-        return view('admin.partials.users.edit', compact('user'));
+        return view('admin.users.edit', compact('user'));
     }
 
     public function update(Request $request, User $user)
@@ -176,15 +191,15 @@ class UserController extends Controller
                     break;
                     
                 default:
-                    return redirect()->route('admin.index', ['tab' => 'configuracion'])
+                    return redirect()->route('admin.configuracion')
                         ->with('cache_error', 'Tipo de caché no válido');
             }
             
-            return redirect()->route('admin.index', ['tab' => 'configuracion'])
+            return redirect()->route('admin.configuracion')
                 ->with('cache_success', $message);
                 
         } catch (\Exception $e) {
-            return redirect()->route('admin.index', ['tab' => 'configuracion'])
+            return redirect()->route('admin.configuracion')
                 ->with('cache_error', 'Error al limpiar caché: ' . $e->getMessage());
         }
     }
@@ -209,11 +224,11 @@ class UserController extends Controller
                 $message = 'Caché limpiado correctamente (cache + vistas).';
             }
             
-            return redirect()->route('admin.index', ['tab' => 'configuracion'])
+            return redirect()->route('admin.configuracion')
                 ->with('cache_success', $message);
                 
         } catch (\Exception $e) {
-            return redirect()->route('admin.index', ['tab' => 'configuracion'])
+            return redirect()->route('admin.configuracion')
                 ->with('cache_error', 'Error al optimizar aplicación: ' . $e->getMessage());
         }
     }

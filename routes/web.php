@@ -33,10 +33,15 @@ Route::middleware([
 
     // Administración (solo admins)
     Route::middleware('isAdmin')->group(function () {
-        // Panel de administración
-        Route::get('/administracion', function () {
-            return view('admin.index');
-        })->name('admin.index');
+        // Reportes
+        Route::get('/admin/reportes', function () {
+            return view('admin.reportes');
+        })->name('admin.reportes');
+        
+        // Configuración del Sistema
+        Route::get('/admin/configuracion', function () {
+            return view('admin.configuracion');
+        })->name('admin.configuracion');
         
         // Gestión de profesionales
         Route::resource('admin/users', UserController::class);

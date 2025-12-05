@@ -1,3 +1,26 @@
+#Construir assets de Node
+FROM node:18-alpine AS node-builder
+
+WORKDIR /app
+
+# Copiar archivos de dependencias de Node
+COPY package*.json ./
+
+# Instalar dependencias de Node
+RUN npm install
+
+# Copiar código fuente necesario para Vite
+COPY resources ./resources
+COPY public ./public
+COPY vite.config.js ./
+COPY postcss.config.js ./
+COPY tailwind.config.js ./
+
+# Compilar assets con Vite para producción
+RUN npm run build
+
+
+# Imagen PHP principal
 FROM php:8.2-fpm
 
 # Argumentos
@@ -15,12 +38,9 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     vim \
-    nodejs \
-    npm \
-    cron
-
-# Limpiar caché
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+    cron \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Instalar extensiones de PHP
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
@@ -29,15 +49,21 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Crear usuario del sistema
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer && \
+RUN useradd -G www-data,root -u $uid -d /home/$user $user && \
+    mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
 # Establecer directorio de trabajo
 WORKDIR /var/www
 
-# Copiar archivos existentes
+# Copiar archivos del proyecto
 COPY --chown=$user:$user . /var/www
+
+# Copiar assets compilados desde la etapa de Node
+COPY --from=node-builder /app/public/build /var/www/public/build
+
+# Instalar dependencias de Composer
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Configurar cron para Laravel Scheduler
 COPY docker/cron/laravel-scheduler /etc/cron.d/laravel-scheduler
@@ -48,16 +74,24 @@ RUN chmod 0644 /etc/cron.d/laravel-scheduler && \
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Crear directorio de logs
-RUN mkdir -p /var/www/storage/logs && \
-    chown -R $user:$user /var/www/storage
+# Asegurar permisos correctos
+RUN mkdir -p /var/www/storage/logs \
+    /var/www/storage/framework/cache \
+    /var/www/storage/framework/sessions \
+    /var/www/storage/framework/views \
+    /var/www/bootstrap/cache && \
+    chown -R $user:$user /var/www/storage /var/www/bootstrap/cache && \
+    chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# Cambiar a usuario no root
-USER $user
+# Asegurar que los assets compilados tengan permisos correctos
+RUN chown -R $user:$user /var/www/public/build && \
+    chmod -R 755 /var/www/public/build
 
 # Exponer puerto
 EXPOSE 9000
 
-# Cambiar CMD por ENTRYPOINT
+VOLUME /var/www/storage
+
+# Ejecutar como root para el entrypoint
 USER root
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

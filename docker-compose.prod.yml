@@ -1,59 +1,59 @@
 services:
-    # Servicio de la aplicación Laravel
-    app:
-        # Para desarrollo local:
-          # build:
-          #     context: .
-          #     dockerfile: Dockerfile
-        
-        # Para producción, se usa la imagen de Docker Hub:
-        image: bryandckr/essalud-am:latest 
-        container_name: essalud-app
-        restart: unless-stopped
-        working_dir: /var/www
-        networks:
-            - essalud-network
-        depends_on:
-            - db
+  # Servicio de la aplicación Laravel (PHP-FPM)
+  app:
+    image: bryandckr/essalud-am:latest 
+    container_name: essalud-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./.env:/var/www/.env
+      - ./storage:/var/www/storage
+      - app-public:/var/www/public
+    networks:
+      - essalud-network
+    depends_on:
+      - db
 
-    # Servicio de base de datos MySQL
-    db:
-        image: mysql:8.0
-        container_name: essalud-db
-        restart: unless-stopped
-        environment:
-            MYSQL_DATABASE: ${DB_DATABASE:-adulto_mayor}
-            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
-            SERVICE_TAGS: production
-            SERVICE_NAME: mysql
-        volumes:
-            - dbdata:/var/lib/mysql
-            - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
-        ports:
-            - "3306:3306"
-        networks:
-            - essalud-network
+  # Servicio de base de datos MySQL
+  db:
+    image: mysql:8.0
+    container_name: essalud-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-adulto_mayor}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
+      SERVICE_TAGS: production
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    ports:
+      - "3306:3306"
+    networks:
+      - essalud-network
 
-    # Servicio Nginx
-    nginx:
-        image: nginx:alpine
-        container_name: essalud-nginx
-        restart: unless-stopped
-        ports:
-            - "80:80"
-            - "443:443"
-        volumes:
-            # Solo montar la configuración de nginx, no el código
-            - ./docker/nginx/conf.d:/etc/nginx/conf.d
-        networks:
-            - essalud-network
-        depends_on:
-            - app
+  # Servicio Nginx
+  nginx:
+    image: nginx:alpine
+    container_name: essalud-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - app-public:/var/www/public:ro
+    networks:
+      - essalud-network
+    depends_on:
+      - app
 
 networks:
-    essalud-network:
-        driver: bridge
+  essalud-network:
+    driver: bridge
 
 volumes:
-    dbdata:
-        driver: local
+  dbdata:
+    driver: local
+  app-public:
+    driver: local
