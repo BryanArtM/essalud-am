@@ -35,7 +35,7 @@ class UserController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'LIKE', '%' . $search . '%')
-                  ->orWhere('email', 'LIKE', '%' . $search . '%');
+                    ->orWhere('email', 'LIKE', '%' . $search . '%');
             });
         }
 
@@ -49,7 +49,7 @@ class UserController extends Controller
         }
 
         //Paginación   
-        $users = $query->paginate(2)->appends($request->all());
+        $users = $query->paginate(5)->appends($request->all());
         return view('admin.users.index', compact('users'));
     }
 
