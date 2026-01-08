@@ -22,30 +22,29 @@ class AdminUserSeeder extends Seeder
             ]
         );
 
-        // 20 usuarios mezclados (administradores y usuarios regulares)
         $usuarios = [
             [
                 'name' => 'Pedro Ramírez',
                 'email' => 'pedro.ramirez@gmail.com',
-                'password' => Hash::make('admin123'),
+                'password' => Hash::make('R9@kL!7pZx2'),
                 'is_admin' => 1,
             ],
             [
                 'name' => 'Dra. María García',
                 'email' => 'maria.garcia@gmail.com',
-                'password' => Hash::make('admin123'),
+                'password' => Hash::make('7F@P!mZ2Kx9'),
                 'is_admin' => 1,
             ],
             [
                 'name' => 'Carmen López',
                 'email' => 'carmen.lopez@gmail.com',
-                'password' => Hash::make('user123'),
+                'password' => Hash::make('L!9sA@X8QwE'),
                 'is_admin' => 0,
             ],
             [
                 'name' => 'Enf. Ana Torres',
                 'email' => 'ana.torres@gmail.com',
-                'password' => Hash::make('admin123'),
+                'password' => Hash::make('@T6ZpK!4xM9'),
                 'is_admin' => 1,
             ],
         ];
