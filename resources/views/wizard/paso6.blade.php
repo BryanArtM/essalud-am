@@ -27,7 +27,7 @@
 
                     <div class="mb-4">
                         <label class="font-semibold">¿Autovalente?</label>
-                        <select name="autovalente" class="w-full border rounded px-3 py-2">
+                        <select name="autovalente" class="w-full border rounded px-3 py-2" required>
                             <option value="1" {{ old('autovalente', $data['autovalente'] ?? '') == '1' ? 'selected' : '' }}>Sí</option>
                             <option value="0" {{ old('autovalente', $data['autovalente'] ?? '') == '0' ? 'selected' : '' }}>No</option>
                         </select>
@@ -47,7 +47,7 @@
 
                     <div class="mb-4">
                         <label class="font-semibold">¿Frágil?</label>
-                        <select name="fragil" class="w-full border rounded px-3 py-2">
+                        <select name="fragil" class="w-full border rounded px-3 py-2" required>
                             <option value="0" {{ old('fragil', $data['fragil'] ?? '') == '0' ? 'selected' : '' }}>No</option>
                             <option value="1" {{ old('fragil', $data['fragil'] ?? '') == '1' ? 'selected' : '' }}>Sí</option>
                         </select>

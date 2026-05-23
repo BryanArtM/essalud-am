@@ -30,9 +30,20 @@
 
 
             <div class="mb-4">
-                <label for="ipress" class="block text-gray-700 font-semibold mb-2">IPRESS</label>
-                <input type="text" name="ipress" id="ipress" value="{{ old('ipress', $data['ipress'] ?? '') }}"
+                <label for="ipress_busqueda" class="block text-gray-700 font-semibold mb-2">IPRESS</label>
+                <input type="text" name="ipress_busqueda" id="ipress_busqueda" list="ipress-options"
+                    value="{{ old('ipress_busqueda', $ipressDisplay ?? '') }}"
                     class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="hidden" name="ipress_id" id="ipress_id"
+                    value="{{ old('ipress_id', $data['ipress_id'] ?? '') }}">
+                <datalist id="ipress-options">
+                    @foreach ($ipressOptions as $ipress)
+                        <option value="{{ $ipress->codigo_ipress }} - {{ $ipress->nombre }}"
+                            data-id="{{ $ipress->id }}" data-codigo="{{ $ipress->codigo_ipress }}"
+                            data-nombre="{{ $ipress->nombre }}"></option>
+                    @endforeach
+                </datalist>
+                <p class="text-xs text-gray-500 mt-1">Escribe el codigo o nombre para buscar.</p>
             </div>
 
             <div class="mb-4">
@@ -128,4 +139,45 @@
             </div>
         </form>
     </div>
+    <script>
+    (function() {
+        const input = document.getElementById('ipress_busqueda');
+        const idInput = document.getElementById('ipress_id');
+        const options = document.querySelectorAll('#ipress-options option');
+
+        if (!input || !idInput || options.length === 0) {
+            return;
+        }
+
+        const normalizar = (value) => (value || '').trim().toLowerCase();
+
+        const syncIpress = () => {
+            const value = normalizar(input.value);
+            let matched = null;
+
+            options.forEach((option) => {
+                const optValue = normalizar(option.value);
+                const optCodigo = normalizar(option.dataset.codigo);
+                const optNombre = normalizar(option.dataset.nombre);
+
+                if (value === optValue || value === optCodigo || value === optNombre) {
+                    matched = option;
+                }
+            });
+
+            if (matched) {
+                idInput.value = matched.dataset.id || '';
+                if (input.value !== matched.value) {
+                    input.value = matched.value;
+                }
+            } else {
+                idInput.value = '';
+            }
+        };
+
+        input.addEventListener('input', syncIpress);
+        input.addEventListener('change', syncIpress);
+        window.addEventListener('DOMContentLoaded', syncIpress);
+    })();
+</script>
 </x-app-layout>
