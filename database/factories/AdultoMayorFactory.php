@@ -13,6 +13,8 @@ class AdultoMayorFactory extends Factory
 
     public function definition(): array
     {
+        $faker = $this->faker ?? app(\Faker\Generator::class);
+
         $apellidos = [
             'García',
             'Rodríguez',
@@ -470,11 +472,11 @@ class AdultoMayorFactory extends Factory
         ];
 
         // Seleccionar género aleatorio
-        $genero = fake()->randomElement(['masculino', 'femenino']);
+        $genero = $faker->randomElement(['masculino', 'femenino']);
         $nombres = $genero === 'masculino' ? $nombresMasculinos : $nombresFemeninos;
 
         // Seleccionar IPRESS aleatorio y crear/obtener registro
-        $ipressDataSelected = fake()->randomElement($ipressData);
+        $ipressDataSelected = $faker->randomElement($ipressData);
         $ipress = Ipress::firstOrCreate(
             ['codigo_ipress' => $ipressDataSelected['codigo']],
             [
@@ -491,27 +493,27 @@ class AdultoMayorFactory extends Factory
 
         // Generar dirección según el código IPRESS
         if ($ipress->codigo_ipress === '000036306') {
-            $direccion = fake()->randomElement($callesPorUbicacion['Conchucos']) . ', ' . $distrito . ', ' . $provincia . ', Ancash';
+            $direccion = $faker->randomElement($callesPorUbicacion['Conchucos']) . ', ' . $distrito . ', ' . $provincia . ', Ancash';
         } else {
             // Para los demás, generar dirección con número
-            $calle = fake()->randomElement($callesPorUbicacion[$distrito]);
-            $numero = fake()->numberBetween(100, 999);
+            $calle = $faker->randomElement($callesPorUbicacion[$distrito]);
+            $numero = $faker->numberBetween(100, 999);
             $direccion = $calle . ' N° ' . $numero . ', ' . $distrito . ', ' . $provincia . ', Ancash';
         }
 
         return [
             'ipress_id' => $ipress->id,
-            'numero_ficha' => fake()->optional(0.8)->numerify('F-####-2024'),
-            'apellidos' => fake()->randomElement($apellidos) . ' ' . fake()->randomElement($apellidos),
-            'nombres' => fake()->randomElement($nombres) . ' ' . fake()->passthrough(fake()->randomElement($nombres)),
-            'dni' => fake()->unique()->numerify('########'),
-            'telefono' => fake()->optional(0.7)->numerify('9########'),
+            'numero_ficha' => $faker->optional(0.8)->numerify('F-####-2024'),
+            'apellidos' => $faker->randomElement($apellidos) . ' ' . $faker->randomElement($apellidos),
+            'nombres' => $faker->randomElement($nombres) . ' ' . $faker->passthrough($faker->randomElement($nombres)),
+            'dni' => $faker->unique()->numerify('########'),
+            'telefono' => $faker->optional(0.7)->numerify('9########'),
             'direccion' => $direccion,
-            'email' => fake()->optional(0.8)->passthrough(fake()->userName() . '@gmail.com'),
-            'fecha_ingreso' => fake()->dateTimeBetween('-3 years', 'now'),
-            'fecha_nacimiento' => fake()->dateTimeBetween('-90 years', '-60 years'),
-            'alergias' => fake()->optional(0.6)->randomElement($alergiasMedicas),
-            'adulto_mayor_fragil' => fake()->randomElement(['No', 'Sí', null]),
+            'email' => $faker->optional(0.8)->passthrough($faker->userName() . '@gmail.com'),
+            'fecha_ingreso' => $faker->dateTimeBetween('-3 years', 'now'),
+            'fecha_nacimiento' => $faker->dateTimeBetween('-90 years', '-60 years'),
+            'alergias' => $faker->optional(0.6)->randomElement($alergiasMedicas),
+            'adulto_mayor_fragil' => $faker->randomElement(['No', 'Sí', null]),
         ];
     }
 }
