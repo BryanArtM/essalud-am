@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\AdultoMayor;
 use Illuminate\Support\Facades\DB;
+use App\Models\Ipress;
 
 
 class AdultoMayorWizardController extends Controller
@@ -24,7 +25,7 @@ class AdultoMayorWizardController extends Controller
                 // Primera vez editando o diferente adulto, cargar desde BD
                 $adulto = AdultoMayor::findOrFail($adulto_id);
                 $data = $adulto->only([
-                    'ipress',
+                    'ipress_id',
                     'numero_ficha',
                     'dni',
                     'apellidos',
@@ -47,14 +48,28 @@ class AdultoMayorWizardController extends Controller
             $data = session('adulto_mayor', []);
         }
 
-        return view('wizard.paso1', compact('data', 'adulto_id'));
+        $ipressOptions = Ipress::activo()
+            ->orderBy('codigo_ipress')
+            ->get(['id', 'codigo_ipress', 'nombre']);
+
+        $ipressDisplay = null;
+        $ipressId = $data['ipress_id'] ?? null;
+        if ($ipressId) {
+            $ipressSeleccionado = $ipressOptions->firstWhere('id', (int) $ipressId) ?? Ipress::find($ipressId);
+            if ($ipressSeleccionado) {
+                $ipressDisplay = $ipressSeleccionado->codigo_ipress . ' - ' . $ipressSeleccionado->nombre;
+            }
+        }
+
+        return view('wizard.paso1', compact('data', 'adulto_id', 'ipressOptions', 'ipressDisplay'));
     }
 
     public function guardarPaso1(Request $request, $adulto_id = null)
     {
         $validated = $request->validate([
             'numero_ficha' => 'nullable|string',
-            'ipress' => 'nullable|string',
+            'ipress_id' => 'nullable|integer|exists:ipress,id',
+            'ipress_busqueda' => 'nullable|string',
             'nombres' => 'required|string|max:100',
             'apellidos' => 'required|string|max:100',
             'dni' => 'required|digits:8|unique:adultos_mayores,dni' . ($adulto_id ? ',' . $adulto_id : ''),
@@ -66,6 +81,14 @@ class AdultoMayorWizardController extends Controller
             'alergias' => 'nullable|string',
             'adulto_mayor_fragil' => 'nullable|string|regex:/^[0-9]*$/|max:20',
         ]);
+
+        if ($request->filled('ipress_busqueda') && empty($validated['ipress_id'])) {
+            return back()
+                ->withErrors(['ipress_busqueda' => 'Selecciona un IPRESS valido de la lista.'])
+                ->withInput();
+        }
+
+        unset($validated['ipress_busqueda']);
 
         session(['adulto_mayor' => $validated]);
 
@@ -126,18 +149,20 @@ class AdultoMayorWizardController extends Controller
         ]);
 
         //Recorrido de los campos booleanos
-        foreach ([
-            'obesidad',
-            'dislipidemia',
-            'hipertension_arterial',
-            'diabetes_mellitus',
-            'erc',
-            'osteoartrosis',
-            'asma',
-            'epoc',
-            'itg',
-            'sindrome_metabolico'
-        ] as $field) {
+        foreach (
+            [
+                'obesidad',
+                'dislipidemia',
+                'hipertension_arterial',
+                'diabetes_mellitus',
+                'erc',
+                'osteoartrosis',
+                'asma',
+                'epoc',
+                'itg',
+                'sindrome_metabolico'
+            ] as $field
+        ) {
             $validated[$field] = $request->has($field);
         }
 
@@ -189,7 +214,18 @@ class AdultoMayorWizardController extends Controller
 
     public function guardarPaso3(Request $request, $adulto_id = null)
     {
+        $request->validate([
+            'sobrepeso' => 'nullable|boolean',
+            'alcohol' => 'nullable|boolean',
+            'sedentarismo' => 'nullable|boolean',
+            'estres' => 'nullable|boolean',
+            'tabaco' => 'nullable|boolean',
+            'bajo_peso' => 'nullable|boolean',
+            'perimetro_abdominal_aumentado' => 'nullable|boolean',
+            'hdl_bajo' => 'nullable|boolean',
+        ]);
 
+        $validated = [];
         $booleanFields = [
             'sobrepeso',
             'alcohol',
@@ -209,7 +245,6 @@ class AdultoMayorWizardController extends Controller
             return redirect()->route('wizard.paso4', ['adulto_id' => $adulto_id]);
         }
         return redirect()->route('wizard.paso4');
-
     }
     public function paso4($adulto_id = null)
     {
@@ -272,7 +307,6 @@ class AdultoMayorWizardController extends Controller
         $citas = session('citas_tratamientos.citas', []);
         $tratamientos = session('citas_tratamientos.tratamientos', []);
         return view('wizard.paso5', compact('citas', 'tratamientos', 'adulto_id'));
-
     }
 
     public function guardarPaso5(Request $request, $adulto_id = null)
@@ -349,6 +383,14 @@ class AdultoMayorWizardController extends Controller
             'paso5' => session('citas_tratamientos', []),
             'paso6' => session('valoracion', []),
         ];
+
+        if (!empty($data['paso1']['ipress_id'])) {
+            $ipressInfo = Ipress::find($data['paso1']['ipress_id']);
+            if ($ipressInfo) {
+                $data['paso1']['ipress'] = $ipressInfo->info_completa;
+            }
+            unset($data['paso1']['ipress_id']);
+        }
 
         // Si estamos en modo edición, detectar cambios
         if (session()->has('adulto_id')) {
@@ -627,27 +669,27 @@ class AdultoMayorWizardController extends Controller
             // Re-crear relaciones (sin campos de auditoría para que boot() los maneje)
             $adulto->enfermedad()->create($enfermedad);
             $adulto->riesgo()->create($riesgo);
-            
+
             foreach ($evaluaciones as $eval) {
                 unset($eval['created_by'], $eval['updated_by']);
                 $adulto->evaluaciones()->create($eval);
             }
-            
+
             foreach ($actividades as $actividad) {
                 unset($actividad['created_by'], $actividad['updated_by']);
                 $adulto->actividadesEducativas()->create($actividad);
             }
-            
+
             foreach ($citasTratamientos['citas'] as $cita) {
                 unset($cita['created_by'], $cita['updated_by']);
                 $adulto->citas()->create($cita);
             }
-            
+
             foreach ($citasTratamientos['tratamientos'] as $tratamiento) {
                 unset($tratamiento['created_by'], $tratamiento['updated_by']);
                 $adulto->tratamientos()->create($tratamiento);
             }
-            
+
             $adulto->valoracion()->create($valoracion);
         });
 
@@ -666,4 +708,3 @@ class AdultoMayorWizardController extends Controller
         return redirect()->route('adultos.index')->with('success', 'Registro completado.');
     }
 }
-

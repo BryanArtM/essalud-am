@@ -48,6 +48,8 @@
         'Tratamientos' => $adulto->tratamientos ?? [],
         'Adulto Mayor 75 Años a Más' => $adulto->valoracion ? [$adulto->valoracion] : [],
     ];
+
+    $ipressInfo = $adulto->ipressEntidad ? $adulto->ipressEntidad->info_completa : ($adulto->ipress ?? null);
 @endphp
 
 <x-app-layout>
@@ -95,7 +97,7 @@
             {{-- Datos principales --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 {!! renderCard('numero_ficha', $adulto->numero_ficha) !!}
-                {!! renderCard('ipress', $adulto->ipress) !!}
+                {!! renderCard('ipress', $ipressInfo) !!}
             </div>
 
             <x-section-border />
