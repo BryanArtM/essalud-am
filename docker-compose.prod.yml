@@ -1,7 +1,10 @@
 services:
   # Servicio de la aplicación Laravel (PHP-FPM)
   app:
-    image: bryandckr/essalud-am:latest 
+    image: bryandckr/essalud-am:latest
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.app
     container_name: essalud-app
     restart: unless-stopped
     working_dir: /var/www
@@ -57,3 +60,4 @@ volumes:
     driver: local
   app-public:
     driver: local
+
