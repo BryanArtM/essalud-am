@@ -13,21 +13,21 @@
 
             <div class="block">
                 <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full text-gray-600 bg-gray-200" type="email" name="email"
-                    :value="old('email', $request->email)" required autofocus autocomplete="username" readonly />
+                <x-input id="email" class="block mt-1 w-full text-gray-600 bg-gray-200" type="email"
+                    name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" readonly />
             </div>
 
             <div class="mt-4">
                 <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required
+                <x-input-password id="password" class="block mt-1 w-full" name="password" required
                     autocomplete="new-password" minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$"
                     title="Mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial" />
             </div>
 
             <div class="mt-4">
                 <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-input id="password_confirmation" class="block mt-1 w-full" type="password"
-                    name="password_confirmation" required autocomplete="new-password" />
+                <x-input-password id="password_confirmation" class="block mt-1 w-full" name="password_confirmation"
+                    required autocomplete="new-password" />
             </div>
 
             <div class="flex items-center justify-around mt-4">

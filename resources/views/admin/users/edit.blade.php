@@ -13,21 +13,23 @@
 
                 <div>
                     <x-label for="name" value="Nombre" />
-                    <x-input id="name" name="name" type="text" class="mt-1 block w-full" value="{{ $user->name }}"
-                        required minlength="3" maxlength="50" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$"
+                    <x-input id="name" name="name" type="text" class="mt-1 block w-full"
+                        value="{{ $user->name }}" required minlength="3" maxlength="50"
+                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$"
                         title="Solo letras y espacios, mínimo 3 y máximo 50 caracteres" />
                 </div>
 
 
                 <div class="mt-4">
                     <x-label for="email" value="Email" />
-                    <x-input id="email" class="block mt-1 w-full" type="email" name="email" placeholder="ejemplo@gmail.com"
-                        value="{{ old('email', $user->email) }}" required title="Solo se permiten correos @gmail.com" />
+                    <x-input id="email" class="block mt-1 w-full" type="email" name="email"
+                        placeholder="ejemplo@gmail.com" value="{{ old('email', $user->email) }}" required
+                        title="Solo se permiten correos @gmail.com" />
                 </div>
 
                 <div class="mt-4">
                     <x-label for="password" value="Contraseña (dejar vacío para no cambiar)" />
-                    <x-input id="password" class="block mt-1 w-full" type="password" name="password"
+                    <x-input-password id="password" class="block mt-1 w-full" name="password"
                         autocomplete="new-password" minlength="8"
                         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$"
                         title="Mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial" />
@@ -35,7 +37,7 @@
 
                 <div class="mt-4">
                     <x-label for="password_confirmation" value="Confirmar Contraseña" />
-                    <x-input id="password_confirmation" name="password_confirmation" type="password"
+                    <x-input-password id="password_confirmation" name="password_confirmation"
                         class="mt-1 block w-full" />
                 </div>
 
@@ -44,8 +46,8 @@
                 <div class="mt-4">
                     <x-label for="role" value="Rol" />
                     <select id="role" name="role" class="mt-1 block w-full rounded border-gray-300">
-                        <option value="user" @if($user->role === 'user') selected @endif>Profesional</option>
-                        <option value="admin" @if($user->role === 'admin') selected @endif>Administrador</option>
+                        <option value="user" @if ($user->role === 'user') selected @endif>Profesional</option>
+                        <option value="admin" @if ($user->role === 'admin') selected @endif>Administrador</option>
                     </select>
                 </div>
 
@@ -56,7 +58,7 @@
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const roleSelect = document.getElementById('role');
             const submitBtn = document.getElementById('submitBtn');
             const emailInput = document.getElementById('email');
@@ -69,7 +71,7 @@
                 }
             }
             // Validación en tiempo real del email
-            emailInput.addEventListener('input', function () {
+            emailInput.addEventListener('input', function() {
                 const email = this.value.trim();
 
                 if (email.length > 0) {
@@ -86,6 +88,5 @@
             roleSelect.addEventListener('change', updateButtonText);
             updateButtonText();
         });
-
     </script>
 </x-app-layout>

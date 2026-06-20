@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Validation\Rules\Password;
+
 class UserController extends Controller
 {
     public function __construct()
@@ -29,7 +31,7 @@ class UserController extends Controller
         ]);
 
         //Filtrado
-        $query = User::where('id', '!=', 1); 
+        $query = User::where('id', '!=', 1);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -76,8 +78,8 @@ class UserController extends Controller
             ],
             'password' => [
                 'required',
-                'min:8',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'
+                'confirmed',
+                Password::defaults()
             ],
             'role' => [
                 'required',
@@ -127,8 +129,8 @@ class UserController extends Controller
             ],
             'password' => [
                 'nullable',
-                'min:8',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'
+                'confirmed',
+                Password::defaults()
             ],
             'role' => [
                 'required',
@@ -168,36 +170,35 @@ class UserController extends Controller
     {
         try {
             $message = '';
-            
+
             switch ($type) {
                 case 'application':
                     Artisan::call('cache:clear');
                     $message = 'Caché de aplicación limpiado correctamente';
                     break;
-                    
+
                 case 'config':
                     Artisan::call('config:clear');
                     $message = 'Caché de configuración limpiado correctamente';
                     break;
-                    
+
                 case 'route':
                     Artisan::call('route:clear');
                     $message = 'Caché de rutas limpiado correctamente';
                     break;
-                    
+
                 case 'view':
                     Artisan::call('view:clear');
                     $message = 'Caché de vistas limpiado correctamente';
                     break;
-                    
+
                 default:
                     return redirect()->route('admin.configuracion')
                         ->with('cache_error', 'Tipo de caché no válido');
             }
-            
+
             return redirect()->route('admin.configuracion')
                 ->with('cache_success', $message);
-                
         } catch (\Exception $e) {
             return redirect()->route('admin.configuracion')
                 ->with('cache_error', 'Error al limpiar caché: ' . $e->getMessage());
@@ -214,19 +215,18 @@ class UserController extends Controller
                 // En producción: limpiar y luego optimizar (cachear todo)
                 Artisan::call('optimize:clear'); // Limpia todo
                 Artisan::call('optimize'); // Cachea config, routes, views, events
-                
+
                 $message = 'Aplicación optimizada para producción. Se limpiaron y cachearon config, rutas, vistas y eventos.';
             } else {
                 // En desarrollo: solo limpiar (no cachear para evitar problemas con closures)
                 Artisan::call('cache:clear');
                 Artisan::call('view:clear');
-                
+
                 $message = 'Caché limpiado correctamente (cache + vistas).';
             }
-            
+
             return redirect()->route('admin.configuracion')
                 ->with('cache_success', $message);
-                
         } catch (\Exception $e) {
             return redirect()->route('admin.configuracion')
                 ->with('cache_error', 'Error al optimizar aplicación: ' . $e->getMessage());
