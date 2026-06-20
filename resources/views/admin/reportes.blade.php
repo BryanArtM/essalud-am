@@ -283,10 +283,6 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center">
                                                     @if ($adulto->createdBy)
-                                                        <div
-                                                            class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-semibold mr-2">
-                                                            {{ strtoupper(substr($adulto->createdBy->name, 0, 1)) }}
-                                                        </div>
                                                         <span
                                                             class="text-sm text-gray-900">{{ $adulto->createdBy->name }}</span>
                                                     @else
@@ -300,10 +296,6 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center">
                                                     @if ($adulto->updatedBy)
-                                                        <div
-                                                            class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white text-xs font-semibold mr-2">
-                                                            {{ strtoupper(substr($adulto->updatedBy->name, 0, 1)) }}
-                                                        </div>
                                                         <span
                                                             class="text-sm text-gray-900">{{ $adulto->updatedBy->name }}</span>
                                                     @else

@@ -245,7 +245,6 @@
                                             </svg>
                                         </div>
                                         <span class="font-medium text-sm text-gray-900">Caché de Aplicación</span>
-                                        <span class="text-xs text-gray-500 mt-0.5">cache:clear</span>
                                     </button>
                                 </form>
 
@@ -266,7 +265,6 @@
                                             </svg>
                                         </div>
                                         <span class="font-medium text-sm text-gray-900">Configuración</span>
-                                        <span class="text-xs text-gray-500 mt-0.5">config:clear</span>
                                     </button>
                                 </form>
 
@@ -285,7 +283,6 @@
                                             </svg>
                                         </div>
                                         <span class="font-medium text-sm text-gray-900">Rutas</span>
-                                        <span class="text-xs text-gray-500 mt-0.5">route:clear</span>
                                     </button>
                                 </form>
 
@@ -306,7 +303,6 @@
                                             </svg>
                                         </div>
                                         <span class="font-medium text-sm text-gray-900">Vistas</span>
-                                        <span class="text-xs text-gray-500 mt-0.5">view:clear</span>
                                     </button>
                                 </form>
                             </div>
