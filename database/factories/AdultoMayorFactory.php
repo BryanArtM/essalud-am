@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\AdultoMayor;
+use App\Models\Ipress;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -12,6 +13,8 @@ class AdultoMayorFactory extends Factory
 
     public function definition(): array
     {
+        $faker = $this->faker ?? app(\Faker\Generator::class);
+
         $apellidos = [
             'García',
             'Rodríguez',
@@ -142,54 +145,29 @@ class AdultoMayorFactory extends Factory
             'Estela',
         ];
 
-        // Códigos IPRESS disponibles
-        $ipressCodes = [
-            '00009926',
-            '00009921',
-            '00009925',
-            '00009204',
-            '00009920',
-            '00009059',
-            '00009055',
-            '00009054',
-            '00009053',
-            '00009924',
-            '00009047',
-            '00009922',
-            '000010013',
-            '00009203',
-            '00009202',
-            '00009060',
-            '00009923',
-            '00009201',
-            '00009057',
-            '000033542',
-            '000036306'
-        ];
-
-        // Mapeo de IPRESS a ubicación
-        $ipressLocation = [
-            '00009926' => ['distrito' => 'Piscobamba', 'provincia' => 'Mariscal Luzuriaga'],
-            '00009921' => ['distrito' => 'Nepeña', 'provincia' => 'Santa'],
-            '00009925' => ['distrito' => 'Pallasca', 'provincia' => 'Pallasca'],
-            '00009204' => ['distrito' => 'Huari', 'provincia' => 'Huari'],
-            '00009920' => ['distrito' => 'Caraz', 'provincia' => 'Huaylas'],
-            '00009059' => ['distrito' => 'Huarmey', 'provincia' => 'Huarmey'],
-            '00009055' => ['distrito' => 'Coishco', 'provincia' => 'Santa'],
-            '00009054' => ['distrito' => 'Nuevo Chimbote', 'provincia' => 'Santa'],
-            '00009053' => ['distrito' => 'Independencia', 'provincia' => 'Huaraz'],
-            '00009924' => ['distrito' => 'Cabana', 'provincia' => 'Pallasca'],
-            '00009047' => ['distrito' => 'Chimbote', 'provincia' => 'Santa'],
-            '00009922' => ['distrito' => 'Pomabamba', 'provincia' => 'Pomabamba'],
-            '000010013' => ['distrito' => 'Chimbote', 'provincia' => 'Santa'],
-            '00009203' => ['distrito' => 'Sihuas', 'provincia' => 'Sihuas'],
-            '00009202' => ['distrito' => 'Pampas', 'provincia' => 'Pallasca'],
-            '00009060' => ['distrito' => 'Carhuaz', 'provincia' => 'Carhuaz'],
-            '00009923' => ['distrito' => 'Yungay', 'provincia' => 'Yungay'],
-            '00009201' => ['distrito' => 'Conchucos', 'provincia' => 'Pallasca'],
-            '00009057' => ['distrito' => 'Casma', 'provincia' => 'Casma'],
-            '000033542' => ['distrito' => 'Nepeña', 'provincia' => 'Santa'],
-            '000036306' => ['distrito' => 'Conchucos', 'provincia' => 'Pallasca'],
+        // Datos de IPRESS disponibles
+        $ipressData = [
+            ['codigo' => '00009926', 'nombre' => 'POSTA MÉDICA PISCOBAMBA', 'distrito' => 'Piscobamba', 'provincia' => 'Mariscal Luzuriaga'],
+            ['codigo' => '00009921', 'nombre' => 'CENTRO DE ATENCIÓN PRIMARIA II SAN JACINTO', 'distrito' => 'Nepeña', 'provincia' => 'Santa'],
+            ['codigo' => '00009925', 'nombre' => 'POSTA MÉDICA PALLASCA', 'distrito' => 'Pallasca', 'provincia' => 'Pallasca'],
+            ['codigo' => '00009204', 'nombre' => 'CENTRO MÉDICO HUARI', 'distrito' => 'Huari', 'provincia' => 'Huari'],
+            ['codigo' => '00009920', 'nombre' => 'CENTRO MÉDICO CARAZ', 'distrito' => 'Caraz', 'provincia' => 'Huaylas'],
+            ['codigo' => '00009059', 'nombre' => 'CENTRO MÉDICO HUARMEY', 'distrito' => 'Huarmey', 'provincia' => 'Huarmey'],
+            ['codigo' => '00009055', 'nombre' => 'CENTRO MÉDICO COISHCO', 'distrito' => 'Coishco', 'provincia' => 'Santa'],
+            ['codigo' => '00009054', 'nombre' => 'HOSPITAL I CONO SUR', 'distrito' => 'Nuevo Chimbote', 'provincia' => 'Santa'],
+            ['codigo' => '00009053', 'nombre' => 'HOSPITAL II HUARAZ', 'distrito' => 'Independencia', 'provincia' => 'Huaraz'],
+            ['codigo' => '00009924', 'nombre' => 'POSTA MÉDICA CABANA', 'distrito' => 'Cabana', 'provincia' => 'Pallasca'],
+            ['codigo' => '00009047', 'nombre' => 'HOSPITAL III CHIMBOTE', 'distrito' => 'Chimbote', 'provincia' => 'Santa'],
+            ['codigo' => '00009922', 'nombre' => 'CENTRO DE ATENCIÓN PRIMARIA II POMABAMBA', 'distrito' => 'Pomabamba', 'provincia' => 'Pomabamba'],
+            ['codigo' => '000010013', 'nombre' => 'POLICLÍNICO DE COMPLEJIDAD CRECIENTE VICTOR PANTA RODRIGUEZ', 'distrito' => 'Chimbote', 'provincia' => 'Santa'],
+            ['codigo' => '00009203', 'nombre' => 'CENTRO MÉDICO SIHUAS', 'distrito' => 'Sihuas', 'provincia' => 'Sihuas'],
+            ['codigo' => '00009202', 'nombre' => 'POSTA MÉDICA PAMPAS', 'distrito' => 'Pampas', 'provincia' => 'Pallasca'],
+            ['codigo' => '00009060', 'nombre' => 'CENTRO MÉDICO CARHUAZ', 'distrito' => 'Carhuaz', 'provincia' => 'Carhuaz'],
+            ['codigo' => '00009923', 'nombre' => 'POSTA MÉDICA YUNGAY', 'distrito' => 'Yungay', 'provincia' => 'Yungay'],
+            ['codigo' => '00009201', 'nombre' => 'POSTA MÉDICA CONCHUCOS', 'distrito' => 'Conchucos', 'provincia' => 'Pallasca'],
+            ['codigo' => '00009057', 'nombre' => 'CENTRO MÉDICO CASMA', 'distrito' => 'Casma', 'provincia' => 'Casma'],
+            ['codigo' => '000033542', 'nombre' => 'CAP II SAN JACINTO', 'distrito' => 'Nepeña', 'provincia' => 'Santa'],
+            ['codigo' => '000036306', 'nombre' => 'POSTA MÉDICA CONCHUCOS', 'distrito' => 'Conchucos', 'provincia' => 'Pallasca'],
         ];
 
         // Calles por ubicación
@@ -494,38 +472,48 @@ class AdultoMayorFactory extends Factory
         ];
 
         // Seleccionar género aleatorio
-        $genero = fake()->randomElement(['masculino', 'femenino']);
+        $genero = $faker->randomElement(['masculino', 'femenino']);
         $nombres = $genero === 'masculino' ? $nombresMasculinos : $nombresFemeninos;
 
-        // Seleccionar código IPRESS aleatorio
-        $ipressCode = fake()->randomElement($ipressCodes);
-        $location = $ipressLocation[$ipressCode];
-        $distrito = $location['distrito'];
-        $provincia = $location['provincia'];
+        // Seleccionar IPRESS aleatorio y crear/obtener registro
+        $ipressDataSelected = $faker->randomElement($ipressData);
+        $ipress = Ipress::firstOrCreate(
+            ['codigo_ipress' => $ipressDataSelected['codigo']],
+            [
+                'nombre' => $ipressDataSelected['nombre'],
+                'distrito' => $ipressDataSelected['distrito'],
+                'provincia' => $ipressDataSelected['provincia'],
+                'departamento' => 'Ancash',
+                'activo' => true,
+            ]
+        );
+
+        $distrito = $ipress->distrito;
+        $provincia = $ipress->provincia;
 
         // Generar dirección según el código IPRESS
-        if ($ipressCode === '000036306') {
-            $direccion = fake()->randomElement($callesPorUbicacion['Conchucos']) . ', ' . $distrito . ', ' . $provincia . ', Ancash';
+        if ($ipress->codigo_ipress === '000036306') {
+            $direccion = $faker->randomElement($callesPorUbicacion['Conchucos']) . ', ' . $distrito . ', ' . $provincia . ', Ancash';
         } else {
             // Para los demás, generar dirección con número
-            $calle = fake()->randomElement($callesPorUbicacion[$distrito]);
-            $numero = fake()->numberBetween(100, 999);
+            $calle = $faker->randomElement($callesPorUbicacion[$distrito]);
+            $numero = $faker->numberBetween(100, 999);
             $direccion = $calle . ' N° ' . $numero . ', ' . $distrito . ', ' . $provincia . ', Ancash';
         }
 
         return [
-            'ipress' => $ipressCode,
-            'numero_ficha' => fake()->optional(0.8)->numerify('F-####-2024'),
-            'apellidos' => fake()->randomElement($apellidos) . ' ' . fake()->randomElement($apellidos),
-            'nombres' => fake()->randomElement($nombres) . ' ' . fake()->passthrough(fake()->randomElement($nombres)),
-            'dni' => fake()->unique()->numerify('########'),
-            'telefono' => fake()->optional(0.7)->numerify('9########'),
+            'ipress_id' => $ipress->id,
+            'numero_ficha' => $faker->optional(0.8)->numerify('F-####-2024'),
+            'apellidos' => $faker->randomElement($apellidos) . ' ' . $faker->randomElement($apellidos),
+            'nombres' => $faker->randomElement($nombres) . ' ' . $faker->passthrough($faker->randomElement($nombres)),
+            'dni' => $faker->unique()->numerify('########'),
+            'telefono' => $faker->optional(0.7)->numerify('9########'),
             'direccion' => $direccion,
-            'email' => fake()->optional(0.8)->passthrough(fake()->userName() . '@gmail.com'),
-            'fecha_ingreso' => fake()->dateTimeBetween('-3 years', 'now'),
-            'fecha_nacimiento' => fake()->dateTimeBetween('-90 years', '-60 years'),
-            'alergias' => fake()->optional(0.6)->randomElement($alergiasMedicas),
-            'adulto_mayor_fragil' => fake()->randomElement(['No', 'Sí', null]),
+            'email' => $faker->optional(0.8)->passthrough($faker->userName() . '@gmail.com'),
+            'fecha_ingreso' => $faker->dateTimeBetween('-3 years', 'now'),
+            'fecha_nacimiento' => $faker->dateTimeBetween('-90 years', '-60 years'),
+            'alergias' => $faker->optional(0.6)->randomElement($alergiasMedicas),
+            'adulto_mayor_fragil' => $faker->randomElement(['No', 'Sí', null]),
         ];
     }
 }

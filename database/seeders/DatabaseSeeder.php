@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 2. Crear adultos mayores 
-        $adultosMayores = AdultoMayor::factory(756)->create();
+        $adultosMayores = AdultoMayor::factory(220)->create();
 
         echo "{$adultosMayores->count()} Adultos mayores creados\n";
 
@@ -66,13 +66,10 @@ class DatabaseSeeder extends Seeder
             // Actividades educativas (90% tienen actividades educativas)
             if (rand(1, 10) <= 9) {
                 $numActividades = rand(0, 11); // Entre 0 y 11 actividades
-            for ($i = 0; $i < $numActividades; $i++) {
-                $this->createActividadEducativa($adultoMayor);
+                $this->createActividadesEducativas($adultoMayor, $numActividades);
             }
         }
-
     }
-}
 
     private function createEnfermedad(AdultoMayor $adultoMayor): void
     {
@@ -284,12 +281,31 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 
-    private function createActividadEducativa(AdultoMayor $adultoMayor): void
+    private function createActividadesEducativas(AdultoMayor $adultoMayor, int $cantidad): void
     {
-        ActividadEducativa::create([
-            'adulto_mayor_id' => $adultoMayor->id,
-            'fecha' => fake()->dateTimeBetween('-1 year', 'now'),
-            'numero_sesion' => 'Sesión ' . rand(1, 12),
-        ]);
+        if ($cantidad === 0) {
+            return;
+        }
+
+        $fechaInicio = fake()->dateTimeBetween('-2 year', '-6 months');
+        $fechaAnterior = null;
+
+        for ($i = 1; $i <= $cantidad; $i++) {
+            if ($i === 1) {
+                $fecha = $fechaInicio;
+            } else {
+                $diasSiguientes = rand(7, 21);
+                $fecha = (new \DateTime($fechaAnterior->format('Y-m-d')))
+                    ->modify("+{$diasSiguientes} days");
+            }
+
+            ActividadEducativa::create([
+                'adulto_mayor_id' => $adultoMayor->id,
+                'fecha' => $fecha,
+                'numero_sesion' => 'Sesión ' . $i,
+            ]);
+
+            $fechaAnterior = $fecha;
+        }
     }
 }

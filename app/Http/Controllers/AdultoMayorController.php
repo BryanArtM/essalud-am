@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Enfermedad;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -13,7 +14,7 @@ class AdultoMayorController extends Controller
     {
         $adultos = AdultoMayor::all();
         //Validación de los campos de búsqueda
-        $request->  validate([
+        $request->validate([
             'dni' => 'nullable|string|regex:/^[0-9]{1,8}$/',
             'apellidos' => 'nullable|string|max:100',
             'email' => 'nullable|email|max:255',
@@ -46,17 +47,15 @@ class AdultoMayorController extends Controller
             'citas_tratamientos',
             'valoracion'
         ]);
-        return view('wizard.paso1');
-
+        return redirect()->route('wizard.paso1');
     }
 
 
-    public function store(Request $request)
-    {
-    }
+    public function store(Request $request) {}
     public function show($id)
     {
         $adulto = AdultoMayor::with([
+            'ipressEntidad',
             'enfermedad',
             'riesgo',
             'evaluaciones',
@@ -89,7 +88,7 @@ class AdultoMayorController extends Controller
 
         session([
             'adulto_mayor' => $adulto->only([
-                'ipress',
+                'ipress_id',
                 'numero_ficha',
                 'dni',
                 'apellidos',
@@ -123,7 +122,7 @@ class AdultoMayorController extends Controller
         }
 
         // Limpiar campos de auditoría de evaluaciones
-        $evaluacionesData = $adulto->evaluaciones->map(function($eval) {
+        $evaluacionesData = $adulto->evaluaciones->map(function ($eval) {
             $data = $eval->toArray();
             unset($data['created_by'], $data['updated_by'], $data['adulto_mayor_id']);
             return $data;
@@ -131,7 +130,7 @@ class AdultoMayorController extends Controller
         session(['evaluacion' => $evaluacionesData]);
 
         // Limpiar campos de auditoría de actividades
-        $actividadesData = $adulto->actividadesEducativas->map(function($act) {
+        $actividadesData = $adulto->actividadesEducativas->map(function ($act) {
             $data = $act->toArray();
             unset($data['created_by'], $data['updated_by'], $data['adulto_mayor_id']);
             return $data;
@@ -139,13 +138,13 @@ class AdultoMayorController extends Controller
         session(['actividad' => $actividadesData]);
 
         // Limpiar campos de auditoría de citas y tratamientos
-        $tratamientosData = $adulto->tratamientos->map(function($trat) {
+        $tratamientosData = $adulto->tratamientos->map(function ($trat) {
             $data = $trat->toArray();
             unset($data['created_by'], $data['updated_by'], $data['adulto_mayor_id']);
             return $data;
         })->toArray();
 
-        $citasData = $adulto->citas->map(function($cita) {
+        $citasData = $adulto->citas->map(function ($cita) {
             $data = $cita->toArray();
             unset($data['created_by'], $data['updated_by'], $data['adulto_mayor_id']);
             return $data;
@@ -169,23 +168,20 @@ class AdultoMayorController extends Controller
 
         return redirect()->route('wizard.paso1', ['adulto_id' => $adulto->id])->with('success', 'Datos cargados para edición.');
     }
-    public function update(Request $request, string $id)
-    {
-
-    }
+    public function update(Request $request, string $id) {}
 
     public function destroy($id)
     {
         $adulto = AdultoMayor::findOrFail($id);
         $adulto->delete();
         return redirect()->route('adultos.index')->with('success', 'Adulto mayor eliminado correctamente.');
-
     }
 
     public function generatePDF($id)
     {
         // Obtener el adulto mayor con todas sus relaciones
         $adulto = AdultoMayor::with([
+            'ipressEntidad',
             'enfermedad',
             'riesgo',
             'evaluaciones' => function ($query) {
@@ -230,5 +226,4 @@ class AdultoMayorController extends Controller
         // Siempre mostrar en el navegador para imprimir
         return $pdf->stream($filename);
     }
-
 }

@@ -64,6 +64,7 @@
                         <div>
                             <label>Número:</label>
                             <input type="number" name="visare_numero"
+                                min="0"
                                 value="{{ old('visare_numero', $data['visare_numero'] ?? '') }}"
                                 class="w-full border rounded px-3 py-2">
                         </div>
@@ -80,6 +81,7 @@
                         <div>
                             <label>Número:</label>
                             <input type="number" name="estadio_1_3a_numero"
+                                min="0"
                                 value="{{ old('estadio_1_3a_numero', $data['estadio_1_3a_numero'] ?? '') }}"
                                 class="w-full border rounded px-3 py-2">
                         </div>
@@ -96,6 +98,7 @@
                         <div>
                             <label>Número:</label>
                             <input type="number" name="estadio_3b_5_numero"
+                                min="0"
                                 value="{{ old('estadio_3b_5_numero', $data['estadio_3b_5_numero'] ?? '') }}"
                                 class="w-full border rounded px-3 py-2">
                         </div>

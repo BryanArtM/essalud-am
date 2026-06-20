@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 
 class AdultoMayor extends Model
 {
@@ -12,6 +13,7 @@ class AdultoMayor extends Model
     protected $fillable = [
         'numero_ficha',
         'ipress',
+        'ipress_id',
         'nombres',
         'apellidos',
         'dni',
@@ -31,54 +33,67 @@ class AdultoMayor extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (auth()->check()) {
-                $model->created_by = auth()->id();
-                $model->updated_by = auth()->id();
+            if (Auth::check()) {
+                $model->created_by = Auth::id();
+                $model->updated_by = Auth::id();
             }
         });
 
         static::updating(function ($model) {
-            if (auth()->check()) {
-                $model->updated_by = auth()->id();
+            if (Auth::check()) {
+                $model->updated_by = Auth::id();
             }
         });
     }
 
 
-    public function enfermedad() {
+    public function enfermedad()
+    {
         return $this->hasOne(Enfermedad::class, 'adulto_mayor_id', 'id');
     }
 
-    public function riesgo() {
+    public function riesgo()
+    {
         return $this->hasOne(Riesgo::class, 'adulto_mayor_id', 'id');
     }
 
-    public function evaluaciones() {
+    public function evaluaciones()
+    {
         return $this->hasMany(Evaluacion::class);
     }
 
-    public function citas() {
+    public function citas()
+    {
         return $this->hasMany(Cita::class);
     }
 
-    public function tratamientos() {
+    public function tratamientos()
+    {
         return $this->hasMany(Tratamiento::class);
     }
 
-    public function valoracion() {
+    public function valoracion()
+    {
         return $this->hasOne(Valoracion::class);
     }
 
-    public function actividadesEducativas() {
+    public function ipressEntidad()
+    {
+        return $this->belongsTo(Ipress::class, 'ipress_id');
+    }
+
+    public function actividadesEducativas()
+    {
         return $this->hasMany(ActividadEducativa::class);
     }
 
-    public function createdBy() {
+    public function createdBy()
+    {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function updatedBy() {
+    public function updatedBy()
+    {
         return $this->belongsTo(User::class, 'updated_by');
     }
 }
-

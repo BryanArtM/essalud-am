@@ -450,7 +450,9 @@
                             </tr>
                             <tr class="info-row">
                                 <td class="info-label">IPRESS:</td>
-                                <td class="info-value">{{ $adulto->ipress ?? 'No registrado' }}</td>
+                                <td class="info-value">
+                                    {{ $adulto->ipressEntidad ? $adulto->ipressEntidad->info_completa : ($adulto->ipress ?? 'No registrado') }}
+                                </td>
                             </tr>
                             <tr class="info-row">
                                 <td class="info-label">Nombres:</td>
