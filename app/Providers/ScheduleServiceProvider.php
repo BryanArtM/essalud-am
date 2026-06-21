@@ -11,7 +11,7 @@ class ScheduleServiceProvider extends ServiceProvider
     {
         $this->callAfterResolving(Schedule::class, function (Schedule $schedule) {
             $schedule->command('backup:google-drive')
-                ->everyThreeHours()
+                ->cron('0 */3 * * *')
                 ->appendOutputTo(storage_path('logs/backup.log'));
         });
     }

@@ -39,6 +39,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     vim \
     cron \
+    mariadb-client \
+    mariadb-client-compat \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
